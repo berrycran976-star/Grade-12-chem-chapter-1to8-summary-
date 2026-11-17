@@ -1,0 +1,1303 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Grade 12 Chemistry - Chapter 3: Chemical Kinetics (Rates of Reaction)</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Three.js for 3D Molecular Collision & Catalyst Visualizations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <!-- Google Fonts: Inter & Noto Sans Myanmar -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Myanmar:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'Noto Sans Myanmar', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', 'Noto Sans Myanmar', sans-serif;
+            line-height: 1.85;
+            background-color: #f8fafc;
+            color: #1e293b;
+            overflow-x: hidden;
+        }
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        .canvas-container {
+            position: relative;
+            width: 100%;
+            height: 340px;
+            border-radius: 1rem;
+            overflow: hidden;
+            background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%);
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.45);
+            touch-action: none;
+        }
+        @media (min-width: 768px) {
+            .canvas-container {
+                height: 390px;
+            }
+        }
+        .myanmar-text {
+            line-height: 1.98;
+        }
+        .formula-card {
+            background: linear-gradient(135deg, #0f172a 0%, #064e3b 100%);
+        }
+        .math-box {
+            font-family: 'Inter', monospace;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.16);
+        }
+        .canvas-container { height: 380px; }
+        @media (min-width: 768px) { .canvas-container { height: 440px; } }
+        .v3d-ui { position: absolute; inset: 0; pointer-events: none; font-family: 'Inter','Noto Sans Myanmar',sans-serif; }
+        .v3d-legend { position: absolute; top: 8px; left: 10px; display: flex; gap: 8px; font-size: 11px; font-weight: 700; color: #e2e8f0; background: rgba(15,23,42,.65); padding: 3px 9px; border-radius: 9999px; border: 1px solid rgba(255,255,255,.15); }
+        .v3d-legend i { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 4px; }
+        .v3d-btn { position: absolute; top: 8px; right: 10px; pointer-events: auto; font-size: 11px; font-weight: 600; color: #fef3c7; background: rgba(15,23,42,.7); border: 1px solid rgba(251,191,36,.45); padding: 3px 10px; border-radius: 9999px; cursor: pointer; }
+        .v3d-hint { position: absolute; top: 34px; left: 10px; font-size: 10.5px; color: #94a3b8; transition: opacity .4s; }
+        .v3d-zoom { position: absolute; right: 10px; top: 38px; display: flex; flex-direction: column; gap: 6px; }
+        .v3d-zoom button { pointer-events: auto; width: 30px; height: 30px; border-radius: 9999px; font-size: 16px; font-weight: 700; line-height: 1; color: #fef3c7; background: rgba(15,23,42,.75); border: 1px solid rgba(251,191,36,.45); cursor: pointer; }
+        .v3d-labels { position: absolute; inset: 0; }
+        .v3d-label { position: absolute; left: 0; top: 0; white-space: nowrap; text-align: center; font-size: 11px; line-height: 1.35; font-weight: 600; color: #f8fafc; background: rgba(15,23,42,.78); border: 1px solid #fde68a; border-radius: .6rem; padding: 2px 8px; will-change: transform; }
+        .v3d-label small { font-size: 10px; font-weight: 500; color: #cbd5e1; }
+        .v3d-info { position: absolute; left: 8px; right: 8px; bottom: 8px; font-size: 11.5px; line-height: 1.6; color: #e2e8f0; background: rgba(15,23,42,.86); border: 1px solid rgba(255,255,255,.14); border-radius: .8rem; padding: 7px 11px; }
+        .v3d-info b { color: #fcd34d; }
+        .mx { font-family: 'Cambria Math','STIX Two Math','Times New Roman',Georgia,serif; font-size: 1.12em; font-weight: 500; letter-spacing: .01em; }
+        .math-box.mx { font-size: 1.05rem; line-height: 2.3; }
+        .mx i { font-style: italic; }
+        .mx .mu { font-size: .8em; opacity: .85; }
+        .mx .nb { display: inline-block; white-space: nowrap; margin-right: .2em; }
+        .mx .fr { display: inline-flex; flex-direction: column; vertical-align: middle; text-align: center; margin: 0 .25em; line-height: 1.3; }
+        .mx .fr > span:first-child { border-bottom: 1.5px solid currentColor; padding: 0 .3em .08em; }
+        .mx .fr > span:last-child { padding: .08em .3em 0; }
+        .mx .fr .fr { font-size: .85em; }
+    </style>
+</head>
+<body class="antialiased selection:bg-emerald-100 selection:text-emerald-900">
+
+    <!-- Mobile Top Header -->
+    <header class="lg:hidden sticky top-0 z-40 bg-white/95 backdrop-blur border-b border-slate-200 px-4 py-3 flex items-center justify-between shadow-sm">
+        <div class="flex items-center gap-2.5">
+            <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-emerald-600 to-teal-700 flex items-center justify-center text-white font-bold shadow">
+                Ch3
+            </div>
+            <div>
+                <h1 class="text-sm font-bold text-slate-900 leading-tight">Grade 12 Chemistry</h1>
+                <p class="text-xs text-slate-500">Chemical Kinetics: Rates of Reaction</p>
+            </div>
+        </div>
+        <button id="mobile-menu-btn" class="p-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 transition" aria-label="Open Navigation">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+            </svg>
+        </button>
+    </header>
+
+    <!-- Mobile Backdrop -->
+    <div id="sidebar-backdrop" class="fixed inset-0 bg-slate-900/50 backdrop-blur-xs z-40 hidden lg:hidden transition-opacity"></div>
+
+    <div class="flex min-h-screen">
+        <!-- Left Sidebar Taskbar -->
+        <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-80 bg-white border-r border-slate-200 transform -translate-x-full lg:translate-x-0 lg:static lg:inset-auto transition-transform duration-300 ease-in-out flex flex-col shadow-xl lg:shadow-none">
+            <!-- Brand Header + Chapter Switcher -->
+            <div class="p-6 border-b border-slate-100 bg-gradient-to-br from-slate-900 via-emerald-950 to-teal-950 text-white">
+                <div class="flex items-center justify-between">
+                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-500/20 text-emerald-200 border border-emerald-400/30">
+                        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                        Grade 12 Chemistry
+                    </span>
+                    <button id="close-sidebar-btn" class="lg:hidden p-1.5 rounded-lg text-slate-300 hover:text-white hover:bg-white/10">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                    </button>
+                </div>
+                <h2 class="mt-3 text-lg font-bold tracking-tight leading-snug">Chapter 3: Chemical Kinetics: Rates of Reaction</h2>
+                <p class="mt-1 text-xs text-emerald-200/85">ပုံသေနည်းအစုံ၊ Ea ရှင်းလင်းချက်နှင့် Exercise No.7</p>
+
+                <!-- Cross-Chapter Page Navigation Bar -->
+                <div class="mt-4 pt-3 border-t border-white/15 flex flex-wrap gap-1.5">
+                    <a href="index.html" class="flex-1 text-center py-1.5 px-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-xs font-semibold text-white transition">Ch 1</a>
+                    <a href="chapter2.html" class="flex-1 text-center py-1.5 px-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-xs font-semibold text-white transition">Ch 2</a>
+                    <a href="chapter3.html" class="flex-1 text-center py-1.5 px-1.5 rounded-lg bg-emerald-500 text-xs font-semibold text-white shadow-xs">Ch 3</a>
+                    <a href="chapter4.html" class="flex-1 text-center py-1.5 px-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-xs font-semibold text-white transition">Ch 4 →</a>
+                </div>
+            </div>
+
+            <!-- Navigation List -->
+            <div class="flex-1 overflow-y-auto p-4 space-y-2">
+                <div class="px-3 py-1.5 text-xs font-bold uppercase tracking-wider text-slate-400">
+                    Chapter 3 လေ့လာရန် အပိုင်းများ (5 ခု)
+                </div>
+
+                <button onclick="selectArticle('formulas')" id="nav-formulas" class="nav-btn w-full text-left p-3.5 rounded-2xl transition-all duration-200 flex items-start gap-3 border border-transparent">
+                    <span class="nav-badge shrink-0 w-9 h-9 rounded-xl flex items-center justify-center text-sm font-bold">📐</span>
+                    <div>
+                        <div class="font-bold text-sm leading-snug">Textbook Formulas & Mind Map</div>
+                        <div class="text-xs opacity-80 mt-0.5">ဖတ်စာအုပ်ထဲက Rate ပုံသေနည်းအားလုံး စုစည်းချက်</div>
+                    </div>
+                </button>
+
+                <button onclick="selectArticle('3.1')" id="nav-3.1" class="nav-btn w-full text-left p-3.5 rounded-2xl transition-all duration-200 flex items-start gap-3 border border-transparent">
+                    <span class="nav-badge shrink-0 w-9 h-9 rounded-xl flex items-center justify-center text-sm font-bold">3.1</span>
+                    <div>
+                        <div class="font-bold text-sm leading-snug">Reaction Rates & Graphs</div>
+                        <div class="text-xs opacity-80 mt-0.5">Average vs Instantaneous Rate & Calculator</div>
+                    </div>
+                </button>
+
+                <button onclick="selectArticle('3.2')" id="nav-3.2" class="nav-btn w-full text-left p-3.5 rounded-2xl transition-all duration-200 flex items-start gap-3 border border-transparent">
+                    <span class="nav-badge shrink-0 w-9 h-9 rounded-xl flex items-center justify-center text-sm font-bold">3.2</span>
+                    <div>
+                        <div class="font-bold text-sm leading-snug">Collision Theory & Activation Energy</div>
+                        <div class="text-xs opacity-80 mt-0.5">Ea ဆိုတာဘာလဲ? ဘာတွေပါဝင်လဲ? (ပုံပြကားချပ်များ)</div>
+                    </div>
+                </button>
+
+                <button onclick="selectArticle('3.3')" id="nav-3.3" class="nav-btn w-full text-left p-3.5 rounded-2xl transition-all duration-200 flex items-start gap-3 border border-transparent">
+                    <span class="nav-badge shrink-0 w-9 h-9 rounded-xl flex items-center justify-center text-sm font-bold">3.3</span>
+                    <div>
+                        <div class="font-bold text-sm leading-snug">Factors Affecting Reaction Rates</div>
+                        <div class="text-xs opacity-80 mt-0.5">ဓာတ်ပြုနှုန်းကို ပြောင်းလဲစေသော အချက် (၆) ချက်</div>
+                    </div>
+                </button>
+
+                <button onclick="selectArticle('ex7')" id="nav-ex7" class="nav-btn w-full text-left p-3.5 rounded-2xl transition-all duration-200 flex items-start gap-3 border border-transparent">
+                    <span class="nav-badge shrink-0 w-9 h-9 rounded-xl flex items-center justify-center text-sm font-bold">Q.7</span>
+                    <div>
+                        <div class="font-bold text-sm leading-snug">Exercise No. 7 အကျယ်ချဲ့ ရှင်းလင်းချက်</div>
+                        <div class="text-xs opacity-80 mt-0.5">ကလေးအရွယ် နားလည်လွယ်သော ဥပမာများဖြင့်</div>
+                    </div>
+                </button>
+            </div>
+
+            <!-- Footer Tip -->
+            <div class="p-4 border-t border-slate-100 bg-slate-50">
+                <div class="p-3 rounded-xl bg-emerald-50 border border-emerald-200/80 text-xs text-emerald-900 flex items-start gap-2.5">
+                    <span class="text-base">💡</span>
+                    <span><strong>Catalyst</strong> သည် <strong>Ea</strong> ကိုသာ လျှော့ချပေးပြီး စုစုပေါင်း <strong>ΔH ကို လုံးဝမပြောင်းလဲစေပါ</strong>။</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="flex-1 min-w-0">
+            <div id="content-container" class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-10 py-6 lg:py-10 space-y-8">
+                <!-- Dynamic Content Rendered Here -->
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // ==========================================
+        // 1. GLOBAL STATE & THREE.JS ENGINE MANAGER
+        // ==========================================
+        let currentArticleId = 'formulas';
+        let activeScenes = [];
+
+        function clearActiveScenes() {
+            activeScenes.forEach(item => {
+                if (item.animId) cancelAnimationFrame(item.animId);
+                if (item.renderer) item.renderer.dispose();
+            });
+            activeScenes = [];
+        }
+
+        function init3DViewer(containerId, buildSceneCallback) {
+            const container = document.getElementById(containerId);
+            if (!container || typeof THREE === 'undefined') return null;
+            container.querySelectorAll('canvas,.v3d-ui').forEach(n => n.remove());
+            activeScenes = activeScenes.filter(r => { if (r.cid === containerId) { cancelAnimationFrame(r.animId); r.renderer.dispose(); return false; } return true; });
+
+            const width = container.clientWidth || 600;
+            const height = container.clientHeight || 360;
+
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
+            camera.position.set(0, 1.8, 7.5);
+
+            const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            renderer.setSize(width, height);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            container.appendChild(renderer.domElement);
+
+            // Overlay UI: legend, label toggle, floating labels, explanation panel
+            const ui = document.createElement('div');
+            ui.className = 'v3d-ui';
+            ui.innerHTML = `
+                <div class="v3d-legend" style="display:none"><span><i style="background:#f8fafc"></i>H</span><span><i style="background:#6b7280"></i>C</span><span><i style="background:#ef4444"></i>O</span></div>
+                <button type="button" class="v3d-btn">🏷️ ရှင်းလင်းချက်: ON</button>
+                <div class="v3d-zoom"><button type="button" data-z="in">+</button><button type="button" data-z="out">−</button><button type="button" data-z="reset">⟲</button></div>
+                <div class="v3d-labels"></div>
+                <div class="v3d-hint">👆 ဆွဲ၍လှည့်ပါ · ညှစ်၍/+ − ဖြင့် ချုံ့ချဲ့ပါ</div>
+                <div class="v3d-info"></div>`;
+            container.appendChild(ui);
+            const labelBox = ui.querySelector('.v3d-labels');
+            const labels = [];
+            const api = {
+                label(text, pos, color = '#fde68a', obj) {
+                    const el = document.createElement('div');
+                    el.className = 'v3d-label';
+                    el.style.borderColor = color;
+                    el.innerHTML = text;
+                    labelBox.appendChild(el);
+                    labels.push({ el, obj, pos: pos.clone ? pos.clone() : new THREE.Vector3(...pos) });
+                },
+                info(html) { ui.querySelector('.v3d-info').innerHTML = html; }
+            };
+            const btn = ui.querySelector('.v3d-btn');
+            btn.addEventListener('click', () => {
+                const on = labelBox.style.display === 'none';
+                labelBox.style.display = on ? '' : 'none';
+                btn.textContent = '🏷️ ရှင်းလင်းချက်: ' + (on ? 'ON' : 'OFF');
+            });
+
+            // Lighting
+            scene.add(new THREE.AmbientLight(0xffffff, 0.7));
+            const dirLight1 = new THREE.DirectionalLight(0xffffff, 0.9);
+            dirLight1.position.set(6, 9, 7);
+            scene.add(dirLight1);
+            const dirLight2 = new THREE.DirectionalLight(0xfdba74, 0.5);
+            dirLight2.position.set(-6, -4, -5);
+            scene.add(dirLight2);
+
+            const rootGroup = new THREE.Group();
+            scene.add(rootGroup);
+
+            const customUpdate = buildSceneCallback(rootGroup, camera, scene, api);
+            camera.lookAt(0, 0, 0);
+            const camPos0 = camera.position.clone();
+            let zoom = 1;
+            const setZoom = z => { zoom = Math.max(0.5, Math.min(2.4, z)); };
+            ui.querySelector('.v3d-zoom').addEventListener('click', e => {
+                const k = e.target.dataset.z;
+                if (k === 'in') setZoom(zoom * 1.25);
+                else if (k === 'out') setZoom(zoom / 1.25);
+                else if (k === 'reset') { zoom = 1; rootGroup.rotation.set(0, 0, 0); autoRotate = true; }
+            });
+
+            // Mouse & Touch Orbit Controls
+            let isDragging = false, prevX = 0, prevY = 0, autoRotate = true;
+            const onDown = (x, y) => { isDragging = true; autoRotate = false; prevX = x; prevY = y; ui.querySelector('.v3d-hint').style.opacity = 0; };
+            const onMove = (x, y) => {
+                if (!isDragging) return;
+                rootGroup.rotation.y += (x - prevX) * 0.01;
+                rootGroup.rotation.x = Math.max(-1.2, Math.min(1.2, rootGroup.rotation.x + (y - prevY) * 0.01));
+                prevX = x; prevY = y;
+            };
+            const onUp = () => { isDragging = false; };
+
+            const domElem = renderer.domElement;
+            domElem.addEventListener('mousedown', e => onDown(e.clientX, e.clientY));
+            domElem.addEventListener('wheel', e => { e.preventDefault(); setZoom(zoom * (e.deltaY < 0 ? 1.1 : 1 / 1.1)); }, { passive: false });
+            let pinchD = 0;
+            const tdist = e => Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
+            window.addEventListener('mousemove', e => onMove(e.clientX, e.clientY));
+            window.addEventListener('mouseup', onUp);
+            domElem.addEventListener('touchstart', e => { if (e.touches.length === 2) { isDragging = false; pinchD = tdist(e); } else if (e.touches.length === 1) onDown(e.touches[0].clientX, e.touches[0].clientY); }, { passive: true });
+            domElem.addEventListener('touchmove', e => { if (e.touches.length === 2) { const d = tdist(e); if (pinchD) setZoom(zoom * d / pinchD); pinchD = d; } else if (e.touches.length === 1) onMove(e.touches[0].clientX, e.touches[0].clientY); }, { passive: true });
+            domElem.addEventListener('touchend', () => { onUp(); pinchD = 0; });
+
+            window.addEventListener('resize', () => {
+                if (!container.isConnected || !container.clientWidth) return;
+                camera.aspect = container.clientWidth / container.clientHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(container.clientWidth, container.clientHeight);
+            });
+
+            const sceneRecord = { renderer, animId: null, cid: containerId };
+            activeScenes.push(sceneRecord);
+
+            const clock = new THREE.Clock();
+            const v = new THREE.Vector3();
+            function animate() {
+                sceneRecord.animId = requestAnimationFrame(animate);
+                const elapsed = clock.getElapsedTime();
+                if (autoRotate) rootGroup.rotation.y += 0.004;
+                if (typeof customUpdate === 'function') customUpdate(elapsed, rootGroup);
+                camera.position.copy(camPos0).multiplyScalar(1 / zoom);
+                renderer.render(scene, camera);
+
+                // Project floating labels onto the screen
+                const W = container.clientWidth, H = container.clientHeight;
+                scene.updateMatrixWorld();
+                labels.forEach(l => {
+                    v.copy(l.pos);
+                    (l.obj || rootGroup).localToWorld(v).project(camera);
+                    l.el.style.opacity = l.obj && !l.obj.visible ? 0 : 1;
+                    const hw = l.el.offsetWidth / 2 + 4;
+                    const x = Math.max(hw, Math.min(W - hw, (v.x * 0.5 + 0.5) * W));
+                    const y = Math.max(14, Math.min(H - 96, (-v.y * 0.5 + 0.5) * H));
+                    l.el.style.transform = `translate(-50%,-50%) translate(${x}px,${y}px)`;
+                });
+            }
+            animate();
+        }
+
+        function createAtom(radius, colorHex, x = 0, y = 0, z = 0) {
+            const geo = new THREE.SphereGeometry(radius, 32, 32);
+            const mat = new THREE.MeshStandardMaterial({ color: colorHex, roughness: 0.25, metalness: 0.15 });
+            const mesh = new THREE.Mesh(geo, mat);
+            mesh.position.set(x, y, z);
+            return mesh;
+        }
+
+        // Annotations: floating labels + explanation per 3D scene
+        const ANNOT = {"viewer-3-2:effective": {"l": [["H<sub>2</sub>", [0, 0.95, 0], "#e2e8f0", "H"], ["I<sub>2</sub>", [0, 1.15, 0], "#d8b4fe", "I"], ["HI (product)", [1.4, 2.0, 0], "#86efac"]], "i": "<b>Effective collision</b> — စွမ်းအင် ≥ E<sub>a</sub> နှင့် ဦးတည်ရာမှန်၍ တိုက်မိသည်။ အဝါလက်စွပ် = activated complex၊ ထို့နောက် HI ၂ မော်လီကျူး ခွဲထွက်သည်"}, "viewer-3-2:ineffective": {"l": [["H<sub>2</sub>", [0, 0.95, 0], "#e2e8f0", "H"], ["I<sub>2</sub>", [0, 1.15, 0], "#d8b4fe", "I"], ["Wrong orientation", [0, 1.7, 0], "#fca5a5"]], "i": "<b>Ineffective collision</b> — ဦးတည်ရာမမှန် (ဘေးတိုက်ထိ) သဖြင့် စည်းမပြတ်ဘဲ ပြန်ကန်ထွက်သွားသည်၊ HI မဖြစ်ပေါ်"}, "viewer-3-3:lump": {"l": [["Big lump", [0, 1.7, 0], "#7dd3fc"], ["H⁺ (acid particles)", [2.2, 1.9, 0], "#fca5a5"]], "i": "<b>အတုံးကြီး</b> — အပြင်မျက်နှာပြင်သာ acid နှင့်ထိ၍ collision နည်းသဖြင့် ဓာတ်ပြုနှေးသည်"}, "viewer-3-3:powder": {"l": [["Small pieces ×8", [0, 1.9, 0], "#86efac"], ["More exposed surface", [2.2, 0, 0], "#fde68a"]], "i": "<b>အမှုန့်/အတုံးသေး</b> — ခွဲလိုက်လျှင် surface area များ၍ collision များသဖြင့် ဓာတ်ပြုမြန်သည်"}, "viewer-3-3:catalyst": {"l": [["Catalyst surface", [0, -1.6, 0], "#fcd34d"], ["Active sites", [2.4, -0.3, 0], "#fef08a"], ["Reactant molecules", [0, 1.8, 0], "#7dd3fc"]], "i": "<b>Catalyst</b> — reactant များ active site တွင် adsorb ဖြစ်၍ E<sub>a</sub> နိမ့်သောလမ်းကြောင်းဖြင့် ဓာတ်ပြုမြန်စေပြီး ကိုယ်တိုင်မကုန်ဆုံးပါ"}};
+        function ANN(ui, id, mode, objs) {
+            const a = ANNOT[id + ':' + mode]; if (!a) return;
+            a.l.forEach(([t, p, c, o]) => ui.label(t, new THREE.Vector3(...p), c, o && objs && objs[o]));
+            ui.info(a.i);
+        }
+
+        // ==========================================
+        // 2. SPECIFIC 3D VISUALIZATIONS FOR CHAPTER 3
+        // ==========================================
+
+        // 3D Viewer 3.2: Effective vs Ineffective Molecular Collisions (H2 + I2 -> 2HI)
+        function render3D_3_2(mode) {
+            init3DViewer('viewer-3-2', (group, camera, scene, ui) => {
+                camera.position.set(0, 0.8, 7.6);
+
+                const h2Group = new THREE.Group();
+                h2Group.add(createAtom(0.32, 0xf8fafc, 0, 0.34, 0));
+                h2Group.add(createAtom(0.32, 0xf8fafc, 0, -0.34, 0));
+                group.add(h2Group);
+
+                const i2Group = new THREE.Group();
+                i2Group.add(createAtom(0.52, 0xa855f7, 0, 0.52, 0));
+                i2Group.add(createAtom(0.52, 0xa855f7, 0, -0.52, 0));
+                group.add(i2Group);
+                ANN(ui, 'viewer-3-2', mode, { H: h2Group, I: i2Group });
+
+                if (mode === 'effective') {
+                    const hiTop = new THREE.Group();
+                    hiTop.add(createAtom(0.32, 0xf8fafc, -0.42, 0, 0));
+                    hiTop.add(createAtom(0.52, 0xa855f7, 0.42, 0, 0));
+                    hiTop.position.set(0, 0.65, 0);
+                    hiTop.visible = false;
+
+                    const hiBot = new THREE.Group();
+                    hiBot.add(createAtom(0.32, 0xf8fafc, -0.42, 0, 0));
+                    hiBot.add(createAtom(0.52, 0xa855f7, 0.42, 0, 0));
+                    hiBot.position.set(0, -0.65, 0);
+                    hiBot.visible = false;
+
+                    const glow = new THREE.Mesh(
+                        new THREE.TorusGeometry(0.95, 0.05, 16, 48),
+                        new THREE.MeshBasicMaterial({ color: 0xfacc15 })
+                    );
+                    glow.visible = false;
+                    group.add(hiTop, hiBot, glow);
+
+                    return (t) => {
+                        const cycle = t % 4.0;
+                        if (cycle < 1.6) {
+                            const p = cycle / 1.6;
+                            h2Group.visible = true;
+                            i2Group.visible = true;
+                            hiTop.visible = false;
+                            hiBot.visible = false;
+                            glow.visible = false;
+                            h2Group.position.set(-2.6 + p * 2.15, 0, 0);
+                            i2Group.position.set(2.6 - p * 2.15, 0, 0);
+                        } else if (cycle < 2.2) {
+                            glow.visible = true;
+                            glow.scale.setScalar(1 + Math.sin((cycle - 1.6) * 15) * 0.12);
+                        } else {
+                            const p = (cycle - 2.2) / 1.8;
+                            h2Group.visible = false;
+                            i2Group.visible = false;
+                            glow.visible = false;
+                            hiTop.visible = true;
+                            hiBot.visible = true;
+                            hiTop.position.set(0, 0.65 + p * 1.4, 0);
+                            hiBot.position.set(0, -0.65 - p * 1.4, 0);
+                        }
+                    };
+                } else {
+                    h2Group.rotation.z = Math.PI / 2;
+                    return (t) => {
+                        const cycle = t % 3.2;
+                        if (cycle < 1.6) {
+                            const p = cycle / 1.6;
+                            h2Group.position.set(-2.6 + p * 1.85, 0, 0);
+                            i2Group.position.set(2.6 - p * 1.85, 0, 0);
+                        } else {
+                            const p = (cycle - 1.6) / 1.6;
+                            h2Group.position.set(-0.75 - p * 1.85, p * 0.5, 0);
+                            i2Group.position.set(0.75 + p * 1.85, -p * 0.5, 0);
+                        }
+                    };
+                }
+            });
+        }
+
+        // 3D Viewer 3.3: Factors Affecting Rate (Surface Area & Catalyst Adsorption)
+        function render3D_3_3(mode) {
+            init3DViewer('viewer-3-3', (group, camera, scene, ui) => { ANN(ui, 'viewer-3-3', mode);
+                camera.position.set(2.4, 2.2, 6.8);
+                camera.lookAt(0, 0, 0);
+
+                if (mode === 'lump') {
+                    const cube = new THREE.Mesh(
+                        new THREE.BoxGeometry(2.0, 2.0, 2.0),
+                        new THREE.MeshStandardMaterial({ color: 0x38bdf8, roughness: 0.3 })
+                    );
+                    const edges = new THREE.LineSegments(
+                        new THREE.EdgesGeometry(new THREE.BoxGeometry(2.02, 2.02, 2.02)),
+                        new THREE.LineBasicMaterial({ color: 0xffffff })
+                    );
+                    group.add(cube, edges);
+
+                    const acids = [];
+                    for (let i = 0; i < 16; i++) {
+                        const a = createAtom(0.11, 0xf43f5e, (Math.random()-0.5)*4.5, (Math.random()-0.5)*4.5, (Math.random()-0.5)*4.5);
+                        if (Math.abs(a.position.x) < 1.2 && Math.abs(a.position.y) < 1.2 && Math.abs(a.position.z) < 1.2) a.position.x = 1.8;
+                        group.add(a);
+                        acids.push(a);
+                    }
+                    return (t) => {
+                        acids.forEach((a, i) => {
+                            a.position.y += Math.sin(t * 3 + i) * 0.015;
+                        });
+                    };
+                } else if (mode === 'powder') {
+                    const offset = 0.72;
+                    for (let x of [-offset, offset]) {
+                        for (let y of [-offset, offset]) {
+                            for (let z of [-offset, offset]) {
+                                const smallCube = new THREE.Mesh(
+                                    new THREE.BoxGeometry(0.95, 0.95, 0.95),
+                                    new THREE.MeshStandardMaterial({ color: 0x10b981, roughness: 0.3 })
+                                );
+                                smallCube.position.set(x, y, z);
+                                const edges = new THREE.LineSegments(
+                                    new THREE.EdgesGeometry(new THREE.BoxGeometry(0.96, 0.96, 0.96)),
+                                    new THREE.LineBasicMaterial({ color: 0xffffff })
+                                );
+                                edges.position.set(x, y, z);
+                                group.add(smallCube, edges);
+                            }
+                        }
+                    }
+                } else if (mode === 'catalyst') {
+                    const bed = new THREE.Mesh(
+                        new THREE.BoxGeometry(3.8, 0.5, 2.6),
+                        new THREE.MeshStandardMaterial({ color: 0xf59e0b, metalness: 0.65, roughness: 0.25 })
+                    );
+                    bed.position.y = -0.8;
+                    group.add(bed);
+
+                    [-1.1, 0, 1.1].forEach(x => {
+                        const site = createAtom(0.18, 0xfef08a, x, -0.5, 0);
+                        group.add(site);
+                    });
+
+                    const m1 = createAtom(0.28, 0x38bdf8, -1.1, 0.8, 0);
+                    const m2 = createAtom(0.28, 0xf43f5e, 1.1, 0.8, 0);
+                    group.add(m1, m2);
+
+                    return (t) => {
+                        const yPos = -0.15 + Math.abs(Math.sin(t * 2)) * 1.1;
+                        m1.position.y = yPos;
+                        m2.position.y = yPos;
+                    };
+                }
+            });
+        }
+
+        // ==========================================
+        // 3. INTERACTIVE REACTION RATE CALCULATOR
+        // ==========================================
+        function runRateCalc() {
+            const c1 = parseFloat(document.getElementById('rate-c1')?.value) || 0;
+            const c2 = parseFloat(document.getElementById('rate-c2')?.value) || 0;
+            const dt = parseFloat(document.getElementById('rate-dt')?.value) || 1;
+            const coeff = parseFloat(document.getElementById('rate-coeff')?.value) || 1;
+            const role = document.getElementById('rate-role')?.value || 'reactant';
+
+            const deltaC = c2 - c1;
+            const rawRate = role === 'reactant' ? -(deltaC / dt) : (deltaC / dt);
+            const generalRate = rawRate / coeff;
+
+            const out = document.getElementById('rate-output');
+            if (out) {
+                out.innerHTML = `
+                    <div class="grid sm:grid-cols-3 gap-3 text-center">
+                        <div class="p-3 rounded-xl bg-white/10 border border-white/15">
+                            <div class="text-xs text-slate-300"><span class="mx">Δ[C] = <i>C</i><sub>final</sub> − <i>C</i><sub>initial</sub></span></div>
+                            <div class="text-lg font-bold text-amber-300">${deltaC.toFixed(4)} mol dm⁻³</div>
+                        </div>
+                        <div class="p-3 rounded-xl bg-white/10 border border-white/15">
+                            <div class="text-xs text-slate-300">Species Rate <span class="mx">(<span class="fr"><span>|Δ<i>C</i>|</span><span>Δ<i>t</i></span></span>)</span></div>
+                            <div class="text-lg font-bold text-sky-300">${rawRate.toFixed(5)} mol dm⁻³ s⁻¹</div>
+                        </div>
+                        <div class="p-3 rounded-xl bg-white/10 border border-white/15">
+                            <div class="text-xs text-slate-300">Overall Reaction Rate (÷ coeff)</div>
+                            <div class="text-lg font-bold text-emerald-300">${generalRate.toFixed(5)} mol dm⁻³ s⁻¹</div>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        // ==========================================
+        // 4. ARTICLE TEMPLATES (FORMULAS + 3.1 - 3.3 + EX 7)
+        // ==========================================
+        const ARTICLES = {
+            'formulas': {
+                badge: 'Chapter 3 Complete Formula Sheet',
+                title: 'ဖတ်စာအုပ်ပါ Rate of Reaction ပုံသေနည်းအားလုံး စုစည်းချက်',
+                subtitle: 'Grade 12 Chemistry Textbook (Section 3.1) မှ တွက်စာပုံသေနည်း ၈ မျိုးနှင့် ယူနစ်များ အပြည့်အစုံ',
+                html: `
+                    <!-- All 8 Textbook Formulas Card -->
+                    <div class="formula-card rounded-3xl p-6 sm:p-8 text-white shadow-xl space-y-6">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-white/15 pb-4">
+                            <div>
+                                <span class="text-xs font-bold uppercase tracking-wider text-emerald-300">Grade 12 Textbook (Section 3.1)</span>
+                                <h3 class="text-xl sm:text-2xl font-bold text-white mt-0.5">ဓာတ်ပြုမှုနှုန်း (Rate of Reaction) ပုံသေနည်း (၈) မျိုး</h3>
+                            </div>
+                            <span class="text-xs px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-200 border border-emerald-400/30 self-start">Exam Must-Know</span>
+                        </div>
+
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <!-- Formula 1 -->
+                            <div class="p-4 rounded-2xl bg-white/5 border border-white/10 space-y-2">
+                                <div class="text-xs font-bold text-amber-300 uppercase">၁။ အခြေခံ ယေဘုယျ ပုံသေနည်း (General Definition)</div>
+                                <div class="mx math-box p-3 rounded-xl text-xs sm:text-sm font-bold text-emerald-200">Rate of reaction = <span class="fr"><span>Change in quantity of reactant or product</span><span>Time taken for this change</span></span></div>
+                                <p class="myanmar-text text-xs text-slate-300">
+                                    အချိန်တစ်ယူနစ်အတွင်း ပြောင်းလဲသွားသော Reactant သို့မဟုတ် Product ပမာဏ (ဒြပ်ထု၊ ထုထည် သို့မဟုတ် ပြင်းအား) ကို အချိန်ဖြင့် စားခြင်းဖြစ်သည်။
+                                </p>
+                            </div>
+
+                            <!-- Formula 2 -->
+                            <div class="p-4 rounded-2xl bg-white/5 border border-white/10 space-y-2">
+                                <div class="text-xs font-bold text-rose-300 uppercase">၂။ Reactant လျော့နည်းသွားမှုဖြင့် တွက်နည်း (Reactant Used Up)</div>
+                                <div class="mx math-box p-3 rounded-xl text-xs sm:text-sm font-bold text-rose-200">Rate = <span class="fr"><span>Decrease in concentration of reactant</span><span>Time taken</span></span> = −<span class="fr"><span>Δ[Reactant]</span><span>Δ<i>t</i></span></span></div>
+                                <p class="myanmar-text text-xs text-slate-300">
+                                    Reactant ပြင်းအားသည် အချိန်ကြာလေ နည်းသွားလေ (C₂ &lt; C₁) ဖြစ်၍ Δ[Reactant] မှာ အနုတ်ထွက်သည်။ ထို့ကြောင့် Rate အပေါင်းရစေရန် ရှေ့မှ <strong>အနုတ် (-)</strong> ထည့်ရသည်။
+                                </p>
+                            </div>
+
+                            <!-- Formula 3 -->
+                            <div class="p-4 rounded-2xl bg-white/5 border border-white/10 space-y-2">
+                                <div class="text-xs font-bold text-emerald-300 uppercase">၃။ Product တိုးပွားလာမှုဖြင့် တွက်နည်း (Product Formed)</div>
+                                <div class="mx math-box p-3 rounded-xl text-xs sm:text-sm font-bold text-emerald-200">Rate = <span class="fr"><span>Increase in concentration of product</span><span>Time taken</span></span> = +<span class="fr"><span>Δ[Product]</span><span>Δ<i>t</i></span></span></div>
+                                <p class="myanmar-text text-xs text-slate-300">
+                                    Product ပြင်းအားသည် အချိန်ကြာလေ များလာလေ (C₂ &gt; C₁) ဖြစ်၍ Δ[Product] မှာ အပေါင်းထွက်သည်။ ထို့ကြောင့် <strong>အပေါင်း (+)</strong> လက္ခဏာသုံးသည်။
+                                </p>
+                            </div>
+
+                            <!-- Formula 4 -->
+                            <div class="p-4 rounded-2xl bg-white/5 border border-white/10 space-y-2">
+                                <div class="text-xs font-bold text-sky-300 uppercase">၄။ ပျော်ရည်ပြင်းအား (Solution Concentration) ပုံသေနည်း</div>
+                                <div class="mx math-box p-3 rounded-xl text-xs sm:text-sm font-bold text-sky-200">Rate = ± <span class="fr"><span>Δ<i>C</i></span><span>Δ<i>t</i></span></span> = ± <span class="fr"><span><i>C</i><sub>2</sub> − <i>C</i><sub>1</sub></span><span><i>t</i><sub>2</sub> − <i>t</i><sub>1</sub></span></span> <span class="mu">[Unit: mol dm<sup>−3</sup> s<sup>−1</sup>]</span></div>
+                                <p class="myanmar-text text-xs text-slate-300">
+                                    ပျော်ရည်ထဲရှိ ဓာတ်ပြုမှုများအတွက် သုံးသည်။ <code>C₁</code> = t₁ အချိန်ရှိ ပြင်းအား၊ <code>C₂</code> = t₂ အချိန်ရှိ ပြင်းအား (mol dm⁻³)။
+                                </p>
+                            </div>
+
+                            <!-- Formula 5 -->
+                            <div class="p-4 rounded-2xl bg-white/5 border border-white/10 space-y-2">
+                                <div class="text-xs font-bold text-purple-300 uppercase">၅။ ဓာတ်ငွေ့ ထုထည် / ဖိအား ပုံသေနည်း (For Gases)</div>
+                                <div class="mx math-box p-3 rounded-xl text-xs sm:text-sm font-bold text-purple-200"><span class="nb">Rate = <span class="fr"><span>Δ<i>V</i></span><span>Δ<i>t</i></span></span> <span class=mu>[cm<sup>3</sup> s<sup>−1</sup> / dm<sup>3</sup> s<sup>−1</sup>]</span></span> <span class="mu">သို့</span> <span class="nb">Rate = <span class="fr"><span>Δ<i>P</i></span><span>Δ<i>t</i></span></span> <span class=mu>[atm s<sup>−1</sup> / Pa s<sup>−1</sup>]</span></span></div>
+                                <p class="myanmar-text text-xs text-slate-300">
+                                    ဓာတ်ငွေ့ထွက်သော ဓာတ်ပြုမှုများ (ဥပမာ- Zn + HCl → H₂↑) တွင် Gas syringe ဖြင့် ထုထည်တိုင်းတာရာ၌ သုံးသည်။
+                                </p>
+                            </div>
+
+                            <!-- Formula 6 -->
+                            <div class="p-4 rounded-2xl bg-white/5 border border-white/10 space-y-2">
+                                <div class="text-xs font-bold text-orange-300 uppercase">၆။ ဒြပ်ထုနှင့် မိုးလ် (Mass & Moles) ပုံသေနည်း</div>
+                                <div class="mx math-box p-3 rounded-xl text-xs sm:text-sm font-bold text-orange-200"><span class="nb">Rate = <span class="fr"><span>Δ<i>m</i></span><span>Δ<i>t</i></span></span> <span class=mu>[g s<sup>−1</sup>]</span></span> <span class="mu">|</span> <span class="nb">Rate <span class=mu>(mol s<sup>−1</sup>)</span> = <span class="fr"><span><span class="fr"><span>Mass</span><span>Molar Mass</span></span></span><span>Time</span></span></span></div>
+                                <p class="myanmar-text text-xs text-slate-300">
+                                    ဥပမာ- ၂ မိနစ် (120 s) အတွင်း Zn 30 g ကုန်သွားလျှင် အရင်ဆုံး Zn ၏ မိုးလ် (30 ÷ 65.38) ရှာပြီး 120 s ဖြင့် စားရသည်။
+                                </p>
+                            </div>
+
+                            <!-- Formula 7 -->
+                            <div class="p-4 rounded-2xl bg-white/5 border border-white/10 space-y-2 md:col-span-2">
+                                <div class="text-xs font-bold text-yellow-300 uppercase">၇။ Stoichiometric Equation တစ်ခုလုံး၏ Rate Expression (aA + bB → cC + dD)</div>
+                                <div class="mx math-box p-3.5 rounded-xl text-xs sm:text-base font-bold text-yellow-200 text-center">Rate of reaction = <span class="nb">−<span class="fr"><span>1</span><span><i>a</i></span></span><span class="fr"><span>Δ[<i>A</i>]</span><span>Δ<i>t</i></span></span></span> = <span class="nb">−<span class="fr"><span>1</span><span><i>b</i></span></span><span class="fr"><span>Δ[<i>B</i>]</span><span>Δ<i>t</i></span></span></span> = <span class="nb">+<span class="fr"><span>1</span><span><i>c</i></span></span><span class="fr"><span>Δ[<i>C</i>]</span><span>Δ<i>t</i></span></span></span> = <span class="nb">+<span class="fr"><span>1</span><span><i>d</i></span></span><span class="fr"><span>Δ[<i>D</i>]</span><span>Δ<i>t</i></span></span></span></div>
+                                <div class="grid sm:grid-cols-2 gap-3 pt-1 text-xs text-slate-200 myanmar-text">
+                                    <div class="p-2.5 rounded-xl bg-black/25">
+                                        <strong>အထူးသတိပြုရန် (က):</strong> မေးခွန်းက <strong>"Rate of reaction"</strong> ဟုမေးလျှင် ရှေ့က ဂဏန်း (a, b, c, d) ဖြင့် <strong>ပြန်စား</strong> ပေးရမည်။
+                                    </div>
+                                    <div class="p-2.5 rounded-xl bg-black/25">
+                                        <strong>အထူးသတိပြုရန် (ခ):</strong> မေးခွန်းက <strong>"Rate of disappearance of A" (<span class="mx">−<span class="fr"><span>Δ[A]</span><span>Δ<i>t</i></span></span></span>)</strong> သို့မဟုတ် <strong>"Rate of formation of C" (<span class="mx">+<span class="fr"><span>Δ[C]</span><span>Δ<i>t</i></span></span></span>)</strong> ဟုမေးလျှင် စားစရာမလိုဘဲ <code>a × Rate</code> (သို့) <code>c × Rate</code> ဖြစ်သည်။
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Formula 8 -->
+                            <div class="p-4 rounded-2xl bg-white/5 border border-white/10 space-y-2 md:col-span-2">
+                                <div class="text-xs font-bold text-teal-300 uppercase">၈။ ဂရပ်ဖ်ပေါ်မှ တွက်နည်း (Average Rate vs Instantaneous Rate)</div>
+                                <div class="grid sm:grid-cols-2 gap-3 text-xs">
+                                    <div class="math-box p-3 rounded-xl text-teal-200">
+                                        <strong>Average Rate:</strong> သတ်မှတ်အချိန်အပိုင်းအခြား Δt အတွင်း ပျမ်းမျှနှုန်း = <span class="mx"><span class="fr"><span>Δ(Quantity)</span><span>Δ<i>t</i></span></span></span>
+                                    </div>
+                                    <div class="math-box p-3 rounded-xl text-teal-200">
+                                        <strong>Instantaneous Rate:</strong> အချိန်တစ်မှတ် (t) ရှိ <strong>Tangent မျဉ်းစောင်း (Gradient)</strong> = <span class="mx"><span class="fr"><span>Rise</span><span>Run</span></span></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Visual Mind Map -->
+                    <div class="bg-white rounded-3xl border border-slate-200 p-5 sm:p-7 shadow-sm space-y-4">
+                        <h3 class="text-lg font-bold text-slate-900">🧠 Chapter 3 တစ်ခုလုံး ချိတ်ဆက်မှုမြေပုံ (Quick Navigation)</h3>
+                        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
+                            <button onclick="selectArticle('3.1')" class="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-left hover:bg-emerald-100 transition">
+                                <div class="font-bold text-emerald-900 text-sm">3.1 Reaction Rates →</div>
+                                <p class="text-emerald-800 mt-1">ဂရပ်ဖ်များနှင့် Interactive Rate Calculator</p>
+                            </button>
+                            <button onclick="selectArticle('3.2')" class="p-4 rounded-2xl bg-sky-50 border border-sky-200 text-left hover:bg-sky-100 transition">
+                                <div class="font-bold text-sky-900 text-sm">3.2 Activation Energy →</div>
+                                <p class="text-sky-800 mt-1">Ea အတွင်းသဘောတရား၊ Maxwell-Boltzmann & 3D</p>
+                            </button>
+                            <button onclick="selectArticle('3.3')" class="p-4 rounded-2xl bg-amber-50 border border-amber-200 text-left hover:bg-amber-100 transition">
+                                <div class="font-bold text-amber-900 text-sm">3.3 6 Factors →</div>
+                                <p class="text-amber-800 mt-1">ဓာတ်ပြုနှုန်း ပြောင်းလဲစေသော အချက် (၆) ချက်</p>
+                            </button>
+                            <button onclick="selectArticle('ex7')" class="p-4 rounded-2xl bg-purple-50 border border-purple-200 text-left hover:bg-purple-100 transition">
+                                <div class="font-bold text-purple-900 text-sm">Exercise No. 7 →</div>
+                                <p class="text-purple-800 mt-1">ကလေးအရွယ် နားလည်လွယ်သော ဥပမာများဖြင့်</p>
+                            </button>
+                        </div>
+                    </div>
+                `
+            },
+
+            '3.1': {
+                badge: 'Article 3.1',
+                title: 'Reaction Rates & Measuring Methods',
+                subtitle: 'ဓာတ်ပြုမှုနှုန်း ဂရပ်ဖ်များ (Average vs Instantaneous Rate) နှင့် တွက်စာနမူနာများ',
+                html: `
+                    <!-- Interactive Rate Calculator -->
+                    <div class="formula-card rounded-3xl p-6 sm:p-8 text-white shadow-xl space-y-4">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                            <h3 class="text-lg sm:text-xl font-bold text-emerald-300">🧮 Reaction Rate တွက်ချက်စက် (<span class="mx">Rate = ± <span class="fr"><span>Δ[C]</span><span>Δ<i>t</i></span></span></span>)</h3>
+                            <span class="text-xs text-slate-300">Example 1 (N₂O₅) တန်ဖိုးများ ထည့်ထားပါသည်</span>
+                        </div>
+                        <div class="grid grid-cols-2 sm:grid-cols-5 gap-3 text-xs">
+                            <div>
+                                <label class="block text-slate-300 mb-1">အမျိုးအစား</label>
+                                <select id="rate-role" onchange="runRateCalc()" class="w-full px-2.5 py-2 rounded-xl bg-slate-800 border border-white/20 text-white font-bold focus:outline-none">
+                                    <option value="reactant">Reactant (လျော့)</option>
+                                    <option value="product">Product (တိုး)</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-slate-300 mb-1"><i>C</i><sub>initial</sub> (M)</label>
+                                <input id="rate-c1" type="number" step="0.001" value="0.0165" oninput="runRateCalc()" class="w-full px-3 py-2 rounded-xl bg-white/10 border border-white/20 text-white font-bold focus:outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-slate-300 mb-1"><i>C</i><sub>final</sub> (M)</label>
+                                <input id="rate-c2" type="number" step="0.001" value="0.0124" oninput="runRateCalc()" class="w-full px-3 py-2 rounded-xl bg-white/10 border border-white/20 text-white font-bold focus:outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-slate-300 mb-1">Time Δt (s)</label>
+                                <input id="rate-dt" type="number" value="600" oninput="runRateCalc()" class="w-full px-3 py-2 rounded-xl bg-white/10 border border-white/20 text-white font-bold focus:outline-none">
+                            </div>
+                            <div class="col-span-2 sm:col-span-1">
+                                <label class="block text-slate-300 mb-1">Stoich. Coeff</label>
+                                <input id="rate-coeff" type="number" value="2" oninput="runRateCalc()" class="w-full px-3 py-2 rounded-xl bg-white/10 border border-white/20 text-white font-bold focus:outline-none">
+                            </div>
+                        </div>
+                        <div id="rate-output" class="pt-2"></div>
+                    </div>
+
+                    <!-- Concentration-Time Graph SVG + Explanation -->
+                    <div class="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 shadow-sm space-y-5">
+                        <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2.5">
+                            <span class="w-8 h-8 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center text-sm font-bold">3.1</span>
+                            ဓာတ်ပြုမှုနှုန်း ဂရပ်ဖ် (Concentration vs Time Graph) နှင့် တွက်စာနမူနာ
+                        </h3>
+                        <p class="myanmar-text text-slate-700 text-sm sm:text-base">
+                            ဓာတ်ပြုမှုတစ်ခု စတင်ချိန် (t = 0) တွင် Reactant ပြင်းအား အများဆုံးဖြစ်သဖြင့် <strong>Initial rate (ကနဦးနှုန်း)</strong> သည် အမြန်ဆုံးဖြစ်သည်။ အချိန်ကြာလာသည်နှင့်အမျှ Reactant လျော့နည်းလာသဖြင့် ဓာတ်ပြုနှုန်း နှေးကွေးသွားပြီး Reactant ကုန်ဆုံးချိန်တွင် ဂရပ်ဖ်မျဉ်းကွေးသည် ရေပြင်ညီ (Flat) ဖြစ်သွားကာ ဓာတ်ပြုမှု ရပ်တန့်သွားသည်။
+                        </p>
+
+                        <!-- SVG Graph -->
+                        <div class="bg-slate-50 rounded-2xl p-4 border border-slate-200">
+                            <div class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">ပုံပြကားချပ် - Reactant လျော့ကျမှုနှင့် Product တိုးပွားမှု ဂရပ်ဖ်</div>
+                            <svg viewBox="0 0 660 205" class="w-full h-auto">
+                                <line x1="60" y1="20" x2="60" y2="165" stroke="#475569" stroke-width="2"/>
+                                <line x1="60" y1="165" x2="610" y2="165" stroke="#475569" stroke-width="2"/>
+                                <text x="25" y="95" transform="rotate(-90 25,95)" text-anchor="middle" font-size="11" font-weight="bold" fill="#334155">Concentration (mol dm⁻³)</text>
+                                <text x="335" y="188" text-anchor="middle" font-size="11" font-weight="bold" fill="#334155">Time (s) →</text>
+
+                                <!-- Product Curve -->
+                                <path d="M 60 165 Q 150 55, 580 42" fill="none" stroke="#10b981" stroke-width="3"/>
+                                <text x="450" y="34" font-size="11.5" font-weight="bold" fill="#047857">Product [P] တိုးလာပုံ (+Δ[P]/Δt)</text>
+
+                                <!-- Reactant Curve -->
+                                <path d="M 60 35 Q 150 145, 580 158" fill="none" stroke="#e11d48" stroke-width="3"/>
+                                <text x="440" y="146" font-size="11.5" font-weight="bold" fill="#be123c">Reactant [R] လျော့သွားပုံ (-Δ[R]/Δt)</text>
+
+                                <!-- Tangent Line at t=0 -->
+                                <line x1="60" y1="165" x2="170" y2="30" stroke="#0284c7" stroke-width="2" stroke-dasharray="5,4"/>
+                                <text x="215" y="75" font-size="11" font-weight="bold" fill="#0369a1">Initial Rate = t=0 ရှိ Tangent မျဉ်းစောင်း</text>
+                            </svg>
+                        </div>
+
+                        <!-- Worked Examples -->
+                        <div class="grid md:grid-cols-2 gap-4 text-xs sm:text-sm">
+                            <div class="p-4 rounded-2xl bg-emerald-50/70 border border-emerald-200 space-y-2">
+                                <div class="font-bold text-emerald-900">တွက်စာ (၁) — 2N₂O₅(g) → 4NO₂(g) + O₂(g)</div>
+                                <p class="myanmar-text text-slate-700 text-xs">
+                                    t = 0 s တွင် [N₂O₅] = 0.0165 mol dm⁻³ ရှိပြီး t = 600 s တွင် 0.0124 mol dm⁻³ သို့ လျော့ကျသွားလျှင် Rate နှင့် NO₂ ဖြစ်ပေါ်မှုနှုန်းကို တွက်ပါ။
+                                </p>
+                                <div class="bg-white p-3 rounded-xl border border-emerald-200/80 font-mono text-xs space-y-1 text-slate-800">
+                                    <div class="mx">Rate = −<span class="fr"><span>1</span><span>2</span></span> × <span class="fr"><span>0.0124 − 0.0165</span><span>600</span></span> = 3.42 × 10<sup>−6</sup> mol dm<sup>−3</sup> s<sup>−1</sup></div>
+                                    <div class="mx font-bold text-emerald-800">Rate of NO<sub>2</sub> formed = 4 × Rate = 1.37 × 10<sup>−5</sup> mol dm<sup>−3</sup> s<sup>−1</sup></div>
+                                </div>
+                            </div>
+
+                            <div class="p-4 rounded-2xl bg-sky-50/70 border border-sky-200 space-y-2">
+                                <div class="font-bold text-sky-900">တွက်စာ (၂) — Zn(s) + 2HCl(aq) → ZnCl₂(aq) + H₂(g)</div>
+                                <p class="myanmar-text text-slate-700 text-xs">
+                                    ၂ မိနစ် (120 s) အတွင်း Zn 30 g ဓာတ်ပြုကုန်သွားလျှင် Rate ကို mol s⁻¹ ဖြင့် တွက်ပါ။ (Zn = 65.38)
+                                </p>
+                                <div class="bg-white p-3 rounded-xl border border-sky-200/80 font-mono text-xs space-y-1 text-slate-800">
+                                    <div class="mx">moles of Zn = <span class="fr"><span>30 g</span><span>65.38 g mol<sup>−1</sup></span></span> = 0.4589 mol</div>
+                                    <div class="mx font-bold text-sky-800">Rate = <span class="fr"><span>0.4589 mol</span><span>120 s</span></span> = 3.82 × 10<sup>−3</sup> mol s<sup>−1</sup></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `,
+                onMount: () => runRateCalc()
+            },
+
+            '3.2': {
+                badge: 'Article 3.2',
+                title: 'Collision Theory & Activation Energy (Ea) အသေးစိတ်',
+                subtitle: 'Activation Energy ဆိုတာဘာလဲ? ဘာတွေပါဝင်လဲ? စွမ်းအင်ပုံပြကားချပ်များနှင့် 3D ပုံစံ',
+                html: `
+                    <!-- 3D Molecular Collision Viewer -->
+                    <div class="bg-white rounded-3xl border border-slate-200 p-5 sm:p-7 shadow-sm space-y-4">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                            <div>
+                                <span class="text-xs font-bold uppercase tracking-wider text-sky-600">Interactive 3D Collision Simulation</span>
+                                <h3 class="text-lg font-bold text-slate-900">H₂ + I₂ → 2HI Effective vs Ineffective Collision 3D</h3>
+                            </div>
+                            <div class="flex flex-wrap gap-2">
+                                <button onclick="render3D_3_2('effective')" class="px-3.5 py-2 rounded-xl text-xs font-semibold bg-emerald-600 text-white hover:bg-emerald-700 transition">✅ Effective Collision (2HI ဖြစ်)</button>
+                                <button onclick="render3D_3_2('ineffective')" class="px-3.5 py-2 rounded-xl text-xs font-semibold bg-rose-600 text-white hover:bg-rose-700 transition">❌ Ineffective (ဦးတည်ချက်မှား)</button>
+                            </div>
+                        </div>
+                        <div id="viewer-3-2" class="canvas-container"></div>
+                        <p class="text-xs text-slate-500 text-center">💡 Collision Theory အရ ဓာတ်ပြုမှုဖြစ်ရန် <strong>(၁) Energy ≥ Activation Energy (Ea)</strong> နှင့် <strong>(၂) Proper Orientation (ဦးတည်ချက်မှန်)</strong> နှစ်ချက်လုံး လိုအပ်သည်။</p>
+                    </div>
+
+                    <!-- Deep Dive: What is Activation Energy (Ea) & What is Inside Ea? -->
+                    <div class="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 shadow-sm space-y-6">
+                        <div class="border-b border-slate-100 pb-4">
+                            <span class="text-xs font-bold uppercase tracking-wider text-sky-600">Deep Concept Breakdown</span>
+                            <h3 class="text-xl sm:text-2xl font-bold text-slate-900 mt-1">Activation Energy (Ea) ဆိုတာဘာလဲ? ၎င်းထဲမှာ ဘာတွေပါဝင်နေသလဲ?</h3>
+                        </div>
+
+                        <div class="p-5 rounded-2xl bg-sky-50 border border-sky-200 space-y-2">
+                            <div class="font-bold text-sky-950 text-sm sm:text-base">📘 ဖတ်စာအုပ် အဓိပ္ပာယ်ဖွင့်ဆိုချက် (Textbook Definition)</div>
+                            <p class="myanmar-text text-slate-800 text-sm sm:text-base">
+                                <strong>Activation Energy (Ea)</strong> ဆိုသည်မှာ ဓာတ်ပြုပစ္စည်းအမှုန်များ (Reacting particles) ဓာတ်ပြုမှုအောင်မြင်စွာ ဖြစ်ပေါ်စေရန်နှင့် <strong>Activated Complex</strong> ဖွဲ့စည်းနိုင်ရန် <strong>အနည်းဆုံး ပိုင်ဆိုင်ထားရမည့် စွမ်းအင်ပမာဏ (Minimum amount of energy)</strong> ဖြစ်သည်။
+                            </p>
+                            <p class="text-xs text-sky-800 font-medium">
+                                🏔️ <strong>လွယ်ကူသော ဥပမာ:</strong> ဘောလုံးတစ်လုံးကို တောင်ကုန်းတစ်ဖက်မှ အခြားတစ်ဖက်သို့ လှိမ့်ချရန် တောင်ထိပ်အထိ တွန်းတင်ပေးရသည့် အနိမ့်ဆုံးစွမ်းအင်သည် <strong>Activation Energy (Ea)</strong> ဖြစ်ပြီး၊ တောင်ထိပ်ဆုံးအမှတ်သည် <strong>Transition State (Activated Complex)</strong> ဖြစ်သည်။
+                            </p>
+                        </div>
+
+                        <!-- What is involved inside Activation Energy (3 Core Components) -->
+                        <div class="space-y-3">
+                            <h4 class="font-bold text-slate-900 text-base sm:text-lg">🔍 Activation Energy (Ea) စွမ်းအင်ထဲမှာ ဘာတွေပါဝင်သလဲ? (အချက် ၃ ချက်)</h4>
+                            <div class="grid md:grid-cols-3 gap-4 text-xs sm:text-sm myanmar-text">
+                                <div class="p-4 rounded-2xl bg-rose-50/70 border border-rose-200 space-y-1.5">
+                                    <div class="font-bold text-rose-900">၁။ Electron Cloud တွန်းကန်အားကို ကျော်လွှားခြင်း</div>
+                                    <p class="text-slate-700">မော်လီကျူးနှစ်ခု အနီးကပ်ဆုံမိသောအခါ အပြင်ဘက်ရှိ အမဓာတ်ဆောင် အီလက်ထရွန်တိမ်တိုက်များ (Electron clouds) အချင်းချင်း တွန်းကန်ကြသည်။ ထိုတွန်းကန်အားကို ကျော်ဖြတ်ပြီး နီးကပ်နိုင်ရန် Kinetic energy လိုအပ်သည်။</p>
+                                </div>
+                                <div class="p-4 rounded-2xl bg-amber-50/70 border border-amber-200 space-y-1.5">
+                                    <div class="font-bold text-amber-900">၂။ စည်းဟောင်းများ ဆန့်ထွက်ပြတ်တောက်ခြင်း</div>
+                                    <p class="text-slate-700">Reactant မော်လီကျူးအတွင်း ရှိနှင့်ပြီးသား ဓာတုစည်းဟောင်းများ (ဥပမာ- H-H နှင့် I-I စည်းများ) ကို ဆွဲဆန့်၍ အားပျော့ပြတ်တောက်သွားစေရန် စွမ်းအင်စုပ်ယူရသည်။</p>
+                                </div>
+                                <div class="p-4 rounded-2xl bg-purple-50/70 border border-purple-200 space-y-1.5">
+                                    <div class="font-bold text-purple-900">၃။ Activated Complex (Transition State) ဖွဲ့စည်းခြင်း</div>
+                                    <p class="text-slate-700">စည်းဟောင်းများ တစ်ဝက်တစ်ပျက်ပြတ်နေပြီး စည်းသစ်များ (H-I) တစ်ဝက်တစ်ပျက် စတင်တွဲဆက်နေသော <strong>စွမ်းအင်အမြင့်ဆုံး၊ မတည်ငြိမ်ဆုံး ကြားခံအခြေအနေ (Transition state)</strong> သို့ ရောက်ရှိခြင်းဖြစ်သည်။</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Detailed SVG Diagram 1: Exothermic vs Endothermic Energy Profiles (showing Ea forward, Ea reverse, Transition State, ΔH) -->
+                        <div class="bg-slate-50 rounded-2xl p-4 sm:p-5 border border-slate-200 space-y-3">
+                            <div class="text-xs font-bold text-slate-600 uppercase tracking-wider">ပုံပြကားချပ် (၁) — Exothermic နှင့် Endothermic ၏ Activation Energy (Ea) နှိုင်းယှဉ်ပုံ</div>
+                            <svg viewBox="0 0 740 265" class="w-full h-auto">
+                                <!-- LEFT: EXOTHERMIC -->
+                                <rect x="10" y="10" width="350" height="245" rx="14" fill="#ffffff" stroke="#fecdd3" stroke-width="2"/>
+                                <text x="185" y="34" text-anchor="middle" font-size="13" font-weight="bold" fill="#be123c">(A) Exothermic Reaction (ΔH = -)</text>
+                                <line x1="48" y1="50" x2="48" y2="215" stroke="#64748b" stroke-width="2"/>
+                                <line x1="48" y1="215" x2="340" y2="215" stroke="#64748b" stroke-width="2"/>
+                                <text x="24" y="135" transform="rotate(-90 24,135)" text-anchor="middle" font-size="11" font-weight="bold" fill="#475569">Potential Energy</text>
+                                <text x="195" y="236" text-anchor="middle" font-size="11" fill="#475569">Reaction Progress →</text>
+
+                                <!-- Reactant & Product Lines -->
+                                <line x1="65" y1="125" x2="145" y2="125" stroke="#1e293b" stroke-width="3"/>
+                                <text x="105" y="116" text-anchor="middle" font-size="11" font-weight="bold" fill="#1e293b">Reactants</text>
+                                <line x1="65" y1="125" x2="310" y2="125" stroke="#94a3b8" stroke-width="1" stroke-dasharray="4,3"/>
+
+                                <line x1="235" y1="185" x2="325" y2="185" stroke="#1e293b" stroke-width="3"/>
+                                <text x="280" y="202" text-anchor="middle" font-size="11" font-weight="bold" fill="#1e293b">Products</text>
+
+                                <!-- Curve -->
+                                <path d="M 145 125 C 175 125, 180 62, 200 62 C 220 62, 225 185, 235 185" fill="none" stroke="#e11d48" stroke-width="3"/>
+                                <circle cx="200" cy="62" r="5" fill="#f59e0b"/>
+                                <text x="200" y="52" text-anchor="middle" font-size="10.5" font-weight="bold" fill="#b45309">Transition State (Activated Complex)</text>
+
+                                <!-- Ea(forward) Arrow -->
+                                <line x1="165" y1="125" x2="165" y2="66" stroke="#0284c7" stroke-width="2"/>
+                                <polygon points="161,68 169,68 165,62" fill="#0284c7"/>
+                                <text x="132" y="95" text-anchor="middle" font-size="10.5" font-weight="bold" fill="#0369a1">Ea(f) နည်း</text>
+
+                                <!-- ΔH Arrow -->
+                                <line x1="285" y1="125" x2="285" y2="181" stroke="#e11d48" stroke-width="2"/>
+                                <polygon points="281,179 289,179 285,185" fill="#e11d48"/>
+                                <text x="315" y="158" text-anchor="middle" font-size="10.5" font-weight="bold" fill="#be123c">ΔH (-)</text>
+
+                                <!-- RIGHT: ENDOTHERMIC -->
+                                <rect x="380" y="10" width="350" height="245" rx="14" fill="#ffffff" stroke="#bae6fd" stroke-width="2"/>
+                                <text x="555" y="34" text-anchor="middle" font-size="13" font-weight="bold" fill="#0369a1">(B) Endothermic Reaction (ΔH = +)</text>
+                                <line x1="418" y1="50" x2="418" y2="215" stroke="#64748b" stroke-width="2"/>
+                                <line x1="418" y1="215" x2="710" y2="215" stroke="#64748b" stroke-width="2"/>
+                                <text x="394" y="135" transform="rotate(-90 394,135)" text-anchor="middle" font-size="11" font-weight="bold" fill="#475569">Potential Energy</text>
+                                <text x="565" y="236" text-anchor="middle" font-size="11" fill="#475569">Reaction Progress →</text>
+
+                                <!-- Reactant & Product Lines -->
+                                <line x1="435" y1="185" x2="515" y2="185" stroke="#1e293b" stroke-width="3"/>
+                                <text x="475" y="202" text-anchor="middle" font-size="11" font-weight="bold" fill="#1e293b">Reactants</text>
+                                <line x1="435" y1="185" x2="680" y2="185" stroke="#94a3b8" stroke-width="1" stroke-dasharray="4,3"/>
+
+                                <line x1="605" y1="115" x2="695" y2="115" stroke="#1e293b" stroke-width="3"/>
+                                <text x="650" y="106" text-anchor="middle" font-size="11" font-weight="bold" fill="#1e293b">Products</text>
+
+                                <!-- Curve -->
+                                <path d="M 515 185 C 535 185, 545 62, 570 62 C 590 62, 595 115, 605 115" fill="none" stroke="#0284c7" stroke-width="3"/>
+                                <circle cx="570" cy="62" r="5" fill="#f59e0b"/>
+                                <text x="570" y="52" text-anchor="middle" font-size="10.5" font-weight="bold" fill="#b45309">Transition State (Activated Complex)</text>
+
+                                <!-- Ea(forward) Arrow -->
+                                <line x1="532" y1="185" x2="532" y2="66" stroke="#0284c7" stroke-width="2"/>
+                                <polygon points="528,68 536,68 532,62" fill="#0284c7"/>
+                                <text x="492" y="128" text-anchor="middle" font-size="10.5" font-weight="bold" fill="#0369a1">Ea(f) ကြီး</text>
+
+                                <!-- ΔH Arrow -->
+                                <line x1="655" y1="185" x2="655" y2="119" stroke="#0284c7" stroke-width="2"/>
+                                <polygon points="651,121 659,121 655,115" fill="#0284c7"/>
+                                <text x="685" y="155" text-anchor="middle" font-size="10.5" font-weight="bold" fill="#0369a1">ΔH (+)</text>
+                            </svg>
+                            <div class="text-xs text-slate-600 text-center font-medium">
+                                📐 အရေးကြီးသော ဆက်သွယ်ချက်ပုံသေနည်း: <strong>ΔH = Ea(forward) - Ea(reverse)</strong> (Ea နိမ့်လေ ဓာတ်ပြုမှု မြန်လေဖြစ်ပြီး Ea မြင့်လေ ဓာတ်ပြုမှု နှေးလေဖြစ်သည်)
+                            </div>
+                        </div>
+
+                        <!-- Detailed SVG Diagram 2: Catalyst & Maxwell-Boltzmann Distribution Curve -->
+                        <div class="bg-slate-50 rounded-2xl p-4 sm:p-5 border border-slate-200 space-y-3">
+                            <div class="text-xs font-bold text-slate-600 uppercase tracking-wider">ပုံပြကားချပ် (၂) — Catalyst နှင့် အပူချိန်ကြောင့် E ≥ Ea ရှိသော အမှုန်များ တိုးပွားလာပုံ (Distribution Curve)</div>
+                            <svg viewBox="0 0 740 220" class="w-full h-auto">
+                                <rect x="10" y="10" width="720" height="200" rx="14" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5"/>
+                                <line x1="65" y1="28" x2="65" y2="178" stroke="#475569" stroke-width="2"/>
+                                <line x1="65" y1="178" x2="695" y2="178" stroke="#475569" stroke-width="2"/>
+                                <text x="26" y="105" transform="rotate(-90 26,105)" text-anchor="middle" font-size="11" font-weight="bold" fill="#334155">Number of Particles</text>
+                                <text x="380" y="198" text-anchor="middle" font-size="11" font-weight="bold" fill="#334155">Kinetic Energy (E) →</text>
+
+                                <!-- Shaded Area under curve past Ea(cat) and Ea -->
+                                <path d="M 380 120 Q 430 155, 560 176 L 560 178 L 380 178 Z" fill="#bbf7d0" opacity="0.8"/>
+                                <path d="M 455 154 Q 500 169, 560 176 L 560 178 L 455 178 Z" fill="#fecdd3" opacity="0.9"/>
+
+                                <!-- Distribution Curve -->
+                                <path d="M 65 178 Q 130 35, 220 45 Q 310 55, 380 120 Q 445 166, 560 176" fill="none" stroke="#1e293b" stroke-width="3"/>
+
+                                <!-- Vertical Line: Ea (With Catalyst - Lower) -->
+                                <line x1="380" y1="45" x2="380" y2="178" stroke="#059669" stroke-width="2.5" stroke-dasharray="5,4"/>
+                                <text x="372" y="42" text-anchor="end" font-size="11" font-weight="bold" fill="#047857">Ea' (With Catalyst - နိမ့်)</text>
+
+                                <!-- Vertical Line: Ea (Without Catalyst - Higher) -->
+                                <line x1="455" y1="70" x2="455" y2="178" stroke="#e11d48" stroke-width="2.5"/>
+                                <text x="462" y="68" text-anchor="start" font-size="11" font-weight="bold" fill="#be123c">Ea (Without Catalyst - မြင့်)</text>
+
+                                <!-- Callouts -->
+                                <text x="530" y="105" font-size="11" font-weight="bold" fill="#047857">✅ အစိမ်းရောင်ဧရိယာ = Catalyst သုံးလျှင်</text>
+                                <text x="530" y="122" font-size="11" fill="#065f46">E ≥ Ea' ရှိသော အမှုန်အရေအတွက် ပိုများလာ</text>
+                                <text x="530" y="142" font-size="11" font-weight="bold" fill="#be123c">❌ ပန်းရောင်ဧရိယာ = Catalyst မပါလျှင် (နည်း)</text>
+                            </svg>
+                        </div>
+                    </div>
+                `,
+                onMount: () => render3D_3_2('effective')
+            },
+
+            '3.3': {
+                badge: 'Article 3.3',
+                title: 'Factors Affecting Reaction Rates (အချက် ၆ ချက်)',
+                subtitle: 'ပြင်းအား၊ မျက်နှာပြင်ဧရိယာ၊ ဖိအား၊ အပူချိန် နှင့် ဓာတ်ကူပစ္စည်းများ၏ သက်ရောက်မှု',
+                html: `
+                    <!-- 3D Surface Area & Catalyst Interactive Viewer -->
+                    <div class="bg-white rounded-3xl border border-slate-200 p-5 sm:p-7 shadow-sm space-y-4">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                            <div>
+                                <span class="text-xs font-bold uppercase tracking-wider text-amber-600">Interactive 3D Factors Model</span>
+                                <h3 class="text-lg font-bold text-slate-900">Surface Area (အတုံးကြီး vs အမှုန့်) နှင့် Solid Catalyst 3D</h3>
+                            </div>
+                            <div class="flex flex-wrap gap-2">
+                                <button onclick="render3D_3_3('lump')" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-sky-600 text-white hover:bg-sky-700 transition">🧊 Large Lump (နှေး)</button>
+                                <button onclick="render3D_3_3('powder')" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-emerald-600 text-white hover:bg-emerald-700 transition">✨ Crushed Powder (မြန်)</button>
+                                <button onclick="render3D_3_3('catalyst')" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-amber-600 text-white hover:bg-amber-700 transition">⚡ Catalyst Active Sites</button>
+                            </div>
+                        </div>
+                        <div id="viewer-3-3" class="canvas-container"></div>
+                        <p class="text-xs text-slate-500 text-center">💡 အခဲတစ်တုံးကို သေးငယ်သောအစိတ်အပိုင်းများခွဲလိုက်လျှင် အတွင်းမျက်နှာပြင်များ ပွင့်ထွက်လာသဖြင့် Surface Area ကြီးမားလာပြီး တိုက်မိနှုန်း (Collision frequency) မြင့်တက်လာသည်။</p>
+                    </div>
+
+                    <!-- 6 Factors Summary Cards -->
+                    <div class="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 shadow-sm space-y-5">
+                        <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2.5">
+                            <span class="w-8 h-8 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center text-sm font-bold">3.3</span>
+                            ဓာတ်ပြုမှုနှုန်းကို ပြောင်းလဲစေသော အချက် (၆) ချက် အနှစ်ချုပ်
+                        </h3>
+
+                        <div class="grid md:grid-cols-2 gap-4 text-xs sm:text-sm myanmar-text">
+                            <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200">
+                                <div class="font-bold text-slate-900 mb-1">1. Nature of Reactants (ဓာတ်ပြုပစ္စည်း သဘာဝ)</div>
+                                <p class="text-slate-700">ပျော်ရည်ထဲရှိ <strong>Ionic reactions</strong> (ဥပမာ- Ag⁺ + Cl⁻ → AgCl) များသည် စည်းဖြတ်ရန်မလိုသဖြင့် အလွန်လျင်မြန်ပြီး၊ စည်းများစွာဖြတ်ရသော Covalent reactions များမှာ နှေးကွေးသည်။</p>
+                            </div>
+                            <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200">
+                                <div class="font-bold text-blue-800 mb-1">2. Concentration (ပြင်းအား)</div>
+                                <p class="text-slate-700">ပြင်းအားများလျှင် ထုထည်တစ်ယူနစ်အတွင်း အမှုန်အရေအတွက် များပြားလာသဖြင့် <strong>Collision frequency (တိုက်မိနှုန်း)</strong> မြင့်တက်ကာ ဓာတ်ပြုနှုန်းမြန်လာသည်။</p>
+                            </div>
+                            <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200">
+                                <div class="font-bold text-emerald-800 mb-1">3. Surface Area (မျက်နှာပြင်ဧရိယာ)</div>
+                                <p class="text-slate-700">အခဲများကို အမှုန့်ကြိတ်လိုက်လျှင် မျက်နှာပြင်ဧရိယာ ကြီးမားလာပြီး ထိတွေ့တိုက်မိမှု များပြားလာသဖြင့် ဓာတ်ပြုနှုန်း ပိုမြန်လာသည်။ (ဖုန်မှုန့်ပေါက်ကွဲမှု ဖြစ်နိုင်သည်)</p>
+                            </div>
+                            <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200">
+                                <div class="font-bold text-indigo-800 mb-1">4. Pressure (ဖိအား - ဓာတ်ငွေ့များအတွက်သာ)</div>
+                                <p class="text-slate-700">ဖိအားတိုးလိုက်လျှင် ဓာတ်ငွေ့မော်လီကျူးများ နီးကပ်သွားပြီး တိုက်မိနှုန်းများလာသဖြင့် ဓာတ်ပြုနှုန်းမြန်လာသည်။ (အခဲနှင့် အရည်များအပေါ် သက်ရောက်မှုမရှိပါ)</p>
+                            </div>
+                            <div class="p-4 rounded-2xl bg-rose-50/80 border border-rose-200">
+                                <div class="font-bold text-rose-900 mb-1">5. Temperature (အပူချိန် - 10°C တိုးလျှင် Rate ၂ ဆတက်)</div>
+                                <p class="text-rose-950/85">အပူချိန်မြင့်လာလျှင် အမှုန်များ၏ <strong>Kinetic energy (KE)</strong> မြင့်တက်လာပြီး <strong>Activation energy (E ≥ Ea)</strong> ရှိသော အမှုန်အရေအတွက် အဆမတန်များပြားလာသဖြင့် ဓာတ်ပြုနှုန်း အလွန်မြန်လာသည်။</p>
+                            </div>
+                            <div class="p-4 rounded-2xl bg-amber-50/80 border border-amber-200">
+                                <div class="font-bold text-amber-900 mb-1">6. Catalysts (ဓာတ်ကူပစ္စည်းများ)</div>
+                                <p class="text-amber-950/85"><strong>Ea နိမ့်သော လမ်းကြောင်းသစ် (Alternative pathway)</strong> ကို ပေးခြင်းဖြင့် ဓာတ်ပြုနှုန်းမြန်စေသည်။ <strong>Homogeneous</strong> (အခြေအနေတူ)၊ <strong>Heterogeneous</strong> (အခြေအနေမတူ - ဥပမာ Haber process မှ Fe) နှင့် <strong>Enzymes</strong> (Biocatalysts) ဟူ၍ ရှိသည်။</p>
+                            </div>
+                        </div>
+                    </div>
+                `,
+                onMount: () => render3D_3_3('powder')
+            },
+
+            'ex7': {
+                badge: 'Chapter 3 Exercise No. 7 Deep Dive',
+                title: 'Exercise နံပါတ် (၇) အကျယ်ချဲ့ ရှင်းလင်းချက်',
+                subtitle: 'ကလေးအရွယ်ပင် နားလည်လွယ်စေမည့် ဥပမာများ၊ ပုံပြကားချပ်များနှင့် စာမေးပွဲဖြေဆိုရန် အဖြေအပြည့်အစုံ',
+                html: `
+                    <!-- Question Box -->
+                    <div class="bg-gradient-to-r from-purple-700 to-indigo-800 rounded-3xl p-6 sm:p-8 text-white shadow-lg space-y-3">
+                        <span class="inline-block px-3 py-1 rounded-full bg-white/15 text-xs font-bold tracking-wide">Grade 12 Textbook — Chapter 3 Exercises (No. 7)</span>
+                        <h3 class="text-lg sm:text-xl font-bold leading-snug">
+                            7. (a) List any five factors that affect the rate of reactions.<br>
+                            <span class="text-purple-200 text-base font-medium">(ဓာတ်ပြုမှုနှုန်းကို ပြောင်းလဲစေသော အချက် ၅ ချက်ကို ဖော်ပြပါ။)</span>
+                        </h3>
+                        <h3 class="text-lg sm:text-xl font-bold leading-snug pt-2 border-t border-white/15">
+                            7. (b) Substances burn more rapidly in pure oxygen than in air. Explain why.<br>
+                            <span class="text-purple-200 text-base font-medium">(ပစ္စည်းများသည် သာမန်လေထုထဲထက် အောက်စီဂျင်စစ်စစ်ထဲတွင် အဘယ်ကြောင့် ပိုမိုလျင်မြန်စွာ လောင်ကျွမ်းသနည်း? ရှင်းပြပါ။)</span>
+                        </h3>
+                    </div>
+
+                    <!-- PART 7(a): Kid-Friendly Analogies + Exam Answer -->
+                    <div class="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 shadow-sm space-y-5">
+                        <div class="flex items-center justify-between flex-wrap gap-2">
+                            <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2.5">
+                                <span class="w-8 h-8 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center text-sm font-bold">7(a)</span>
+                                ကလေးအရွယ်ကို ရှင်းပြသလို လွယ်ကူသော ဥပမာများဖြင့် နားလည်ခြင်း
+                            </h3>
+                            <span class="text-xs px-3 py-1 rounded-full bg-purple-50 text-purple-800 border border-purple-200 font-semibold">စာမေးပွဲတွင် ကြိုက်ရာ ၅ ချက် ရေးနိုင်သည်</span>
+                        </div>
+
+                        <div class="grid md:grid-cols-2 gap-4 text-xs sm:text-sm myanmar-text">
+                            <!-- Analogy 1 -->
+                            <div class="p-4 rounded-2xl bg-blue-50/70 border border-blue-200 space-y-1.5">
+                                <div class="font-bold text-blue-900 text-sm">၁။ Concentration of reactants (ပြင်းအား)</div>
+                                <p class="text-slate-700">
+                                    🧸 <strong>ကလေးဥပမာ:</strong> ကစားကွင်းတစ်ခုထဲမှာ ကလေး <strong>၅ ယောက်</strong> ပဲ ပြေးလွှားနေတာနဲ့ ကလေး <strong>၁၀၀ ယောက်</strong> ပြည့်ကျပ်ပြီး ပြေးလွှားနေတာ ဘယ်ကွင်းမှာ အချင်းချင်း ဝင်တိုက်မိဖို့ ပိုများမလဲ? လူများတဲ့ကွင်းမှာ ခဏခဏ ဝင်တိုက်မိသလိုပဲ၊ ပြင်းအားများရင် မော်လီကျူးတွေ ခဏခဏ တိုက်မိပြီး ဓာတ်ပြုမှု ပိုမြန်ပါတယ်။
+                                </p>
+                            </div>
+
+                            <!-- Analogy 2 -->
+                            <div class="p-4 rounded-2xl bg-emerald-50/70 border border-emerald-200 space-y-1.5">
+                                <div class="font-bold text-emerald-900 text-sm">၂။ Surface area of solid reactants (မျက်နှာပြင်ဧရိယာ)</div>
+                                <p class="text-slate-700">
+                                    🍬 <strong>ကလေးဥပမာ:</strong> သကြားခဲအတုံးကြီး တစ်တုံးကို ရေထဲထည့်ဖျော်တာနဲ့ သကြားမှုန့်လေးတွေကို ရေထဲထည့်ဖျော်တာ ဘယ်ဟာက အရင်ပျော်မလဲ? အမှုန့်လေးတွေကျတော့ ရေစက်လေးတွေက အဘက်ဘက်ကနေ ဝိုင်းဖက်နိုင်လို့ အမြန်ဆုံး ပျော်သွားသလိုပဲ မျက်နှာပြင်ကျယ်လေ ဓာတ်ပြုမှု မြန်လေပါ။
+                                </p>
+                            </div>
+
+                            <!-- Analogy 3 -->
+                            <div class="p-4 rounded-2xl bg-rose-50/70 border border-rose-200 space-y-1.5">
+                                <div class="font-bold text-rose-900 text-sm">၃။ Temperature (အပူချိန်)</div>
+                                <p class="text-slate-700">
+                                    🏃 <strong>ကလေးဥပမာ:</strong> ဆောင်းတွင်းအေးနေတဲ့အချိန် ကလေးတွေ ငြိမ်ငြိမ်လေး ထိုင်နေတာနဲ့ မုန့်စားပြီး အားအင်ပြည့်လို့ အရှိန်နဲ့ ပြေးလွှားခုန်ပေါက်နေတာလိုပါပဲ။ အပူချိန်မြင့်လာရင် အမှုန်လေးတွေ အားအင် (Kinetic Energy) ပြည့်လာပြီး အပြေးမြန်လာတော့ ပြင်းပြင်းထန်ထန် ဝင်တိုက်မိကြတာပါ။
+                                </p>
+                            </div>
+
+                            <!-- Analogy 4 -->
+                            <div class="p-4 rounded-2xl bg-amber-50/70 border border-amber-200 space-y-1.5">
+                                <div class="font-bold text-amber-900 text-sm">၄။ Presence of a catalyst (ဓာတ်ကူပစ္စည်း)</div>
+                                <p class="text-slate-700">
+                                    🚇 <strong>ကလေးဥပမာ:</strong> တောင်အမြင့်ကြီးပေါ်ကို ပင်ပင်ပန်းပန်း ကျော်တက်ရမယ့်အစား တောင်အောက်ကနေ ဖြတ်ဖောက်ထားတဲ့ <strong>ဥမင်လိုဏ်ခေါင်း (ဖြတ်လမ်း)</strong> ကနေ လမ်းလျှောက်သွားလိုက်သလိုပါပဲ။ ပင်ပန်းမှု (Activation Energy) နည်းသွားတော့ ခဏလေးနဲ့ ဟိုဘက်ရောက်သွားတာပေါ့!
+                                </p>
+                            </div>
+
+                            <!-- Analogy 5 -->
+                            <div class="p-4 rounded-2xl bg-indigo-50/70 border border-indigo-200 space-y-1.5 md:col-span-2">
+                                <div class="font-bold text-indigo-900 text-sm">၅။ Pressure of gaseous reactants (ဖိအား - ဓာတ်ငွေ့များအတွက်)</div>
+                                <p class="text-slate-700">
+                                    🎈 <strong>ကလေးဥပမာ:</strong> ပူဖောင်းအကြီးကြီးထဲမှာ ဘောလုံးလေး ၁၀ လုံး ထည့်ထားတာကို လက်နှစ်ဖက်နဲ့ ညှစ်ပြီး ပူဖောင်းကို သေးအောင် လုပ်လိုက်သလိုပါပဲ။ နေရာကျဉ်းသွားတော့ ဘောလုံးလေးတွေ အချင်းချင်း ခဏခဏ တိုက်မိကုန်ပြီး ဓာတ်ပြုမှု မြန်သွားပါတယ်။
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Exam Answer Box for 7(a) -->
+                        <div class="p-4 rounded-2xl bg-slate-900 text-white space-y-1.5">
+                            <div class="text-xs font-bold text-amber-300 uppercase">✍️ စာမေးပွဲတွင် ရေးဖြေရန် အဖြေ (Exam-Ready Answer for 7a)</div>
+                            <p class="text-xs sm:text-sm font-mono text-slate-100 leading-relaxed">
+                                Any five factors that affect the rate of reactions are:<br>
+                                (1) Concentration of reactants &nbsp; (2) Surface area of solid reactants &nbsp; (3) Temperature &nbsp; (4) Pressure (for gases) &nbsp; (5) Presence of a catalyst (or Nature of reactants).
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- PART 7(b): Kid-Friendly Story + Visual SVG Comparison + Exam Answer -->
+                    <div class="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 shadow-sm space-y-6">
+                        <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2.5">
+                            <span class="w-8 h-8 rounded-xl bg-rose-100 text-rose-700 flex items-center justify-center text-sm font-bold">7(b)</span>
+                            သာမန်လေထု (Air) ထက် အောက်စီဂျင်စစ်စစ် (Pure O₂) ထဲမှာ ဘာကြောင့် ပိုမြန်မြန် မီးလောင်သလဲ?
+                        </h3>
+
+                        <!-- Kid-Friendly Story Explanation -->
+                        <div class="p-5 rounded-2xl bg-amber-50 border border-amber-200 space-y-3 myanmar-text text-sm sm:text-base">
+                            <div class="font-bold text-amber-950 flex items-center gap-2">
+                                <span class="text-xl">🔥</span> ကလေးအရွယ်ကို ပုံပြင်လေးလို ရှင်းပြရမယ်ဆိုရင်...
+                            </div>
+                            <p class="text-slate-800">
+                                မီးတောက်လေးတစ်ခု လောင်ကျွမ်းဖို့ဆိုတာ မီးစာလေး (Fuel) က <strong>"အောက်စီဂျင် (O₂)" ဆိုတဲ့ သူငယ်ချင်းလေး</strong> နဲ့ လက်ချင်းချိတ် (တိုက်မိ) မှ မီးတောက်နိုင်တာပါ။
+                            </p>
+                            <div class="grid sm:grid-cols-2 gap-4 pt-1">
+                                <div class="p-4 rounded-xl bg-white border border-slate-200">
+                                    <div class="font-bold text-slate-800 mb-1">🌫️ ၁။ သာမန်လေထု (Air) ထဲမှာဆိုရင်...</div>
+                                    <p class="text-xs sm:text-sm text-slate-600">
+                                        လူ ၁၀၀ ရှိတဲ့ အခန်းထဲမှာ အောက်စီဂျင်သူငယ်ချင်းက <strong>၂၁ ယောက် (21%)</strong> ပဲ ပါပါတယ်။ ကျန်တဲ့ <strong>၇၈ ယောက် (78%)</strong> က မီးလောင်တာကို အားမပေးဘဲ ကြားထဲကနေ ဝင်ပိတ်နေတဲ့ <strong>နိုက်ထရိုဂျင် (N₂)</strong> တွေ ဖြစ်နေပါတယ်။ ဒါကြောင့် မီးစာလေးက အောက်စီဂျင်သူငယ်ချင်းကို ရှာတွေ့ဖို့ ခက်ခဲပြီး ဖြည်းဖြည်းချင်းပဲ လောင်နိုင်ပါတယ်။
+                                    </p>
+                                </div>
+                                <div class="p-4 rounded-xl bg-rose-50 border border-rose-200">
+                                    <div class="font-bold text-rose-900 mb-1">🔥 ၂။ အောက်စီဂျင်စစ်စစ် (Pure Oxygen) ထဲမှာဆိုရင်...</div>
+                                    <p class="text-xs sm:text-sm text-rose-950/85">
+                                        ကြားထဲက ဝင်ပိတ်နေတဲ့ နိုက်ထရိုဂျင်တွေ တစ်ယောက်မှ မရှိဘဲ အခန်းပြည့် <strong>၁၀၀ ရာခိုင်နှုန်း (100%)</strong> လုံး အောက်စီဂျင်သူငယ်ချင်းတွေချည်းပဲ ဖြစ်နေပါတယ်။ အောက်စီဂျင် ပြင်းအား (Concentration) <strong>၅ ဆနီးပါး ပိုများ</strong> နေတော့ မီးစာလေးနဲ့ အောက်စီဂျင်တွေ တစ်စက္ကန့်အတွင်း အကြိမ်ရေ အများကြီး ပိုတိုက်မိ (Collision frequency မြင့်တက်) ပြီး ဝုန်းခနဲ အရှိန်ပြင်းပြင်း လောင်ကျွမ်းသွားတာပါ!
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Visual SVG Illustration: Air (21% O2) vs Pure Oxygen (100% O2) -->
+                        <div class="bg-slate-50 rounded-2xl p-4 sm:p-5 border border-slate-200 space-y-2">
+                            <div class="text-xs font-bold text-slate-600 uppercase tracking-wider">ပုံပြကားချပ် — Air (21% O₂) နှင့် Pure Oxygen (100% O₂) မော်လီကျူး တိုက်မိပုံ နှိုင်းယှဉ်ချက်</div>
+                            <svg viewBox="0 0 720 210" class="w-full h-auto">
+                                <!-- LEFT BOX: AIR -->
+                                <rect x="15" y="10" width="330" height="190" rx="16" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/>
+                                <text x="180" y="34" text-anchor="middle" font-size="13" font-weight="bold" fill="#334155">သာမန်လေထု (Air): ~21% O₂ + ~78% N₂</text>
+
+                                <!-- Fuel Particle -->
+                                <circle cx="95" cy="110" r="24" fill="#f59e0b"/>
+                                <text x="95" y="114" text-anchor="middle" font-size="11" font-weight="bold" fill="#ffffff">Fuel</text>
+
+                                <!-- Blocking N2 particles (Grey) -->
+                                <circle cx="155" cy="80" r="14" fill="#94a3b8"/><text x="155" y="84" text-anchor="middle" font-size="9" fill="#fff" font-weight="bold">N₂</text>
+                                <circle cx="160" cy="135" r="14" fill="#94a3b8"/><text x="160" y="139" text-anchor="middle" font-size="9" fill="#fff" font-weight="bold">N₂</text>
+                                <circle cx="215" cy="105" r="14" fill="#94a3b8"/><text x="215" y="109" text-anchor="middle" font-size="9" fill="#fff" font-weight="bold">N₂</text>
+                                <circle cx="220" cy="155" r="14" fill="#94a3b8"/><text x="220" y="159" text-anchor="middle" font-size="9" fill="#fff" font-weight="bold">N₂</text>
+                                <circle cx="275" cy="75" r="14" fill="#94a3b8"/><text x="275" y="79" text-anchor="middle" font-size="9" fill="#fff" font-weight="bold">N₂</text>
+
+                                <!-- Few O2 particles (Red) -->
+                                <circle cx="275" cy="135" r="14" fill="#ef4444"/><text x="275" y="139" text-anchor="middle" font-size="9" fill="#fff" font-weight="bold">O₂</text>
+                                <circle cx="145" cy="168" r="14" fill="#ef4444"/><text x="145" y="172" text-anchor="middle" font-size="9" fill="#fff" font-weight="bold">O₂</text>
+
+                                <text x="180" y="190" text-anchor="middle" font-size="11" font-weight="bold" fill="#64748b">N₂ တွေ ကြားခံပိတ်နေ၍ O₂ တိုက်မိနှုန်း နည်း (လောင်ကျွမ်းမှု နှေး)</text>
+
+                                <!-- RIGHT BOX: PURE OXYGEN -->
+                                <rect x="375" y="10" width="330" height="190" rx="16" fill="#fff1f2" stroke="#fda4af" stroke-width="2"/>
+                                <text x="540" y="34" text-anchor="middle" font-size="13" font-weight="bold" fill="#be123c">အောက်စီဂျင်စစ်စစ် (Pure O₂): 100% O₂</text>
+
+                                <!-- Fuel Particle -->
+                                <circle cx="455" cy="110" r="24" fill="#f59e0b"/>
+                                <text x="455" y="114" text-anchor="middle" font-size="11" font-weight="bold" fill="#ffffff">Fuel</text>
+
+                                <!-- Crowded O2 particles (All Red!) -->
+                                <circle cx="515" cy="75" r="14" fill="#ef4444"/><text x="515" y="79" text-anchor="middle" font-size="9" fill="#fff" font-weight="bold">O₂</text>
+                                <circle cx="515" cy="142" r="14" fill="#ef4444"/><text x="515" y="146" text-anchor="middle" font-size="9" fill="#fff" font-weight="bold">O₂</text>
+                                <circle cx="565" cy="108" r="14" fill="#ef4444"/><text x="565" y="112" text-anchor="middle" font-size="9" fill="#fff" font-weight="bold">O₂</text>
+                                <circle cx="615" cy="75" r="14" fill="#ef4444"/><text x="615" y="79" text-anchor="middle" font-size="9" fill="#fff" font-weight="bold">O₂</text>
+                                <circle cx="615" cy="145" r="14" fill="#ef4444"/><text x="615" y="149" text-anchor="middle" font-size="9" fill="#fff" font-weight="bold">O₂</text>
+                                <circle cx="665" cy="110" r="14" fill="#ef4444"/><text x="665" y="114" text-anchor="middle" font-size="9" fill="#fff" font-weight="bold">O₂</text>
+                                <circle cx="565" cy="162" r="14" fill="#ef4444"/><text x="565" y="166" text-anchor="middle" font-size="9" fill="#fff" font-weight="bold">O₂</text>
+
+                                <!-- Collision Arrows -->
+                                <line x1="500" y1="82" x2="478" y2="96" stroke="#be123c" stroke-width="2.5"/>
+                                <line x1="500" y1="136" x2="478" y2="122" stroke="#be123c" stroke-width="2.5"/>
+                                <line x1="550" y1="108" x2="483" y2="108" stroke="#be123c" stroke-width="2.5"/>
+
+                                <text x="540" y="190" text-anchor="middle" font-size="11" font-weight="bold" fill="#be123c">O₂ ပြင်းအား ၅ ဆခန့်များ၍ တိုက်မိနှုန်း အလွန်မြင့် (အမြန်လောင်ကျွမ်း)</text>
+                            </svg>
+                        </div>
+
+                        <!-- Exam-Ready Answer for 7(b) -->
+                        <div class="p-5 rounded-2xl bg-slate-900 text-white space-y-2">
+                            <div class="text-xs font-bold text-emerald-300 uppercase">✍️ စာမေးပွဲတွင် အမှတ်ပြည့်ရအောင် ရေးဖြေရန် အဖြေ (Exam-Ready Answer for 7b)</div>
+                            <p class="text-xs sm:text-sm font-mono text-slate-100 leading-relaxed">
+                                Air contains only about 21% oxygen (and 78% nitrogen), whereas pure oxygen is 100% oxygen. Therefore, the concentration of oxygen in pure oxygen is much higher (nearly five times greater) than in air. According to the collision theory, a higher concentration of oxygen molecules increases the frequency of effective collisions between the burning substance and oxygen molecules. As a result, substances burn much more rapidly in pure oxygen than in air.
+                            </p>
+                        </div>
+
+                        <!-- Bonus Calculation part if teacher's worksheet includes 7(b) calculation -->
+                        <div class="p-4 rounded-2xl bg-indigo-50/70 border border-indigo-200 space-y-1.5 text-xs">
+                            <div class="font-bold text-indigo-900">📌 အပိုဆောင်း တွက်စာ (အချို့ Practice Sheet များတွင် 7(b) အဖြစ် ပါတတ်သော ပုစ္ဆာ)</div>
+                            <p class="text-slate-700">
+                                <strong>ပုစ္ဆာ:</strong> H₂(g) + 2ICl(g) → I₂(g) + 2HCl(g) တွင် t₁ = 1 s ၌ [H₂] = 0.674 mol dm⁻³ ရှိပြီး t₂ = 2 s ၌ 0.526 mol dm⁻³ ရှိလျှင် Rate ကို တွက်ပါ။
+                            </p>
+                            <div class="bg-white p-3 rounded-xl font-mono text-slate-800">
+                                <span class="mx">Rate = −<span class="fr"><span>Δ[H<sub>2</sub>]</span><span>Δ<i>t</i></span></span> = −<span class="fr"><span>0.526 − 0.674</span><span>2 − 1</span></span> = −<span class="fr"><span>−0.148</span><span>1</span></span> = <strong>0.148 mol dm<sup>−3</sup> s<sup>−1</sup></strong></span>
+                            </div>
+                        </div>
+                    </div>
+                `
+            }
+        };
+
+        // ==========================================
+        // 5. NAVIGATION & UI CONTROLLER
+        // ==========================================
+        function selectArticle(id) {
+            currentArticleId = id;
+            const article = ARTICLES[id];
+            if (!article) return;
+
+            clearActiveScenes();
+
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('bg-emerald-50', 'text-emerald-900', 'border-emerald-200', 'shadow-xs');
+                btn.classList.add('text-slate-600', 'hover:bg-slate-50');
+                const badge = btn.querySelector('.nav-badge');
+                if (badge) {
+                    badge.classList.remove('bg-emerald-600', 'text-white');
+                    badge.classList.add('bg-slate-100', 'text-slate-600');
+                }
+            });
+
+            const activeBtn = document.getElementById(`nav-${id}`);
+            if (activeBtn) {
+                activeBtn.classList.remove('text-slate-600', 'hover:bg-slate-50');
+                activeBtn.classList.add('bg-emerald-50', 'text-emerald-900', 'border-emerald-200', 'shadow-xs');
+                const badge = activeBtn.querySelector('.nav-badge');
+                if (badge) {
+                    badge.classList.remove('bg-slate-100', 'text-slate-600');
+                    badge.classList.add('bg-emerald-600', 'text-white');
+                }
+            }
+
+            const container = document.getElementById('content-container');
+            const ids = ['formulas', '3.1', '3.2', '3.3', 'ex7'];
+            const idx = ids.indexOf(id);
+            const prevId = idx > 0 ? ids[idx - 1] : null;
+            const nextId = idx < ids.length - 1 ? ids[idx + 1] : null;
+
+            container.innerHTML = `
+                <div class="border-b border-slate-200 pb-5">
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800 mb-2">
+                        ${article.badge}
+                    </span>
+                    <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">${article.title}</h1>
+                    <p class="mt-1 text-sm sm:text-base text-slate-600 font-medium">${article.subtitle}</p>
+                </div>
+
+                ${article.html}
+
+                <div class="pt-4 pb-8 flex items-center justify-between gap-4 border-t border-slate-200">
+                    ${prevId ? `
+                        <button onclick="selectArticle('${prevId}')" class="px-4 py-3 rounded-2xl bg-white border border-slate-200 hover:border-emerald-300 hover:bg-emerald-50 text-slate-700 text-xs sm:text-sm font-semibold transition flex items-center gap-2 shadow-xs">
+                            <span>←</span> ယခင်အပိုင်း (${prevId === 'formulas' ? 'Formulas' : (prevId === 'ex7' ? 'Exercise 7' : prevId)})
+                        </button>
+                    ` : '<div></div>'}
+
+                    ${nextId ? `
+                        <button onclick="selectArticle('${nextId}')" class="px-5 py-3 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs sm:text-sm font-semibold transition flex items-center gap-2 shadow-sm">
+                            နောက်တစ်ပိုင်း (${nextId === 'ex7' ? 'Exercise No. 7' : nextId}) <span>→</span>
+                        </button>
+                    ` : `
+                        <a href="chapter4.html" class="px-5 py-3 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs sm:text-sm font-semibold transition flex items-center gap-2 shadow-sm">
+                            Chapter 4 သို့ ဆက်သွားရန် <span>→</span>
+                        </a>
+                    `}
+                </div>
+            `;
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            closeMobileSidebar();
+
+            if (typeof article.onMount === 'function') {
+                setTimeout(() => article.onMount(), 50);
+            }
+        }
+
+        const sidebar = document.getElementById('sidebar');
+        const backdrop = document.getElementById('sidebar-backdrop');
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const closeSidebarBtn = document.getElementById('close-sidebar-btn');
+
+        function openMobileSidebar() {
+            sidebar.classList.remove('-translate-x-full');
+            backdrop.classList.remove('hidden');
+        }
+        function closeMobileSidebar() {
+            sidebar.classList.add('-translate-x-full');
+            backdrop.classList.add('hidden');
+        }
+
+        mobileMenuBtn.addEventListener('click', openMobileSidebar);
+        closeSidebarBtn.addEventListener('click', closeMobileSidebar);
+        backdrop.addEventListener('click', closeMobileSidebar);
+
+        window.onload = function() {
+            selectArticle('formulas');
+        };
+    </script>
+</body>
+</html>
