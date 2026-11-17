@@ -1,0 +1,1408 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grade 12 Chemistry - Chapter 1: Chemical Bonding & Intermolecular Forces</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Three.js for 3D Molecular & Crystal Visualizations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <!-- Google Fonts: Inter & Noto Sans Myanmar -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Myanmar:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'Noto Sans Myanmar', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#eff6ff',
+                            100: '#dbeafe',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                            900: '#1e3a8a',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', 'Noto Sans Myanmar', sans-serif;
+            line-height: 1.85;
+            background-color: #f8fafc;
+            color: #1e293b;
+            overflow-x: hidden;
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        .canvas-container {
+            position: relative;
+            width: 100%;
+            height: 340px;
+            border-radius: 1rem;
+            overflow: hidden;
+            background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%);
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.4);
+            touch-action: none;
+        }
+        @media (min-width: 768px) {
+            .canvas-container {
+                height: 390px;
+            }
+        }
+        .myanmar-text {
+            line-height: 1.95;
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-blue-100 selection:text-blue-900">
+
+    <!-- Mobile Top Header -->
+    <header class="lg:hidden sticky top-0 z-40 bg-white/95 backdrop-blur border-b border-slate-200 px-4 py-3 flex items-center justify-between shadow-sm">
+        <div class="flex items-center gap-2.5">
+            <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-600 to-indigo-700 flex items-center justify-center text-white font-bold shadow">
+                Ch1
+            </div>
+            <div>
+                <h1 class="text-sm font-bold text-slate-900 leading-tight">Grade 12 Chemistry</h1>
+                <p class="text-xs text-slate-500">Chemical Bonding & Forces</p>
+            </div>
+        </div>
+        <button id="mobile-menu-btn" class="p-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 transition" aria-label="Open Navigation">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+            </svg>
+        </button>
+    </header>
+
+    <!-- Mobile Backdrop -->
+    <div id="sidebar-backdrop" class="fixed inset-0 bg-slate-900/50 backdrop-blur-xs z-40 hidden lg:hidden transition-opacity"></div>
+
+    <div class="flex min-h-screen">
+        <!-- Left Sidebar Taskbar -->
+        <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-80 bg-white border-r border-slate-200 transform -translate-x-full lg:translate-x-0 lg:static lg:inset-auto transition-transform duration-300 ease-in-out flex flex-col shadow-xl lg:shadow-none">
+            <!-- Brand Header -->
+            <div class="p-6 border-b border-slate-100 bg-gradient-to-br from-slate-900 via-blue-950 to-indigo-950 text-white">
+                <div class="flex items-center justify-between">
+                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-500/20 text-blue-200 border border-blue-400/30">
+                        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                        Grade 12 Chemistry
+                    </span>
+                    <button id="close-sidebar-btn" class="lg:hidden p-1.5 rounded-lg text-slate-300 hover:text-white hover:bg-white/10">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                    </button>
+                </div>
+                <h2 class="mt-3 text-lg font-bold tracking-tight leading-snug">Chapter 1: Chemical Bonding & Intermolecular Forces</h2>
+                <p class="mt-1 text-xs text-blue-200/80">3D မော်ဒယ်များနှင့် ပုံပြကားချပ်များဖြင့် လေ့လာရန်</p>
+            </div>
+
+            <!-- Navigation Articles List -->
+            <div class="flex-1 overflow-y-auto p-4 space-y-2">
+                <div class="px-3 py-1.5 text-xs font-bold uppercase tracking-wider text-slate-400">
+                    Chapter 1 Articles (5 ခု)
+                </div>
+
+                <button onclick="selectArticle('1.1')" id="nav-1.1" class="nav-btn w-full text-left p-3.5 rounded-2xl transition-all duration-200 flex items-start gap-3 border border-transparent">
+                    <span class="nav-badge shrink-0 w-9 h-9 rounded-xl flex items-center justify-center text-sm font-bold">1.1</span>
+                    <div>
+                        <div class="font-bold text-sm leading-snug">Basic Concepts</div>
+                        <div class="text-xs opacity-80 mt-0.5">ဓာတုစည်းနှောင်မှု အခြေခံသဘောတရားများ</div>
+                    </div>
+                </button>
+
+                <button onclick="selectArticle('1.2')" id="nav-1.2" class="nav-btn w-full text-left p-3.5 rounded-2xl transition-all duration-200 flex items-start gap-3 border border-transparent">
+                    <span class="nav-badge shrink-0 w-9 h-9 rounded-xl flex items-center justify-center text-sm font-bold">1.2</span>
+                    <div>
+                        <div class="font-bold text-sm leading-snug">Ionic Bonding</div>
+                        <div class="text-xs opacity-80 mt-0.5">အိုင်းယွန်းနစ် စည်းနှောင်မှုနှင့် ပုံဆောင်ခဲ</div>
+                    </div>
+                </button>
+
+                <button onclick="selectArticle('1.3')" id="nav-1.3" class="nav-btn w-full text-left p-3.5 rounded-2xl transition-all duration-200 flex items-start gap-3 border border-transparent">
+                    <span class="nav-badge shrink-0 w-9 h-9 rounded-xl flex items-center justify-center text-sm font-bold">1.3</span>
+                    <div>
+                        <div class="font-bold text-sm leading-snug">Covalent Bonding</div>
+                        <div class="text-xs opacity-80 mt-0.5">ကိုဗေးလင့်စည်း၊ Lewis & VSEPR 3D</div>
+                    </div>
+                </button>
+
+                <button onclick="selectArticle('1.4')" id="nav-1.4" class="nav-btn w-full text-left p-3.5 rounded-2xl transition-all duration-200 flex items-start gap-3 border border-transparent">
+                    <span class="nav-badge shrink-0 w-9 h-9 rounded-xl flex items-center justify-center text-sm font-bold">1.4</span>
+                    <div>
+                        <div class="font-bold text-sm leading-snug">Intermolecular Forces</div>
+                        <div class="text-xs opacity-80 mt-0.5">မော်လီကျူးကြား ဆွဲငင်အားများ & H-Bond</div>
+                    </div>
+                </button>
+
+                <button onclick="selectArticle('1.5')" id="nav-1.5" class="nav-btn w-full text-left p-3.5 rounded-2xl transition-all duration-200 flex items-start gap-3 border border-transparent">
+                    <span class="nav-badge shrink-0 w-9 h-9 rounded-xl flex items-center justify-center text-sm font-bold">1.5</span>
+                    <div>
+                        <div class="font-bold text-sm leading-snug">Metallic Bonding</div>
+                        <div class="text-xs opacity-80 mt-0.5">သတ္တုစည်းနှောင်မှုနှင့် နေ့စဉ်ဘဝအသုံးချမှု</div>
+                    </div>
+                </button>
+            </div>
+
+            <!-- Footer Tip -->
+            <div class="p-4 border-t border-slate-100 bg-slate-50">
+                <div class="p-3 rounded-xl bg-blue-50 border border-blue-100 text-xs text-blue-800 flex items-start gap-2.5">
+                    <span class="text-base">🖱️</span>
+                    <span>3D ပုံများကို မောက်စ်ဖြင့် ဖိဆွဲ၍ လှည့်ကြည့်နိုင်သလို ဖုန်းဖြင့်လည်း လက်ဖြင့်ပွတ်ဆွဲ လှည့်ကြည့်နိုင်ပါသည်။</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="flex-1 min-w-0">
+            <div id="content-container" class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-10 py-6 lg:py-10 space-y-8">
+                <!-- Dynamic Article Content Rendered Here -->
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // ==========================================
+        // 1. GLOBAL STATE & THREE.JS ENGINE MANAGER
+        // ==========================================
+        let currentArticleId = '1.1';
+        let activeScenes = []; // Track Three.js instances to dispose cleanly on article switch
+
+        function clearActiveScenes() {
+            activeScenes.forEach(item => {
+                if (item.animId) cancelAnimationFrame(item.animId);
+                if (item.renderer) {
+                    item.renderer.dispose();
+                }
+            });
+            activeScenes = [];
+        }
+
+        // Reusable Interactive 3D Viewer Builder
+        function init3DViewer(containerId, buildSceneCallback) {
+            const container = document.getElementById(containerId);
+            if (!container || typeof THREE === 'undefined') return null;
+
+            // Clear existing canvas if re-rendering model inside same container
+            const oldCanvas = container.querySelector('canvas');
+            if (oldCanvas) oldCanvas.remove();
+
+            const width = container.clientWidth || 600;
+            const height = container.clientHeight || 360;
+
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
+            camera.position.set(0, 1.5, 7.5);
+
+            const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            renderer.setSize(width, height);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            container.appendChild(renderer.domElement);
+
+            // Studio Lighting
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.65);
+            scene.add(ambientLight);
+
+            const dirLight1 = new THREE.DirectionalLight(0xffffff, 0.9);
+            dirLight1.position.set(5, 8, 7);
+            scene.add(dirLight1);
+
+            const dirLight2 = new THREE.DirectionalLight(0x93c5fd, 0.5);
+            dirLight2.position.set(-6, -4, -5);
+            scene.add(dirLight2);
+
+            // Root group for user rotation
+            const rootGroup = new THREE.Group();
+            scene.add(rootGroup);
+
+            // Build specific 3D geometry & get optional per-frame update function
+            const customUpdate = buildSceneCallback(rootGroup, camera, scene);
+
+            // Mouse & Touch Orbit Controls
+            let isDragging = false;
+            let prevX = 0;
+            let prevY = 0;
+            let autoRotate = true;
+
+            const onDown = (clientX, clientY) => {
+                isDragging = true;
+                autoRotate = false;
+                prevX = clientX;
+                prevY = clientY;
+            };
+            const onMove = (clientX, clientY) => {
+                if (!isDragging) return;
+                const deltaX = clientX - prevX;
+                const deltaY = clientY - prevY;
+                rootGroup.rotation.y += deltaX * 0.01;
+                rootGroup.rotation.x += deltaY * 0.01;
+                prevX = clientX;
+                prevY = clientY;
+            };
+            const onUp = () => {
+                isDragging = false;
+            };
+
+            const domElem = renderer.domElement;
+            domElem.addEventListener('mousedown', e => onDown(e.clientX, e.clientY));
+            window.addEventListener('mousemove', e => onMove(e.clientX, e.clientY));
+            window.addEventListener('mouseup', onUp);
+
+            domElem.addEventListener('touchstart', e => {
+                if (e.touches.length === 1) {
+                    onDown(e.touches[0].clientX, e.touches[0].clientY);
+                }
+            }, { passive: true });
+            domElem.addEventListener('touchmove', e => {
+                if (e.touches.length === 1) {
+                    onMove(e.touches[0].clientX, e.touches[0].clientY);
+                }
+            }, { passive: true });
+            domElem.addEventListener('touchend', onUp);
+
+            // Resize Handler
+            const handleResize = () => {
+                if (!container.clientWidth) return;
+                const w = container.clientWidth;
+                const h = container.clientHeight;
+                camera.aspect = w / h;
+                camera.updateProjectionMatrix();
+                renderer.setSize(w, h);
+            };
+            window.addEventListener('resize', handleResize);
+
+            const sceneRecord = { renderer, animId: null };
+            activeScenes.push(sceneRecord);
+
+            let clock = new THREE.Clock();
+            function animate() {
+                sceneRecord.animId = requestAnimationFrame(animate);
+                const elapsed = clock.getElapsedTime();
+                if (autoRotate) {
+                    rootGroup.rotation.y += 0.005;
+                }
+                if (typeof customUpdate === 'function') {
+                    customUpdate(elapsed, rootGroup);
+                }
+                renderer.render(scene, camera);
+            }
+            animate();
+
+            return {
+                resetRotation: () => {
+                    rootGroup.rotation.set(0, 0, 0);
+                    autoRotate = true;
+                }
+            };
+        }
+
+        // Helper: Create 3D Atom Sphere
+        function createAtom(radius, colorHex, x = 0, y = 0, z = 0) {
+            const geo = new THREE.SphereGeometry(radius, 32, 32);
+            const mat = new THREE.MeshStandardMaterial({
+                color: colorHex,
+                roughness: 0.25,
+                metalness: 0.15
+            });
+            const mesh = new THREE.Mesh(geo, mat);
+            mesh.position.set(x, y, z);
+            return mesh;
+        }
+
+        // Helper: Create 3D Cylinder Bond between two Vector3 points
+        function createBond(p1, p2, radius = 0.09, colorHex = 0xe2e8f0) {
+            const dir = new THREE.Vector3().subVectors(p2, p1);
+            const len = dir.length();
+            const geo = new THREE.CylinderGeometry(radius, radius, len, 16);
+            const mat = new THREE.MeshStandardMaterial({
+                color: colorHex,
+                roughness: 0.35,
+                metalness: 0.2
+            });
+            const mesh = new THREE.Mesh(geo, mat);
+            mesh.position.copy(p1).add(p2).multiplyScalar(0.5);
+            mesh.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), dir.clone().normalize());
+            return mesh;
+        }
+
+        // Helper: Create Double or Triple Bond
+        function createMultiBond(p1, p2, order = 2, colorHex = 0xe2e8f0) {
+            const group = new THREE.Group();
+            const dir = new THREE.Vector3().subVectors(p2, p1).normalize();
+            let up = new THREE.Vector3(0, 1, 0);
+            if (Math.abs(dir.y) > 0.9) up = new THREE.Vector3(1, 0, 0);
+            const perp = new THREE.Vector3().crossVectors(dir, up).normalize();
+
+            if (order === 2) {
+                const offset = perp.clone().multiplyScalar(0.13);
+                group.add(createBond(p1.clone().add(offset), p2.clone().add(offset), 0.065, colorHex));
+                group.add(createBond(p1.clone().sub(offset), p2.clone().sub(offset), 0.065, colorHex));
+            } else if (order === 3) {
+                const offset = perp.clone().multiplyScalar(0.18);
+                group.add(createBond(p1, p2, 0.06, colorHex));
+                group.add(createBond(p1.clone().add(offset), p2.clone().add(offset), 0.06, colorHex));
+                group.add(createBond(p1.clone().sub(offset), p2.clone().sub(offset), 0.06, colorHex));
+            }
+            return group;
+        }
+
+        // ==========================================
+        // 2. SPECIFIC 3D MODEL BUILDERS
+        // ==========================================
+
+        // 3D Builder 1.1: Atomic Orbitals & Valence Shell
+        function render3D_1_1(mode) {
+            init3DViewer('viewer-1-1', (group, camera) => {
+                camera.position.set(0, 1.2, 7.2);
+                // Axes helper lines
+                const axisMat = new THREE.LineBasicMaterial({ color: 0x64748b, transparent: true, opacity: 0.5 });
+                [
+                    [new THREE.Vector3(-2.6,0,0), new THREE.Vector3(2.6,0,0)],
+                    [new THREE.Vector3(0,-2.6,0), new THREE.Vector3(0,2.6,0)],
+                    [new THREE.Vector3(0,0,-2.6), new THREE.Vector3(0,0,2.6)]
+                ].forEach(pts => {
+                    const g = new THREE.BufferGeometry().setFromPoints(pts);
+                    group.add(new THREE.Line(g, axisMat));
+                });
+
+                // Nucleus
+                group.add(createAtom(0.22, 0xfef08a, 0, 0, 0));
+
+                if (mode === 's-orbital') {
+                    const geo = new THREE.SphereGeometry(1.6, 36, 36);
+                    const mat = new THREE.MeshStandardMaterial({
+                        color: 0x38bdf8,
+                        transparent: true,
+                        opacity: 0.45,
+                        roughness: 0.2
+                    });
+                    group.add(new THREE.Mesh(geo, mat));
+                } else if (mode === 'p-orbitals') {
+                    const makeLobe = (color, rotAxis, angle) => {
+                        const pair = new THREE.Group();
+                        const lobeGeo = new THREE.SphereGeometry(0.65, 28, 28);
+                        lobeGeo.scale(0.68, 1.35, 0.68);
+                        const mat = new THREE.MeshStandardMaterial({
+                            color,
+                            transparent: true,
+                            opacity: 0.65,
+                            roughness: 0.2
+                        });
+                        const top = new THREE.Mesh(lobeGeo, mat);
+                        top.position.y = 0.95;
+                        const bot = new THREE.Mesh(lobeGeo, mat);
+                        bot.position.y = -0.95;
+                        pair.add(top, bot);
+                        if (rotAxis === 'z') pair.rotation.z = angle;
+                        if (rotAxis === 'x') pair.rotation.x = angle;
+                        return pair;
+                    };
+                    // py (green), px (red), pz (blue)
+                    group.add(makeLobe(0x4ade80, 'y', 0));
+                    group.add(makeLobe(0xf87171, 'z', Math.PI / 2));
+                    group.add(makeLobe(0x60a5fa, 'x', Math.PI / 2));
+                } else if (mode === 'octet-oxygen') {
+                    // Oxygen (2, 6): Inner shell (2e) + Outer Valence shell (6e + 2 empty slots)
+                    const ring1 = new THREE.Mesh(
+                        new THREE.TorusGeometry(1.1, 0.025, 16, 64),
+                        new THREE.MeshBasicMaterial({ color: 0x94a3b8 })
+                    );
+                    const ring2 = new THREE.Mesh(
+                        new THREE.TorusGeometry(2.0, 0.03, 16, 64),
+                        new THREE.MeshBasicMaterial({ color: 0x38bdf8 })
+                    );
+                    group.add(ring1, ring2);
+
+                    const electrons = [];
+                    // 2 inner electrons
+                    for (let i = 0; i < 2; i++) {
+                        const e = createAtom(0.14, 0xfbbf24, Math.cos(i * Math.PI) * 1.1, Math.sin(i * Math.PI) * 1.1, 0);
+                        group.add(e);
+                    }
+                    // 6 valence electrons
+                    for (let i = 0; i < 6; i++) {
+                        const ang = (i / 6) * Math.PI * 2;
+                        const e = createAtom(0.16, 0x38bdf8, Math.cos(ang) * 2.0, Math.sin(ang) * 2.0, 0);
+                        group.add(e);
+                        electrons.push(e);
+                    }
+                    return (t) => {
+                        ring2.rotation.z = t * 0.4;
+                    };
+                }
+            });
+        }
+
+        // 3D Builder 1.2: Ionic Crystal Lattice & Unit Cells
+        function render3D_1_2(mode) {
+            init3DViewer('viewer-1-2', (group, camera) => {
+                camera.position.set(3.8, 3.2, 6.5);
+                camera.lookAt(0, 0, 0);
+
+                if (mode === 'nacl-lattice') {
+                    // 3x3x3 NaCl Crystal Lattice (Na+ purple small, Cl- green large)
+                    const step = 1.25;
+                    for (let x = -1; x <= 1; x++) {
+                        for (let y = -1; y <= 1; y++) {
+                            for (let z = -1; z <= 1; z++) {
+                                const isCl = (Math.abs(x + y + z) % 2 === 0);
+                                const atom = createAtom(
+                                    isCl ? 0.34 : 0.21,
+                                    isCl ? 0x22c55e : 0xa855f7,
+                                    x * step, y * step, z * step
+                                );
+                                group.add(atom);
+                            }
+                        }
+                    }
+                    // Connecting grid lines
+                    const boxGeo = new THREE.BoxGeometry(step * 2, step * 2, step * 2);
+                    const edges = new THREE.EdgesGeometry(boxGeo);
+                    group.add(new THREE.LineSegments(edges, new THREE.LineBasicMaterial({ color: 0x64748b })));
+                } else if (mode === 'fcc' || mode === 'bcc' || mode === 'sc') {
+                    const s = 1.4;
+                    const boxGeo = new THREE.BoxGeometry(s * 2, s * 2, s * 2);
+                    const edges = new THREE.EdgesGeometry(boxGeo);
+                    group.add(new THREE.LineSegments(edges, new THREE.LineBasicMaterial({ color: 0x38bdf8 })));
+
+                    // 8 Corners
+                    for (let x of [-s, s]) {
+                        for (let y of [-s, s]) {
+                            for (let z of [-s, s]) {
+                                group.add(createAtom(0.28, 0x38bdf8, x, y, z));
+                            }
+                        }
+                    }
+                    if (mode === 'bcc') {
+                        // Body centre
+                        group.add(createAtom(0.32, 0xf59e0b, 0, 0, 0));
+                    } else if (mode === 'fcc') {
+                        // 6 Face centres
+                        const faces = [
+                            [s,0,0], [-s,0,0],
+                            [0,s,0], [0,-s,0],
+                            [0,0,s], [0,0,-s]
+                        ];
+                        faces.forEach(f => group.add(createAtom(0.28, 0xf43f5e, f[0], f[1], f[2])));
+                    }
+                }
+            });
+        }
+
+        // 3D Builder 1.3: VSEPR Molecular Shapes & Giant Covalent Networks
+        function render3D_1_3(mode) {
+            init3DViewer('viewer-1-3', (group, camera) => {
+                camera.position.set(0, 1.2, 6.2);
+
+                const addLonePair = (dirVec) => {
+                    const lobeGeo = new THREE.SphereGeometry(0.42, 24, 24);
+                    lobeGeo.scale(0.85, 1.3, 0.85);
+                    const mat = new THREE.MeshStandardMaterial({
+                        color: 0xfacc15,
+                        transparent: true,
+                        opacity: 0.45,
+                        roughness: 0.2
+                    });
+                    const lobe = new THREE.Mesh(lobeGeo, mat);
+                    const pos = dirVec.clone().normalize().multiplyScalar(0.95);
+                    lobe.position.copy(pos);
+                    lobe.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), dirVec.clone().normalize());
+                    group.add(lobe);
+
+                    // Two yellow dots inside lobe
+                    const d1 = createAtom(0.09, 0xfef08a, pos.x + 0.12, pos.y, pos.z);
+                    const d2 = createAtom(0.09, 0xfef08a, pos.x - 0.12, pos.y, pos.z);
+                    group.add(d1, d2);
+                };
+
+                if (mode === 'co2') {
+                    // Linear 180 deg
+                    const c = createAtom(0.45, 0x334155, 0, 0, 0);
+                    const o1 = createAtom(0.42, 0xef4444, -1.8, 0, 0);
+                    const o2 = createAtom(0.42, 0xef4444, 1.8, 0, 0);
+                    group.add(c, o1, o2);
+                    group.add(createMultiBond(new THREE.Vector3(0,0,0), new THREE.Vector3(-1.8,0,0), 2));
+                    group.add(createMultiBond(new THREE.Vector3(0,0,0), new THREE.Vector3(1.8,0,0), 2));
+                } else if (mode === 'bf3') {
+                    // Trigonal planar 120 deg
+                    const b = createAtom(0.45, 0xf472b6, 0, 0, 0);
+                    group.add(b);
+                    for (let i = 0; i < 3; i++) {
+                        const ang = (i * 2 * Math.PI) / 3 + Math.PI / 2;
+                        const p = new THREE.Vector3(Math.cos(ang) * 1.75, Math.sin(ang) * 1.75, 0);
+                        group.add(createAtom(0.38, 0x22c55e, p.x, p.y, p.z));
+                        group.add(createBond(new THREE.Vector3(0,0,0), p));
+                    }
+                } else if (mode === 'ch4') {
+                    // Tetrahedral 109.5 deg
+                    const c = createAtom(0.46, 0x334155, 0, 0, 0);
+                    group.add(c);
+                    const dirs = [
+                        new THREE.Vector3(0, 1, 0),
+                        new THREE.Vector3(0.9428, -0.3333, 0),
+                        new THREE.Vector3(-0.4714, -0.3333, 0.8165),
+                        new THREE.Vector3(-0.4714, -0.3333, -0.8165)
+                    ];
+                    dirs.forEach(d => {
+                        const p = d.clone().multiplyScalar(1.75);
+                        group.add(createAtom(0.32, 0xf8fafc, p.x, p.y, p.z));
+                        group.add(createBond(new THREE.Vector3(0,0,0), p));
+                    });
+                } else if (mode === 'nh3') {
+                    // Trigonal pyramidal (<109.5 deg, 1 lone pair)
+                    const n = createAtom(0.46, 0x3b82f6, 0, 0, 0);
+                    group.add(n);
+                    addLonePair(new THREE.Vector3(0, 1, 0));
+                    const dirs = [
+                        new THREE.Vector3(0.9428, -0.38, 0),
+                        new THREE.Vector3(-0.4714, -0.38, 0.8165),
+                        new THREE.Vector3(-0.4714, -0.38, -0.8165)
+                    ];
+                    dirs.forEach(d => {
+                        const p = d.clone().normalize().multiplyScalar(1.7);
+                        group.add(createAtom(0.32, 0xf8fafc, p.x, p.y, p.z));
+                        group.add(createBond(new THREE.Vector3(0,0,0), p));
+                    });
+                } else if (mode === 'h2o') {
+                    // Bent / V-shaped (<109.5 deg, 2 lone pairs)
+                    const o = createAtom(0.48, 0xef4444, 0, 0, 0);
+                    group.add(o);
+                    addLonePair(new THREE.Vector3(-0.6, 0.8, 0.6));
+                    addLonePair(new THREE.Vector3(-0.6, 0.8, -0.6));
+                    const d1 = new THREE.Vector3(0.85, -0.65, 0);
+                    const d2 = new THREE.Vector3(-0.35, -0.95, 0);
+                    [d1, d2].forEach(d => {
+                        const p = d.clone().normalize().multiplyScalar(1.65);
+                        group.add(createAtom(0.32, 0xf8fafc, p.x, p.y, p.z));
+                        group.add(createBond(new THREE.Vector3(0,0,0), p));
+                    });
+                } else if (mode === 'diamond') {
+                    // Tetrahedral Diamond Network
+                    camera.position.set(2.5, 2.2, 6.8);
+                    const center = new THREE.Vector3(0, 0, 0);
+                    group.add(createAtom(0.32, 0x38bdf8, 0, 0, 0));
+                    const dirs = [
+                        new THREE.Vector3(0, 1, 0),
+                        new THREE.Vector3(0.94, -0.33, 0),
+                        new THREE.Vector3(-0.47, -0.33, 0.82),
+                        new THREE.Vector3(-0.47, -0.33, -0.82)
+                    ];
+                    dirs.forEach(d => {
+                        const p1 = d.clone().multiplyScalar(1.35);
+                        group.add(createAtom(0.28, 0x0284c7, p1.x, p1.y, p1.z));
+                        group.add(createBond(center, p1, 0.08, 0x94a3b8));
+                        // Sub-branches
+                        dirs.forEach(d2 => {
+                            if (d2.dot(d) < 0.5) {
+                                const p2 = p1.clone().add(d2.clone().multiplyScalar(1.1));
+                                group.add(createAtom(0.22, 0x64748b, p2.x, p2.y, p2.z));
+                                group.add(createBond(p1, p2, 0.06, 0x64748b));
+                            }
+                        });
+                    });
+                } else if (mode === 'graphite') {
+                    // Two Hexagonal Layers + Dashed van der Waals
+                    camera.position.set(2.5, 2.5, 6.8);
+                    const buildHexLayer = (yOffset, color) => {
+                        const r = 1.05;
+                        const centers = [
+                            [0, 0],
+                            [r * 1.5, r * 0.866],
+                            [-r * 1.5, r * 0.866],
+                            [0, -r * 1.732]
+                        ];
+                        centers.forEach(([cx, cz]) => {
+                            const pts = [];
+                            for (let i = 0; i < 6; i++) {
+                                const a = (i * Math.PI) / 3;
+                                pts.push(new THREE.Vector3(cx + Math.cos(a) * r, yOffset, cz + Math.sin(a) * r));
+                            }
+                            for (let i = 0; i < 6; i++) {
+                                group.add(createAtom(0.2, color, pts[i].x, pts[i].y, pts[i].z));
+                                group.add(createBond(pts[i], pts[(i + 1) % 6], 0.06, 0xcbd5e1));
+                            }
+                        });
+                    };
+                    buildHexLayer(1.1, 0x38bdf8);
+                    buildHexLayer(-1.1, 0x818cf8);
+
+                    // Dashed interlayer attraction lines
+                    const dashMat = new THREE.LineDashedMaterial({ color: 0xfacc15, dashSize: 0.18, gapSize: 0.14 });
+                    [[0,0], [1.05, 0], [-1.05, 0], [0, 1.05], [0, -1.05]].forEach(([x, z]) => {
+                        const lineGeo = new THREE.BufferGeometry().setFromPoints([
+                            new THREE.Vector3(x, 1.1, z),
+                            new THREE.Vector3(x, -1.1, z)
+                        ]);
+                        const line = new THREE.Line(lineGeo, dashMat);
+                        line.computeLineDistances();
+                        group.add(line);
+                    });
+                }
+            });
+        }
+
+        // 3D Builder 1.4: Intermolecular Forces (Hydrogen Bonding in Water & Ion-Dipole)
+        function render3D_1_4(mode) {
+            init3DViewer('viewer-1-4', (group, camera) => {
+                camera.position.set(0, 1.2, 7.2);
+
+                const createWaterMol = (x, y, z, rotZ = 0) => {
+                    const wGroup = new THREE.Group();
+                    const o = createAtom(0.38, 0xef4444, 0, 0, 0);
+                    const h1Pos = new THREE.Vector3(0.75, -0.55, 0);
+                    const h2Pos = new THREE.Vector3(-0.75, -0.55, 0);
+                    const h1 = createAtom(0.24, 0xf8fafc, h1Pos.x, h1Pos.y, 0);
+                    const h2 = createAtom(0.24, 0xf8fafc, h2Pos.x, h2Pos.y, 0);
+                    wGroup.add(o, h1, h2);
+                    wGroup.add(createBond(new THREE.Vector3(0,0,0), h1Pos, 0.07));
+                    wGroup.add(createBond(new THREE.Vector3(0,0,0), h2Pos, 0.07));
+                    wGroup.position.set(x, y, z);
+                    wGroup.rotation.z = rotZ;
+                    return wGroup;
+                };
+
+                if (mode === 'h-bond') {
+                    // Central water surrounded by 4 hydrogen-bonded water molecules
+                    group.add(createWaterMol(0, 0, 0, 0));
+                    group.add(createWaterMol(1.9, -1.35, 0, -0.5));
+                    group.add(createWaterMol(-1.9, -1.35, 0, 0.5));
+                    group.add(createWaterMol(0, 2.1, 0, 0.6));
+
+                    // Dashed Hydrogen Bonds (Yellow)
+                    const dashMat = new THREE.LineDashedMaterial({ color: 0xfacc15, dashSize: 0.16, gapSize: 0.12 });
+                    const pairs = [
+                        [new THREE.Vector3(0.75, -0.55, 0), new THREE.Vector3(1.9, -1.35, 0)],
+                        [new THREE.Vector3(-0.75, -0.55, 0), new THREE.Vector3(-1.9, -1.35, 0)],
+                        [new THREE.Vector3(0, 0.35, 0), new THREE.Vector3(-0.4, 1.4, 0)]
+                    ];
+                    pairs.forEach(([p1, p2]) => {
+                        const g = new THREE.BufferGeometry().setFromPoints([p1, p2]);
+                        const line = new THREE.Line(g, dashMat);
+                        line.computeLineDistances();
+                        group.add(line);
+                    });
+                } else if (mode === 'ion-dipole') {
+                    // Central Na+ ion surrounded by Oxygen ends of 6 Water molecules
+                    group.add(createAtom(0.45, 0xa855f7, 0, 0, 0));
+                    const positions = [
+                        [2.1, 0, 0, Math.PI / 2],
+                        [-2.1, 0, 0, -Math.PI / 2],
+                        [0, 2.1, 0, Math.PI],
+                        [0, -2.1, 0, 0]
+                    ];
+                    positions.forEach(([x, y, z, r]) => {
+                        group.add(createWaterMol(x, y, z, r));
+                    });
+                }
+            });
+        }
+
+        // 3D Builder 1.5: Metallic Bonding ("Sea of Mobile Electrons")
+        function render3D_1_5() {
+            init3DViewer('viewer-1-5', (group, camera) => {
+                camera.position.set(2.5, 2.0, 6.8);
+                // Grid of Positive Metal Cations
+                for (let x = -1.5; x <= 1.5; x += 1.5) {
+                    for (let y = -1.0; y <= 1.0; y += 1.0) {
+                        for (let z = -1.0; z <= 1.0; z += 1.0) {
+                            group.add(createAtom(0.32, 0xf97316, x, y, z));
+                        }
+                    }
+                }
+
+                // Sea of Mobile Delocalized Electrons (glowing cyan spheres)
+                const electrons = [];
+                for (let i = 0; i < 45; i++) {
+                    const e = createAtom(
+                        0.09,
+                        0x38bdf8,
+                        (Math.random() - 0.5) * 4.2,
+                        (Math.random() - 0.5) * 3.0,
+                        (Math.random() - 0.5) * 3.0
+                    );
+                    e.userData = {
+                        speedX: (Math.random() - 0.5) * 0.04,
+                        speedY: (Math.random() - 0.5) * 0.04,
+                        speedZ: (Math.random() - 0.5) * 0.04
+                    };
+                    group.add(e);
+                    electrons.push(e);
+                }
+
+                return () => {
+                    electrons.forEach(e => {
+                        e.position.x += e.userData.speedX;
+                        e.position.y += e.userData.speedY;
+                        e.position.z += e.userData.speedZ;
+                        if (Math.abs(e.position.x) > 2.2) e.userData.speedX *= -1;
+                        if (Math.abs(e.position.y) > 1.6) e.userData.speedY *= -1;
+                        if (Math.abs(e.position.z) > 1.6) e.userData.speedZ *= -1;
+                    });
+                };
+            });
+        }
+
+        // ==========================================
+        // 3. ARTICLE CONTENT TEMPLATES (MYANMAR)
+        // ==========================================
+
+        const ARTICLES = {
+            '1.1': {
+                badge: 'Article 1.1',
+                title: 'Basic Concepts to Understand Chemical Bonding',
+                subtitle: 'ဓာတုစည်းနှောင်မှုဆိုင်ရာ အခြေခံသဘောတရားများနှင့် အီလက်ထရွန်ဖွဲ့စည်းပုံ',
+                html: `
+                    <!-- Introduction Card -->
+                    <div class="bg-gradient-to-r from-blue-600 to-indigo-700 rounded-3xl p-6 sm:p-8 text-white shadow-lg">
+                        <span class="inline-block px-3 py-1 rounded-full bg-white/15 text-xs font-semibold tracking-wide mb-3">နိဒါန်း (Introduction)</span>
+                        <h3 class="text-xl sm:text-2xl font-bold mb-3">ဒြပ်ပေါင်းများ အဘယ်ကြောင့် ဖြစ်ပေါ်လာသနည်း?</h3>
+                        <p class="myanmar-text text-blue-50 text-sm sm:text-base">
+                            သဘာဝတွင် ဒြပ်စင်အက်တမ်များသည် တစ်လုံးတည်း လွတ်လပ်စွာ တည်ရှိခဲပါသည်။ သိရှိပြီးသော ဒြပ်စင် <strong>၁၁၈ မျိုး</strong> ပုံစံအမျိုးမျိုးဖြင့် ပေါင်းစပ်ရာမှ မူလဒြပ်စင်များနှင့် လုံးဝမတူညီသော ဂုဏ်သတ္တိရှိသည့် ဒြပ်ပေါင်းသန်းပေါင်းများစွာ ဖြစ်ပေါ်လာပါသည်။ ဒြပ်ပေါင်းများအတွင်း အက်တမ်အချင်းချင်း စုစည်းထားသော ဆွဲငင်အားကို <strong>Chemical Bonds (ဓာတုစည်းများ)</strong> ဟုခေါ်ပါသည်။
+                        </p>
+                    </div>
+
+                    <!-- 3D Orbital & Octet Interactive Viewer -->
+                    <div class="bg-white rounded-3xl border border-slate-200 p-5 sm:p-7 shadow-sm space-y-4">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                            <div>
+                                <span class="text-xs font-bold uppercase tracking-wider text-blue-600">Interactive 3D Model</span>
+                                <h3 class="text-lg font-bold text-slate-900">Atomic Orbitals (s, p) နှင့် Valence Shell 3D ပုံစံ</h3>
+                            </div>
+                            <div class="flex flex-wrap gap-2">
+                                <button onclick="render3D_1_1('s-orbital')" class="px-3.5 py-2 rounded-xl text-xs font-semibold bg-blue-600 text-white hover:bg-blue-700 transition shadow-xs">s Orbital (စက်လုံးပုံ)</button>
+                                <button onclick="render3D_1_1('p-orbitals')" class="px-3.5 py-2 rounded-xl text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 transition">p Orbitals (px, py, pz)</button>
+                                <button onclick="render3D_1_1('octet-oxygen')" class="px-3.5 py-2 rounded-xl text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 transition">Oxygen (2, 6) Shell</button>
+                            </div>
+                        </div>
+                        <div id="viewer-1-1" class="canvas-container"></div>
+                        <p class="text-xs text-slate-500 text-center">💡 ခလုတ်များကိုနှိပ်၍ s orbital၊ ဒမ်ဘယ်ပုံ p orbital (၃) ခုနှင့် Oxygen ၏ Valence အီလက်ထရွန် ၆ လုံးကို 3D ဖြင့် လှည့်ကြည့်ပါ။</p>
+                    </div>
+
+                    <!-- Section 1: Electronic Structure & 3 Rules -->
+                    <div class="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 shadow-sm space-y-5">
+                        <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2.5">
+                            <span class="w-8 h-8 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center text-sm font-bold">၁</span>
+                            Electronic Structure & Energy Levels (အီလက်ထရွန်ဖွဲ့စည်းပုံ စည်းမျဉ်းများ)
+                        </h3>
+                        <p class="myanmar-text text-slate-700 text-sm sm:text-base">
+                            အက်တမ်တစ်ခု၏ အပြင်ဘက်ဆုံးပတ်လမ်းရှိ <strong>Valence electrons</strong> များသည် ဓာတုစည်းနှောင်မှုတွင် အဓိကပါဝင်ပါသည်။ အက်တမ်တွင် ပင်မပတ်လမ်း (Main shells: K, L, M, N) နှင့် ပတ်လမ်းခွဲ (Subshells: <strong>s, p, d, f</strong> - အများဆုံး 2, 6, 10, 14 လုံးစီဝင်ဆံ့) တို့ရှိပြီး အီလက်ထရွန်ဖြည့်သွင်းရာတွင် အောက်ပါစည်းမျဉ်း (၃) ခုကို လိုက်နာရပါသည်-
+                        </p>
+
+                        <div class="grid md:grid-cols-3 gap-4">
+                            <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200/80">
+                                <div class="font-bold text-blue-700 text-sm mb-1.5">1. Aufbau Principle</div>
+                                <p class="myanmar-text text-xs sm:text-sm text-slate-600">အီလက်ထရွန်များကို စွမ်းအင်အနိမ့်ဆုံး Orbital မှစတင်၍ စွမ်းအင်မြင့်ရာသို့ အစဉ်လိုက် (1s, 2s, 2p, 3s, 3p, 4s, 3d...) ဖြည့်သွင်းရပါသည်။</p>
+                            </div>
+                            <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200/80">
+                                <div class="font-bold text-indigo-700 text-sm mb-1.5">2. Pauli's Exclusion Principle</div>
+                                <p class="myanmar-text text-xs sm:text-sm text-slate-600">Orbital တစ်ခုတည်းတွင် အများဆုံး အီလက်ထရွန် (၂) လုံးသာ နေရာယူနိုင်ပြီး လည်ပတ်မှုဦးတည်ရာ ဆန့်ကျင်ဘက် (<strong>Opposite spins: ↑↓</strong>) ဖြစ်ရမည်။</p>
+                            </div>
+                            <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200/80">
+                                <div class="font-bold text-emerald-700 text-sm mb-1.5">3. Hund's Rule</div>
+                                <p class="myanmar-text text-xs sm:text-sm text-slate-600">Subshell တစ်ခုအတွင်းရှိ Orbital တိုင်း၌ အီလက်ထရွန်တစ်လုံးစီ ဦးတည်ရာတူညီစွာ (↑ ↑ ↑) အရင်နေရာယူပြီးမှသာ စုံတွဲဖွဲ့ရပါသည်။</p>
+                            </div>
+                        </div>
+
+                        <!-- SVG Diagram: Aufbau & Hund's Rule -->
+                        <div class="bg-slate-50 rounded-2xl p-4 border border-slate-200">
+                            <div class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">ပုံပြကားချပ် - Oxygen (Z = 8: 1s² 2s² 2p⁴) ၏ Orbital Box Diagram</div>
+                            <svg viewBox="0 0 640 135" class="w-full h-auto max-w-2xl mx-auto">
+                                <!-- 1s -->
+                                <rect x="30" y="30" width="54" height="54" rx="8" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
+                                <text x="57" y="64" text-anchor="middle" font-size="22" font-weight="bold" fill="#1e3a8a">↑↓</text>
+                                <text x="57" y="105" text-anchor="middle" font-size="14" font-weight="bold" fill="#334155">1s²</text>
+
+                                <!-- 2s -->
+                                <rect x="120" y="30" width="54" height="54" rx="8" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
+                                <text x="147" y="64" text-anchor="middle" font-size="22" font-weight="bold" fill="#1e3a8a">↑↓</text>
+                                <text x="147" y="105" text-anchor="middle" font-size="14" font-weight="bold" fill="#334155">2s²</text>
+
+                                <!-- 2p (3 boxes) -->
+                                <rect x="220" y="30" width="54" height="54" rx="8" fill="#dcfce7" stroke="#16a34a" stroke-width="2"/>
+                                <text x="247" y="64" text-anchor="middle" font-size="22" font-weight="bold" fill="#14532d">↑↓</text>
+                                <text x="247" y="105" text-anchor="middle" font-size="13" font-weight="bold" fill="#334155">2px</text>
+
+                                <rect x="278" y="30" width="54" height="54" rx="8" fill="#dcfce7" stroke="#16a34a" stroke-width="2"/>
+                                <text x="305" y="64" text-anchor="middle" font-size="22" font-weight="bold" fill="#14532d">↑</text>
+                                <text x="305" y="105" text-anchor="middle" font-size="13" font-weight="bold" fill="#334155">2py</text>
+
+                                <rect x="336" y="30" width="54" height="54" rx="8" fill="#dcfce7" stroke="#16a34a" stroke-width="2"/>
+                                <text x="363" y="64" text-anchor="middle" font-size="22" font-weight="bold" fill="#14532d">↑</text>
+                                <text x="363" y="105" text-anchor="middle" font-size="13" font-weight="bold" fill="#334155">2pz</text>
+
+                                <!-- Annotation -->
+                                <path d="M 410 57 L 440 57" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+                                <text x="450" y="50" font-size="13" font-weight="bold" fill="#0f172a">Hund's Rule အရ</text>
+                                <text x="450" y="70" font-size="12" fill="#475569">2px, 2py, 2pz တစ်လုံးစီ</text>
+                                <text x="450" y="88" font-size="12" fill="#475569">အရင်ဖြည့်ပြီးမှ 2px စုံတွဲဖွဲ့သည်</text>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <!-- Section 2: Octet Rule, EN, EA, IE & Bond Types -->
+                    <div class="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 shadow-sm space-y-5">
+                        <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2.5">
+                            <span class="w-8 h-8 rounded-xl bg-indigo-100 text-indigo-700 flex items-center justify-center text-sm font-bold">၂</span>
+                            Octet Rule, EN, EA, IE နှင့် ဓာတုစည်း အမျိုးအစားများ
+                        </h3>
+
+                        <div class="grid sm:grid-cols-2 gap-4">
+                            <div class="p-4 rounded-2xl bg-amber-50/70 border border-amber-200/80">
+                                <h4 class="font-bold text-amber-900 text-sm mb-1">Octet Rule & Lewis Symbols</h4>
+                                <p class="myanmar-text text-xs sm:text-sm text-amber-950/80">
+                                    အက်တမ်များသည် တည်ငြိမ်သော Noble gas များကဲ့သို့ အပြင်ဘက်ဆုံးပတ်လမ်းတွင် အီလက်ထရွန် <strong>(၈) လုံး</strong> ပြည့်စေရန် အီလက်ထရွန် ပေးခြင်း၊ ယူခြင်း သို့မဟုတ် မျှဝေခြင်း ပြုလုပ်ကြသည်။ Valence electron များကို ဒြပ်စင်သင်္ကေတဘေးတွင် အစက် (Dots) များဖြင့် ပြခြင်းကို <strong>Lewis symbols</strong> ဟုခေါ်သည်။
+                                </p>
+                            </div>
+                            <div class="p-4 rounded-2xl bg-blue-50/70 border border-blue-200/80">
+                                <h4 class="font-bold text-blue-900 text-sm mb-1">EN, Electron Affinity (EA) & Ionisation Energy (IE)</h4>
+                                <p class="myanmar-text text-xs sm:text-sm text-blue-950/80">
+                                    <strong>EN:</strong> မျှဝေအီလက်ထရွန်ကို ဆွဲယူနိုင်စွမ်း။ <strong>EA</strong> မြင့်သော ဒြပ်စင်များသည် အီလက်ထရွန်လက်ခံ၍ <strong>Anions (-)</strong> ဖြစ်လွယ်ပြီး၊ <strong>IE</strong> နိမ့်သော ဒြပ်စင်များသည် အီလက်ထရွန်စွန့်လွှတ်၍ <strong>Cations (+)</strong> ဖြစ်လွယ်သည်။
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- SVG Bonding Hierarchy -->
+                        <div class="bg-slate-50 rounded-2xl p-4 border border-slate-200">
+                            <div class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">ဓာတုစည်းနှောင်မှု အမျိုးအစားများ (Chemical Bonds vs Intermolecular Forces)</div>
+                            <svg viewBox="0 0 680 185" class="w-full h-auto">
+                                <rect x="200" y="8" width="280" height="34" rx="10" fill="#1e293b"/>
+                                <text x="340" y="30" text-anchor="middle" fill="#ffffff" font-size="13" font-weight="bold">Chemical Bonding & Forces</text>
+
+                                <line x1="250" y1="42" x2="170" y2="75" stroke="#94a3b8" stroke-width="2"/>
+                                <line x1="430" y1="42" x2="510" y2="75" stroke="#94a3b8" stroke-width="2"/>
+
+                                <!-- Strong Chemical Bonds -->
+                                <rect x="20" y="75" width="300" height="32" rx="8" fill="#2563eb"/>
+                                <text x="170" y="96" text-anchor="middle" fill="#ffffff" font-size="12" font-weight="bold">Strong Chemical Bonds (အက်တမ်ချင်း)</text>
+
+                                <rect x="20" y="118" width="94" height="52" rx="8" fill="#dbeafe" stroke="#3b82f6"/>
+                                <text x="67" y="140" text-anchor="middle" fill="#1e3a8a" font-size="11" font-weight="bold">Ionic Bond</text>
+                                <text x="67" y="156" text-anchor="middle" fill="#3b82f6" font-size="10">Metal + Non-metal</text>
+
+                                <rect x="123" y="118" width="94" height="52" rx="8" fill="#dbeafe" stroke="#3b82f6"/>
+                                <text x="170" y="140" text-anchor="middle" fill="#1e3a8a" font-size="11" font-weight="bold">Covalent Bond</text>
+                                <text x="170" y="156" text-anchor="middle" fill="#3b82f6" font-size="10">Non-metals</text>
+
+                                <rect x="226" y="118" width="94" height="52" rx="8" fill="#dbeafe" stroke="#3b82f6"/>
+                                <text x="273" y="140" text-anchor="middle" fill="#1e3a8a" font-size="11" font-weight="bold">Metallic Bond</text>
+                                <text x="273" y="156" text-anchor="middle" fill="#3b82f6" font-size="10">Metals</text>
+
+                                <!-- Weak Intermolecular Forces -->
+                                <rect x="355" y="75" width="305" height="32" rx="8" fill="#0d9488"/>
+                                <text x="507" y="96" text-anchor="middle" fill="#ffffff" font-size="12" font-weight="bold">Intermolecular Forces (မော်လီကျူးချင်း)</text>
+
+                                <rect x="355" y="118" width="145" height="52" rx="8" fill="#ccfbf1" stroke="#14b8a6"/>
+                                <text x="427" y="140" text-anchor="middle" fill="#134e4a" font-size="11" font-weight="bold">Hydrogen Bonding</text>
+                                <text x="427" y="156" text-anchor="middle" fill="#0f766e" font-size="10">အားအကောင်းဆုံး IMF</text>
+
+                                <rect x="510" y="118" width="150" height="52" rx="8" fill="#ccfbf1" stroke="#14b8a6"/>
+                                <text x="585" y="140" text-anchor="middle" fill="#134e4a" font-size="11" font-weight="bold">van der Waals Forces</text>
+                                <text x="585" y="156" text-anchor="middle" fill="#0f766e" font-size="10">Dipole & London forces</text>
+                            </svg>
+                        </div>
+                    </div>
+                `,
+                onMount: () => render3D_1_1('s-orbital')
+            },
+
+            '1.2': {
+                badge: 'Article 1.2',
+                title: 'Ionic Bonding',
+                subtitle: 'အိုင်းယွန်းနစ် စည်းနှောင်မှု ဖြစ်ပေါ်ပုံနှင့် ပုံဆောင်ခဲ တည်ဆောက်ပုံများ',
+                html: `
+                    <!-- 3D Crystal Lattice & Unit Cell Viewer -->
+                    <div class="bg-white rounded-3xl border border-slate-200 p-5 sm:p-7 shadow-sm space-y-4">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                            <div>
+                                <span class="text-xs font-bold uppercase tracking-wider text-purple-600">Interactive 3D Crystal Model</span>
+                                <h3 class="text-lg font-bold text-slate-900">NaCl Crystal Lattice နှင့် Cubic Unit Cells (3 မျိုး)</h3>
+                            </div>
+                            <div class="flex flex-wrap gap-2">
+                                <button onclick="render3D_1_2('nacl-lattice')" class="px-3 py-2 rounded-xl text-xs font-semibold bg-purple-600 text-white hover:bg-purple-700 transition">NaCl Lattice (6:6)</button>
+                                <button onclick="render3D_1_2('sc')" class="px-3 py-2 rounded-xl text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 transition">Simple Cubic (sc)</button>
+                                <button onclick="render3D_1_2('bcc')" class="px-3 py-2 rounded-xl text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 transition">Body-Centred (bcc)</button>
+                                <button onclick="render3D_1_2('fcc')" class="px-3 py-2 rounded-xl text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 transition">Face-Centred (fcc)</button>
+                            </div>
+                        </div>
+                        <div id="viewer-1-2" class="canvas-container"></div>
+                        <div class="flex flex-wrap items-center justify-center gap-4 text-xs text-slate-600">
+                            <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-purple-500 inline-block"></span> Na⁺ Cation (သေးငယ်)</span>
+                            <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-green-500 inline-block"></span> Cl⁻ Anion (ကြီးမား)</span>
+                            <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-amber-500 inline-block"></span> Body Centre</span>
+                            <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-rose-500 inline-block"></span> Face Centres</span>
+                        </div>
+                    </div>
+
+                    <!-- (a) Formation of Ionic Bond -->
+                    <div class="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 shadow-sm space-y-5">
+                        <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2.5">
+                            <span class="w-8 h-8 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center text-sm font-bold">(a)</span>
+                            Formation of Ionic Bond (အိုင်းယွန်းနစ်စည်း ဖြစ်ပေါ်ပုံ)
+                        </h3>
+                        <p class="myanmar-text text-slate-700 text-sm sm:text-base">
+                            IE နိမ့်သော သတ္တုအက်တမ် (Metal) မှ EA မြင့်သော သတ္တုမဟုတ်သည့်အက်တမ် (Non-metal) သို့ အီလက်ထရွန် လွှဲပြောင်းပေးခြင်းဖြင့် ဖြစ်ပေါ်သည်။ အက်တမ်နှစ်ခုကြား <strong>Electronegativity ခြားနားချက် 1.8 ထက်ကြီးမှ</strong> Ionic bond ဖြစ်ပေါ်လေ့ရှိသည်။ ဆန့်ကျင်ဘက်လျှပ်စစ်ဓာတ်ရှိသော Cation (+) နှင့် Anion (-) ကြားရှိ ပြင်းထန်သော လျှပ်စစ်ငြိမ်ဆွဲအား (<strong>Electrostatic attraction</strong>) ကို Ionic bond ဟုခေါ်သည်။
+                        </p>
+
+                        <!-- SVG Electron Transfer NaCl & MgO -->
+                        <div class="bg-slate-50 rounded-2xl p-4 sm:p-5 border border-slate-200 space-y-4">
+                            <div class="text-xs font-bold text-slate-500 uppercase tracking-wider">ပုံပြကားချပ် - အီလက်ထရွန် လွှဲပြောင်းပေးပုံ (NaCl နှင့် MgO)</div>
+                            <svg viewBox="0 0 680 185" class="w-full h-auto">
+                                <!-- NaCl Example -->
+                                <rect x="15" y="10" width="650" height="75" rx="12" fill="#ffffff" stroke="#e2e8f0"/>
+                                <text x="35" y="34" font-size="12" font-weight="bold" fill="#6b21a8">ဥပမာ (၁) NaCl (ΔEN = 3.0 - 0.9 = 2.1 &gt; 1.8)</text>
+                                <text x="35" y="60" font-size="14" font-weight="bold" fill="#1e293b">Na (2, 8, 1)  +  Cl (2, 8, 7)</text>
+                                <path d="M 225 55 L 285 55" stroke="#9333ea" stroke-width="2.5"/>
+                                <polygon points="285,50 295,55 285,60" fill="#9333ea"/>
+                                <text x="260" y="45" text-anchor="middle" font-size="11" fill="#9333ea" font-weight="bold">1 e⁻ ပေး</text>
+                                <text x="315" y="60" font-size="14" font-weight="bold" fill="#15803d">[Na]⁺ (2, 8) + [Cl]⁻ (2, 8, 8)  →  NaCl</text>
+
+                                <!-- MgO Example -->
+                                <rect x="15" y="98" width="650" height="75" rx="12" fill="#ffffff" stroke="#e2e8f0"/>
+                                <text x="35" y="122" font-size="12" font-weight="bold" fill="#0369a1">ဥပမာ (၂) MgO (ΔEN = 3.5 - 1.2 = 2.3 &gt; 1.8)</text>
+                                <text x="35" y="148" font-size="14" font-weight="bold" fill="#1e293b">Mg (2, 8, 2)  +  O (2, 6)</text>
+                                <path d="M 225 143 L 285 143" stroke="#0284c7" stroke-width="2.5"/>
+                                <polygon points="285,138 295,143 285,148" fill="#0284c7"/>
+                                <text x="260" y="133" text-anchor="middle" font-size="11" fill="#0284c7" font-weight="bold">2 e⁻ ပေး</text>
+                                <text x="315" y="148" font-size="14" font-weight="bold" fill="#15803d">[Mg]²⁺ (2, 8) + [O]²⁻ (2, 8)  →  MgO</text>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <!-- (b) Structures of Ionic Compounds -->
+                    <div class="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 shadow-sm space-y-4">
+                        <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2.5">
+                            <span class="w-8 h-8 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center text-sm font-bold">(b)</span>
+                            Structures of Ionic Compounds (ပုံဆောင်ခဲ တည်ဆောက်ပုံနှင့် ဂုဏ်သတ္တိများ)
+                        </h3>
+                        <ul class="myanmar-text space-y-2.5 text-slate-700 text-sm sm:text-base list-disc pl-5">
+                            <li><strong>Crystal Lattice & Unit Cell:</strong> အိုင်းယွန်းများသည် သုံးဖက်မြင်ကွန်ရက် (Crystal lattice) အဖြစ် စီစဉ်ဖွဲ့စည်းထားပြီး အသေးငယ်ဆုံး ထပ်တလဲလဲအစိတ်အပိုင်းကို <strong>Unit cell</strong> (sc, bcc, fcc) ဟုခေါ်သည်။</li>
+                            <li><strong>Coordination Number:</strong> ဗဟိုအိုင်းယွန်းတစ်ခုကို ဝန်းရံထားသော ဆန့်ကျင်ဘက်အိုင်းယွန်း အရေအတွက်ဖြစ်သည်။ NaCl (fcc) တွင် Na⁺ တစ်လုံးကို Cl⁻ ၆ လုံးက ဝန်းရံထားပြီး Cl⁻ တစ်လုံးကို Na⁺ ၆ လုံးက ဝန်းရံထားသဖြင့် Coordination ratio မှာ <strong>6:6 (အချိုး 1:1)</strong> ဖြစ်သည်။</li>
+                            <li><strong>ဂုဏ်သတ္တိများ:</strong> လျှပ်စစ်ငြိမ်ဆွဲအား ပြင်းထန်သဖြင့် <strong>အရည်ပျော်မှတ် (Melting point) မြင့်မား</strong>သည် (အိုင်းယွန်းဓာတ်ပမာဏ ကြီးလေ ပိုမြင့်လေဖြစ်သည်)။ အခဲအခြေအနေတွင် အိုင်းယွန်းများ မရွေ့လျားနိုင်သဖြင့် လျှပ်စစ်မစီးကူးနိုင်ပါ။</li>
+                        </ul>
+                    </div>
+                `,
+                onMount: () => render3D_1_2('nacl-lattice')
+            },
+
+            '1.3': {
+                badge: 'Article 1.3',
+                title: 'Covalent Bonding, Lewis & VSEPR Model',
+                subtitle: 'ကိုဗေးလင့်စည်း၊ ကိုသြဒိနိတ်စည်း၊ Lewis တည်ဆောက်ပုံနှင့် 3D မော်လီကျူးပုံသဏ္ဌာန်များ',
+                html: `
+                    <!-- 3D VSEPR & Giant Structures Interactive Viewer -->
+                    <div class="bg-white rounded-3xl border border-slate-200 p-5 sm:p-7 shadow-sm space-y-4">
+                        <div class="flex flex-col gap-3">
+                            <div>
+                                <span class="text-xs font-bold uppercase tracking-wider text-emerald-600">Interactive 3D VSEPR & Giant Networks</span>
+                                <h3 class="text-lg font-bold text-slate-900">မော်လီကျူးပုံသဏ္ဌာန် (VSEPR Shapes) နှင့် Diamond / Graphite 3D</h3>
+                            </div>
+                            <div class="flex flex-wrap gap-2">
+                                <button onclick="render3D_1_3('ch4')" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-emerald-600 text-white hover:bg-emerald-700 transition">CH₄ (Tetrahedral 109.5°)</button>
+                                <button onclick="render3D_1_3('nh3')" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 transition">NH₃ (Pyramidal)</button>
+                                <button onclick="render3D_1_3('h2o')" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 transition">H₂O (Bent / V-shape)</button>
+                                <button onclick="render3D_1_3('bf3')" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 transition">BF₃ (Trigonal Planar 120°)</button>
+                                <button onclick="render3D_1_3('co2')" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 transition">CO₂ (Linear 180°)</button>
+                                <button onclick="render3D_1_3('diamond')" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-sky-100 text-sky-800 hover:bg-sky-200 transition">💎 Diamond 3D</button>
+                                <button onclick="render3D_1_3('graphite')" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-indigo-100 text-indigo-800 hover:bg-indigo-200 transition">✏️ Graphite Layers 3D</button>
+                            </div>
+                        </div>
+                        <div id="viewer-1-3" class="canvas-container"></div>
+                        <p class="text-xs text-slate-500 text-center">💡 အဝါရောင်အဖုများသည် <strong>Lone Pair Electrons</strong> များဖြစ်ပြီး Bonding Pair များကို တွန်းကန်သဖြင့် ထောင့်ကျဉ်းသွားပုံကို လှည့်ကြည့်ပါ။</p>
+                    </div>
+
+                    <!-- (a) Formation of Covalent & Coordinate Bonds -->
+                    <div class="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 shadow-sm space-y-5">
+                        <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2.5">
+                            <span class="w-8 h-8 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center text-sm font-bold">(a)</span>
+                            Covalent Bonds & Coordinate (Dative) Bonds
+                        </h3>
+                        <p class="myanmar-text text-slate-700 text-sm sm:text-base">
+                            သတ္တုမဟုတ်သော အက်တမ်များကြား Valence electron အတွဲများကို <strong>အတူတကွ မျှဝေသုံးစွဲခြင်း</strong>ဖြင့် Covalent bond ဖြစ်ပေါ်သည်။ မျှဝေသည့် အီလက်ထရွန်အတွဲ များလေ စည်းပိုတိုပြီး ပိုခိုင်မာလေဖြစ်သည် (<strong>Bond length:</strong> Single &gt; Double &gt; Triple ၊ <strong>Bond strength:</strong> Triple &gt; Double &gt; Single)။
+                        </p>
+                        <div class="p-4 rounded-2xl bg-emerald-50/70 border border-emerald-200">
+                            <h4 class="font-bold text-emerald-900 text-sm mb-1">Coordinate Bond (Dative Bond)</h4>
+                            <p class="myanmar-text text-xs sm:text-sm text-emerald-950/85">
+                                မျှဝေသည့် အီလက်ထရွန်တစ်တွဲလုံးကို အက်တမ်တစ်ခုတည်း၏ <strong>Lone pair</strong> မှ ပေးလှူခြင်းဖြစ်ပြီး မြား (<strong>→</strong>) ဖြင့် ပြသည် (ဥပမာ - NH₄⁺, H₃O⁺, H₃N → BF₃, CO)။
+                            </p>
+                        </div>
+
+                        <!-- SVG Coordinate Bond Diagram -->
+                        <div class="bg-slate-50 rounded-2xl p-4 border border-slate-200">
+                            <div class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">ပုံပြကားချပ် - Coordinate Bond ဖြစ်ပေါ်ပုံ (NH₄⁺ နှင့် H₃N → BF₃)</div>
+                            <svg viewBox="0 0 680 140" class="w-full h-auto">
+                                <rect x="15" y="10" width="315" height="118" rx="12" fill="#ffffff" stroke="#e2e8f0"/>
+                                <text x="172" y="34" text-anchor="middle" font-size="12" font-weight="bold" fill="#065f46">Ammonium Ion (NH₄⁺)</text>
+                                <text x="172" y="65" text-anchor="middle" font-size="14" font-weight="bold" fill="#1e293b">H₃N:  +  H⁺   →   [H₃N → H]⁺</text>
+                                <text x="172" y="95" text-anchor="middle" font-size="11" fill="#475569">N ၏ Lone pair ကို H⁺ သို့ ပေးလှူသည်</text>
+
+                                <rect x="350" y="10" width="315" height="118" rx="12" fill="#ffffff" stroke="#e2e8f0"/>
+                                <text x="507" y="34" text-anchor="middle" font-size="12" font-weight="bold" fill="#1d4ed8">Ammonia-Boron Trifluoride Adduct</text>
+                                <text x="507" y="65" text-anchor="middle" font-size="14" font-weight="bold" fill="#1e293b">H₃N:  +  BF₃   →   H₃N → BF₃</text>
+                                <text x="507" y="95" text-anchor="middle" font-size="11" fill="#475569">Electron-deficient BF₃ (6e⁻) က လက်ခံသည်</text>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <!-- (b) & (c) Lewis Structures, Octet Exceptions & VSEPR Table -->
+                    <div class="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 shadow-sm space-y-5">
+                        <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2.5">
+                            <span class="w-8 h-8 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center text-sm font-bold">(b,c)</span>
+                            Lewis Structures, Octet ခြွင်းချက်များနှင့် VSEPR Theory
+                        </h3>
+                        <p class="myanmar-text text-slate-700 text-sm sm:text-base">
+                            <strong>Octet rule ခြွင်းချက်များ:</strong> ဗဟိုအက်တမ်တွင် အီလက်ထရွန် ၈ လုံးထက်နည်းသော <strong>Electron-deficient</strong> မော်လီကျူးများ (NO [7e⁻], BeCl₂ [4e⁻], BF₃/AlCl₃ [6e⁻]) နှင့် ၈ လုံးထက်ပိုသော <strong>Expanded valence shell</strong> မော်လီကျူးများ (PF₅/ICl₃ [10e⁻], SF₆ [12e⁻]) ရှိကြသည်။
+                        </p>
+                        <p class="myanmar-text text-slate-700 text-sm sm:text-base">
+                            <strong>VSEPR Theory:</strong> တွန်းကန်အားအစီအစဉ်မှာ <code class="px-2 py-0.5 bg-slate-100 rounded text-xs font-bold text-slate-800">bonding-bonding &lt; lone-bonding &lt; lone-lone</code> ဖြစ်သောကြောင့် Lone pair ပါဝင်လာပါက မူလပုံသဏ္ဌာန်နှင့် ထောင့်အတိုင်းအတာ ပြောင်းလဲသွားပါသည်။
+                        </p>
+
+                        <!-- Responsive VSEPR Table -->
+                        <div class="overflow-x-auto rounded-2xl border border-slate-200">
+                            <table class="w-full text-left border-collapse text-xs sm:text-sm">
+                                <thead>
+                                    <tr class="bg-slate-900 text-white">
+                                        <th class="p-3.5">Type</th>
+                                        <th class="p-3.5">Bonding, Lone</th>
+                                        <th class="p-3.5">Electron Geometry</th>
+                                        <th class="p-3.5">Molecular Shape & Angle</th>
+                                        <th class="p-3.5">Examples</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-slate-200 bg-white">
+                                    <tr><td class="p-3 font-bold">AX₂</td><td class="p-3">2, 0</td><td class="p-3">Linear</td><td class="p-3 font-semibold text-blue-700">Linear (180°)</td><td class="p-3">BeCl₂, CO₂</td></tr>
+                                    <tr class="bg-slate-50/60"><td class="p-3 font-bold">AX₃</td><td class="p-3">3, 0</td><td class="p-3">Triangular planar</td><td class="p-3 font-semibold text-blue-700">Triangular planar (120°)</td><td class="p-3">BF₃</td></tr>
+                                    <tr><td class="p-3 font-bold">AX₂E</td><td class="p-3">2, 1</td><td class="p-3">Triangular planar</td><td class="p-3 font-semibold text-amber-700">Bent / V-shaped (&lt;120°)</td><td class="p-3">SO₂</td></tr>
+                                    <tr class="bg-slate-50/60"><td class="p-3 font-bold">AX₄</td><td class="p-3">4, 0</td><td class="p-3">Tetrahedral</td><td class="p-3 font-semibold text-emerald-700">Tetrahedral (109.5°)</td><td class="p-3">CH₄, CCl₄</td></tr>
+                                    <tr><td class="p-3 font-bold">AX₃E</td><td class="p-3">3, 1</td><td class="p-3">Tetrahedral</td><td class="p-3 font-semibold text-amber-700">Trigonal pyramidal (&lt;109.5°)</td><td class="p-3">NH₃</td></tr>
+                                    <tr class="bg-slate-50/60"><td class="p-3 font-bold">AX₂E₂</td><td class="p-3">2, 2</td><td class="p-3">Tetrahedral</td><td class="p-3 font-semibold text-amber-700">Bent / V-shaped (&lt;109.5°)</td><td class="p-3">H₂O</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- (d) Giant Structures -->
+                        <div class="grid md:grid-cols-3 gap-4 pt-2">
+                            <div class="p-4 rounded-2xl bg-sky-50 border border-sky-200">
+                                <div class="font-bold text-sky-900 text-sm mb-1">💎 Diamond (စိန်)</div>
+                                <p class="myanmar-text text-xs text-sky-950/80">ကာဗွန်တစ်လုံးစီသည် အခြားကာဗွန် ၄ လုံးနှင့် Tetrahedral ကွန်ရက်ဖွဲ့ထားသည်။ လွတ်လပ်သောအီလက်ထရွန်မရှိသဖြင့် <strong>လျှပ်စစ်မစီးကူးနိုင်</strong>။</p>
+                            </div>
+                            <div class="p-4 rounded-2xl bg-indigo-50 border border-indigo-200">
+                                <div class="font-bold text-indigo-900 text-sm mb-1">✏️ Graphite (ခဲနက်)</div>
+                                <p class="myanmar-text text-xs text-indigo-950/80">ဆဋ္ဌဂံအလွှာ (Hexagonal layers) များကြား van der Waals forces ရှိသည်။ လွတ်လပ်သောအီလက်ထရွန်ကြောင့် <strong>လျှပ်စစ်စီးကူးနိုင်</strong>သည်။</p>
+                            </div>
+                            <div class="p-4 rounded-2xl bg-slate-100 border border-slate-200">
+                                <div class="font-bold text-slate-900 text-sm mb-1">🪨 Silica (SiO₂)</div>
+                                <p class="myanmar-text text-xs text-slate-700">စိန်ကဲ့သို့ Tetrahedral ကွန်ရက်ပုံစံရှိပြီး လျှပ်စစ်မစီးကူးနိုင်ပါ။ (Fullerene C₆₀, Graphene တို့မှာ Giant structure မဟုတ်ဘဲ Bulky molecules ဖြစ်သည်။)</p>
+                            </div>
+                        </div>
+                    </div>
+                `,
+                onMount: () => render3D_1_3('ch4')
+            },
+
+            '1.4': {
+                badge: 'Article 1.4',
+                title: 'Intermolecular Forces',
+                subtitle: 'ဝင်ရိုးစွန်းရှိ/မဲ့ မော်လီကျူးများ၊ van der Waals Forces နှင့် Hydrogen Bonding',
+                html: `
+                    <!-- 3D Hydrogen Bonding & Ion-Dipole Viewer -->
+                    <div class="bg-white rounded-3xl border border-slate-200 p-5 sm:p-7 shadow-sm space-y-4">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                            <div>
+                                <span class="text-xs font-bold uppercase tracking-wider text-teal-600">Interactive 3D Intermolecular Forces</span>
+                                <h3 class="text-lg font-bold text-slate-900">Hydrogen Bonding (H₂O) နှင့် Ion-Dipole ဆွဲငင်အား 3D</h3>
+                            </div>
+                            <div class="flex flex-wrap gap-2">
+                                <button onclick="render3D_1_4('h-bond')" class="px-3.5 py-2 rounded-xl text-xs font-semibold bg-teal-600 text-white hover:bg-teal-700 transition">💧 H₂O Hydrogen Bonding</button>
+                                <button onclick="render3D_1_4('ion-dipole')" class="px-3.5 py-2 rounded-xl text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 transition">🧂 Na⁺ Ion-Dipole Hydration</button>
+                            </div>
+                        </div>
+                        <div id="viewer-1-4" class="canvas-container"></div>
+                        <p class="text-xs text-slate-500 text-center">💡 အဝါရောင်အစက်ပြတ်မျဉ်းများသည် ရေမော်လီကျူးတစ်ခု၏ H (δ⁺) နှင့် အခြားရေမော်လီကျူး၏ O (δ⁻) ကြားရှိ Hydrogen Bond ဖြစ်သည်။</p>
+                    </div>
+
+                    <!-- (a) Polar vs Non-polar Molecules -->
+                    <div class="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 shadow-sm space-y-5">
+                        <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2.5">
+                            <span class="w-8 h-8 rounded-xl bg-teal-100 text-teal-700 flex items-center justify-center text-sm font-bold">(a)</span>
+                            Polar and Non-polar Molecules (ဝင်ရိုးစွန်းရှိနှင့် ဝင်ရိုးစွန်းမဲ့ မော်လီကျူးများ)
+                        </h3>
+                        <p class="myanmar-text text-slate-700 text-sm sm:text-base">
+                            EN မတူသော အက်တမ်နှစ်ခုကြား အီလက်ထရွန်မျှဝေမှု မညီမျှပါက EN ကြီးသောအက်တမ်ဘက်တွင် <strong>δ⁻</strong> နှင့် EN ငယ်သောဘက်တွင် <strong>δ⁺</strong> ဖြစ်ပေါ်လာပြီး <strong>Polar covalent bond</strong> (Dipole moment ရှိ) ဖြစ်လာသည်။ Polyatomic မော်လီကျူးများ၏ Polarity သည် မော်လီကျူးပုံသဏ္ဌာန်ပေါ်တွင် မူတည်ပါသည်။
+                        </p>
+
+                        <!-- SVG Polar H2O vs Non-polar CO2 -->
+                        <div class="bg-slate-50 rounded-2xl p-4 border border-slate-200">
+                            <div class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">ပုံပြကားချပ် - H₂O (Polar) နှင့် CO₂ (Non-polar) နှိုင်းယှဉ်ချက်</div>
+                            <svg viewBox="0 0 680 155" class="w-full h-auto">
+                                <!-- H2O -->
+                                <rect x="15" y="10" width="315" height="135" rx="12" fill="#ffffff" stroke="#bae6fd" stroke-width="2"/>
+                                <text x="172" y="34" text-anchor="middle" font-size="13" font-weight="bold" fill="#0369a1">H₂O = Polar Molecule (Dipole ≠ 0)</text>
+                                <circle cx="172" cy="65" r="16" fill="#ef4444"/>
+                                <text x="172" y="70" text-anchor="middle" fill="#fff" font-size="11" font-weight="bold">O δ⁻</text>
+                                <circle cx="125" cy="108" r="12" fill="#cbd5e1"/>
+                                <text x="125" y="112" text-anchor="middle" fill="#0f172a" font-size="10" font-weight="bold">H δ⁺</text>
+                                <circle cx="219" cy="108" r="12" fill="#cbd5e1"/>
+                                <text x="219" y="112" text-anchor="middle" fill="#0f172a" font-size="10" font-weight="bold">H δ⁺</text>
+                                <line x1="135" y1="98" x2="160" y2="76" stroke="#334155" stroke-width="2.5"/>
+                                <line x1="209" y1="98" x2="184" y2="76" stroke="#334155" stroke-width="2.5"/>
+                                <text x="172" y="136" text-anchor="middle" font-size="11" fill="#475569">Bent ပုံသဏ္ဌာန်ကြောင့် Dipole များ မချေဖျက်နိုင်</text>
+
+                                <!-- CO2 -->
+                                <rect x="350" y="10" width="315" height="135" rx="12" fill="#ffffff" stroke="#e2e8f0" stroke-width="2"/>
+                                <text x="507" y="34" text-anchor="middle" font-size="13" font-weight="bold" fill="#334155">CO₂ = Non-polar Molecule (Dipole = 0)</text>
+                                <circle cx="420" cy="80" r="15" fill="#ef4444"/>
+                                <text x="420" y="84" text-anchor="middle" fill="#fff" font-size="10" font-weight="bold">O δ⁻</text>
+                                <circle cx="507" cy="80" r="16" fill="#334155"/>
+                                <text x="507" y="84" text-anchor="middle" fill="#fff" font-size="10" font-weight="bold">C δ⁺</text>
+                                <circle cx="594" cy="80" r="15" fill="#ef4444"/>
+                                <text x="594" y="84" text-anchor="middle" fill="#fff" font-size="10" font-weight="bold">O δ⁻</text>
+                                <line x1="435" y1="77" x2="491" y2="77" stroke="#334155" stroke-width="2"/>
+                                <line x1="435" y1="83" x2="491" y2="83" stroke="#334155" stroke-width="2"/>
+                                <line x1="523" y1="77" x2="579" y2="77" stroke="#334155" stroke-width="2"/>
+                                <line x1="523" y1="83" x2="579" y2="83" stroke="#334155" stroke-width="2"/>
+                                <text x="507" y="136" text-anchor="middle" font-size="11" fill="#475569">Linear ပုံသဏ္ဌာန်ကြောင့် ဆန့်ကျင်ဘက်ချေဖျက်သွား</text>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <!-- (b) & (c) van der Waals Forces & Hydrogen Bonding -->
+                    <div class="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 shadow-sm space-y-4">
+                        <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2.5">
+                            <span class="w-8 h-8 rounded-xl bg-teal-100 text-teal-700 flex items-center justify-center text-sm font-bold">(b,c)</span>
+                            van der Waals Forces & Hydrogen Bonding
+                        </h3>
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
+                                <h4 class="font-bold text-slate-900 text-sm">van der Waals Forces (၃ မျိုး)</h4>
+                                <ul class="myanmar-text text-xs sm:text-sm text-slate-700 space-y-1.5 list-disc pl-4">
+                                    <li><strong>Dipole-dipole interaction:</strong> Polar မော်လီကျူးနှစ်ခု၏ δ⁺ နှင့် δ⁻ ကြား ဆွဲငင်အား (HCl, HCN)။</li>
+                                    <li><strong>Ion-dipole interaction:</strong> အိုင်းယွန်းနှင့် Polar မော်လီကျူးကြား ဆွဲငင်အား (ရေထဲ NaCl ပျော်ဝင်ခြင်း)။</li>
+                                    <li><strong>London dispersion forces:</strong> ခဏတာဝင်ရိုးစွန်း (Instantaneous dipole) မှတစ်ဆင့် ဆွဲငင်ခြင်း။ အားအပျော့ဆုံးဖြစ်ပြီး Non-polar အပါအဝင် ဒြပ်ပစ္စည်းအားလုံးတွင် ရှိသည်။</li>
+                                </ul>
+                            </div>
+                            <div class="p-4 rounded-2xl bg-teal-50/80 border border-teal-200 space-y-2">
+                                <h4 class="font-bold text-teal-900 text-sm">Hydrogen Bonding (အားအကောင်းဆုံး IMF)</h4>
+                                <p class="myanmar-text text-xs sm:text-sm text-teal-950/85">
+                                    Electronegativity အလွန်မြင့်မားသော <strong>F, O, သို့မဟုတ် N</strong> အက်တမ်နှင့် တိုက်ရိုက်တွဲဆက်နေသော ဟိုက်ဒရိုဂျင် (δ⁺) နှင့် အခြားမော်လီကျူးရှိ F, O, N တို့၏ Lone pair အီလက်ထရွန်များကြား ဖြစ်ပေါ်သည့် အထူးပြု Dipole-dipole ဆွဲငင်အားဖြစ်သည် (ဥပမာ - H₂O, Acetic acid dimer, DNA ကြိုးမျှင်နှစ်ခု)။
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                `,
+                onMount: () => render3D_1_4('h-bond')
+            },
+
+            '1.5': {
+                badge: 'Article 1.5',
+                title: 'Metallic Bonding & Chemistry in Society',
+                subtitle: 'သတ္တုစည်းနှောင်မှု ("Sea of Mobile Electrons") နှင့် နေ့စဉ်လူမှုဘဝမှ ဓာတုဗေဒ',
+                html: `
+                    <!-- 3D Metallic Bonding Animated Sea of Electrons -->
+                    <div class="bg-white rounded-3xl border border-slate-200 p-5 sm:p-7 shadow-sm space-y-4">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                            <div>
+                                <span class="text-xs font-bold uppercase tracking-wider text-orange-600">Interactive 3D Metallic Lattice</span>
+                                <h3 class="text-lg font-bold text-slate-900">Metallic Bonding: "A Sea of Mobile Electrons" 3D</h3>
+                            </div>
+                            <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-orange-50 text-orange-800 border border-orange-200 text-xs font-semibold">
+                                🟠 Metal Cations (+) &nbsp;|&nbsp; 🔵 Mobile Valence Electrons (e⁻)
+                            </span>
+                        </div>
+                        <div id="viewer-1-5" class="canvas-container"></div>
+                        <p class="text-xs text-slate-500 text-center">💡 အဖိုဓာတ်ဆောင် သတ္တုနျူကလိယပ်စ်များကြားတွင် လွတ်လပ်စွာ ရွေ့လျားနေသော Valence အီလက်ထရွန်ပင်လယ်ကြောင့် သတ္တုများ လျှပ်စစ်နှင့် အပူ ကောင်းစွာစီးကူးနိုင်သည်။</p>
+                    </div>
+
+                    <!-- (a) & (b) Metallic Bonds & Strength -->
+                    <div class="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 shadow-sm space-y-5">
+                        <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2.5">
+                            <span class="w-8 h-8 rounded-xl bg-orange-100 text-orange-700 flex items-center justify-center text-sm font-bold">1.5</span>
+                            Metallic Bonds နှင့် သတ္တုစည်း၏ ခိုင်မာမှု (Strength)
+                        </h3>
+                        <p class="myanmar-text text-slate-700 text-sm sm:text-base">
+                            သတ္တုအခဲများတွင် အပြင်ဘက်ဆုံး Valence electron များသည် မူလအက်တမ်မှ လွတ်ထွက်ကာ ဘုံအီလက်ထရွန်တိမ်တိုက် (<strong>"A sea of mobile electrons"</strong>) အဖြစ် လွတ်လပ်စွာ ရွေ့လျားနေကြသည်။ ထိုအီလက်ထရွန်ပင်လယ်နှင့် အဖိုဓာတ်ဆောင် သတ္တုအိုင်းယွန်းများကြားရှိ ပြင်းထန်သော လျှပ်စစ်ငြိမ်ဆွဲအားကို <strong>Metallic bond</strong> ဟုခေါ်သည်။
+                        </p>
+
+                        <!-- SVG Metallic Bond Strength Comparison (Na vs Mg vs Al) -->
+                        <div class="bg-slate-50 rounded-2xl p-4 border border-slate-200">
+                            <div class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">ပုံပြကားချပ် - သတ္တုစည်း ခိုင်မာမှု တိုးလာပုံ (Na &lt; Mg &lt; Al)</div>
+                            <svg viewBox="0 0 680 140" class="w-full h-auto">
+                                <rect x="15" y="10" width="200" height="118" rx="12" fill="#ffffff" stroke="#fed7aa" stroke-width="2"/>
+                                <circle cx="115" cy="52" r="22" fill="#fb923c"/>
+                                <text x="115" y="57" text-anchor="middle" fill="#fff" font-size="13" font-weight="bold">Na⁺</text>
+                                <text x="115" y="92" text-anchor="middle" fill="#1e293b" font-size="12" font-weight="bold">1 Valence e⁻ / atom</text>
+                                <text x="115" y="112" text-anchor="middle" fill="#64748b" font-size="11">အိုင်းယွန်းကြီး၊ ဓာတ်အားနည်း</text>
+
+                                <path d="M 222 68 L 236 68" stroke="#ea580c" stroke-width="2.5"/>
+                                <polygon points="235,63 243,68 235,73" fill="#ea580c"/>
+
+                                <rect x="245" y="10" width="200" height="118" rx="12" fill="#ffffff" stroke="#fdba74" stroke-width="2"/>
+                                <circle cx="345" cy="52" r="18" fill="#f97316"/>
+                                <text x="345" y="57" text-anchor="middle" fill="#fff" font-size="12" font-weight="bold">Mg²⁺</text>
+                                <text x="345" y="92" text-anchor="middle" fill="#1e293b" font-size="12" font-weight="bold">2 Valence e⁻ / atom</text>
+                                <text x="345" y="112" text-anchor="middle" fill="#64748b" font-size="11">အိုင်းယွန်းပိုသေး၊ ပိုခိုင်မာ</text>
+
+                                <path d="M 452 68 L 466 68" stroke="#ea580c" stroke-width="2.5"/>
+                                <polygon points="465,63 473,68 465,73" fill="#ea580c"/>
+
+                                <rect x="475" y="10" width="190" height="118" rx="12" fill="#fff7ed" stroke="#ea580c" stroke-width="2"/>
+                                <circle cx="570" cy="52" r="15" fill="#ea580c"/>
+                                <text x="570" y="56" text-anchor="middle" fill="#fff" font-size="11" font-weight="bold">Al³⁺</text>
+                                <text x="570" y="92" text-anchor="middle" fill="#9a3412" font-size="12" font-weight="bold">3 Valence e⁻ / atom</text>
+                                <text x="570" y="112" text-anchor="middle" fill="#c2410c" font-size="11">အသေးဆုံး၊ အခိုင်မာဆုံး</text>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <!-- Chemistry in Society & Key Terms -->
+                    <div class="bg-gradient-to-br from-slate-900 to-slate-800 rounded-3xl p-6 sm:p-8 text-white shadow-lg space-y-4">
+                        <span class="inline-block px-3 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-400/30 text-xs font-semibold">Chemistry in Society (နေ့စဉ်လူမှုဘဝမှ ဓာတုဗေဒ)</span>
+                        <div class="grid sm:grid-cols-2 gap-4 text-xs sm:text-sm myanmar-text text-slate-200">
+                            <div class="p-4 rounded-2xl bg-white/5 border border-white/10">
+                                <div class="font-bold text-amber-300 mb-1">🧂 Ionic Compounds အသုံးဝင်ပုံ</div>
+                                <p>အိမ်သုံးဆား (NaCl)၊ သွားကျန်းမာရေးအတွက် NaF၊ လည်ပင်းကြီးရောဂါကာကွယ်ရန် အိုင်အိုဒင်းဆား (KI)၊ ခန္ဓာကိုယ် Electrolytes (Na⁺, K⁺, Ca²⁺, Mg²⁺) နှင့် မီးရှူးမီးပန်းအရောင်များ (SrCO₃ အနီ၊ BaCl₂ အစိမ်း၊ CuCl₂ အပြာ) တို့တွင် သုံးသည်။</p>
+                            </div>
+                            <div class="p-4 rounded-2xl bg-white/5 border border-white/10">
+                                <div class="font-bold text-sky-300 mb-1">🧬 Intermolecular Forces အသုံးဝင်ပုံ</div>
+                                <p>Hydrogen bonding သည် ရေ၊ ပရိုတင်းနှင့် DNA နှစ်ပင်လိမ်ကြိုးမျှင်နှစ်ခုကို တွဲဆက်ပေးသည်။ ပင့်ကူနှင့် အိမ်မြှောင်များ နံရံပေါ်တွယ်ကပ်နိုင်ခြင်းမှာ van der Waals forces ကြောင့်ဖြစ်ပြီး Dry ice (CO₂) နှင့် Liquid N₂ တို့ကို အအေးပေးစနစ်များတွင် သုံးသည်။</p>
+                            </div>
+                        </div>
+                    </div>
+                `,
+                onMount: () => render3D_1_5()
+            }
+        };
+
+        // ==========================================
+        // 4. NAVIGATION & UI CONTROLLER
+        // ==========================================
+
+        function selectArticle(id) {
+            currentArticleId = id;
+            const article = ARTICLES[id];
+            if (!article) return;
+
+            // Clean up previous Three.js scenes
+            clearActiveScenes();
+
+            // Update Sidebar Active Styles
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('bg-blue-50', 'text-blue-900', 'border-blue-200', 'shadow-xs');
+                btn.classList.add('text-slate-600', 'hover:bg-slate-50');
+                const badge = btn.querySelector('.nav-badge');
+                if (badge) {
+                    badge.classList.remove('bg-blue-600', 'text-white');
+                    badge.classList.add('bg-slate-100', 'text-slate-600');
+                }
+            });
+
+            const activeBtn = document.getElementById(`nav-${id}`);
+            if (activeBtn) {
+                activeBtn.classList.remove('text-slate-600', 'hover:bg-slate-50');
+                activeBtn.classList.add('bg-blue-50', 'text-blue-900', 'border-blue-200', 'shadow-xs');
+                const badge = activeBtn.querySelector('.nav-badge');
+                if (badge) {
+                    badge.classList.remove('bg-slate-100', 'text-slate-600');
+                    badge.classList.add('bg-blue-600', 'text-white');
+                }
+            }
+
+            // Render Main Content
+            const container = document.getElementById('content-container');
+            const articleIds = ['1.1', '1.2', '1.3', '1.4', '1.5'];
+            const idx = articleIds.indexOf(id);
+            const prevId = idx > 0 ? articleIds[idx - 1] : null;
+            const nextId = idx < articleIds.length - 1 ? articleIds[idx + 1] : null;
+
+            container.innerHTML = `
+                <!-- Article Top Header -->
+                <div class="border-b border-slate-200 pb-5">
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-blue-100 text-blue-800 mb-2">
+                        ${article.badge}
+                    </span>
+                    <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">${article.title}</h1>
+                    <p class="mt-1 text-sm sm:text-base text-slate-600 font-medium">${article.subtitle}</p>
+                </div>
+
+                <!-- Article Body -->
+                ${article.html}
+
+                <!-- Bottom Next / Prev Article Navigation -->
+                <div class="pt-4 pb-8 flex items-center justify-between gap-4 border-t border-slate-200">
+                    ${prevId ? `
+                        <button onclick="selectArticle('${prevId}')" class="px-4 py-3 rounded-2xl bg-white border border-slate-200 hover:border-blue-300 hover:bg-blue-50 text-slate-700 text-xs sm:text-sm font-semibold transition flex items-center gap-2 shadow-xs">
+                            <span>←</span> ယခင်အပိုင်း (${prevId})
+                        </button>
+                    ` : '<div></div>'}
+
+                    ${nextId ? `
+                        <button onclick="selectArticle('${nextId}')" class="px-5 py-3 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white text-xs sm:text-sm font-semibold transition flex items-center gap-2 shadow-sm">
+                            နောက်တစ်ပိုင်း (${nextId}) <span>→</span>
+                        </button>
+                    ` : `
+                        <button onclick="selectArticle('1.1')" class="px-5 py-3 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs sm:text-sm font-semibold transition flex items-center gap-2 shadow-sm">
+                            အစမှ ပြန်လေ့လာရန် (1.1) <span>↻</span>
+                        </button>
+                    `}
+                </div>
+            `;
+
+            // Scroll to top smoothly
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            // Close mobile drawer if open
+            closeMobileSidebar();
+
+            // Initialize 3D Scene for this article
+            if (typeof article.onMount === 'function') {
+                setTimeout(() => article.onMount(), 50);
+            }
+        }
+
+        // Mobile Drawer Controls
+        const sidebar = document.getElementById('sidebar');
+        const backdrop = document.getElementById('sidebar-backdrop');
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const closeSidebarBtn = document.getElementById('close-sidebar-btn');
+
+        function openMobileSidebar() {
+            sidebar.classList.remove('-translate-x-full');
+            backdrop.classList.remove('hidden');
+        }
+
+        function closeMobileSidebar() {
+            sidebar.classList.add('-translate-x-full');
+            backdrop.classList.add('hidden');
+        }
+
+        mobileMenuBtn.addEventListener('click', openMobileSidebar);
+        closeSidebarBtn.addEventListener('click', closeMobileSidebar);
+        backdrop.addEventListener('click', closeMobileSidebar);
+
+        // Initialize Default Article on Window Load
+        window.onload = function() {
+            selectArticle('1.1');
+        };
+    </script>
+</body>
+</html>
