@@ -40,6 +40,998 @@
             background: #f1f5f9;
         }
         ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        .canvas-container {
+            position: relative;
+            width: 100%;
+            height: 380px;
+            border-radius: 1rem;
+            overflow: hidden;
+            background: radial-gradient(circle at center, #27201c 0%, #0f172a 100%);
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.45);
+            touch-action: none;
+        }
+        @media (min-width: 768px) {
+            .canvas-container {
+                height: 430px;
+            }
+        }
+        .myanmar-text {
+            line-height: 1.98;
+        }
+        .formula-card {
+            background: linear-gradient(135deg, #0f172a 0%, #78350f 100%);
+        }
+        .math-box {
+            font-family: 'Inter', monospace;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.16);
+        }
+        .v3d-ui { position: absolute; inset: 0; pointer-events: none; font-family: 'Inter','Noto Sans Myanmar',sans-serif; }
+        .v3d-btn { position: absolute; top: 8px; right: 10px; pointer-events: auto; font-size: 11px; font-weight: 600; color: #fef3c7; background: rgba(15,23,42,.72); border: 1px solid rgba(251,191,36,.45); padding: 3px 10px; border-radius: 9999px; cursor: pointer; }
+        .v3d-hint { position: absolute; top: 10px; left: 10px; font-size: 10.5px; color: #cbd5e1; transition: opacity .4s; }
+        .v3d-zoom { position: absolute; right: 10px; top: 38px; display: flex; flex-direction: column; gap: 6px; }
+        .v3d-zoom button { pointer-events: auto; width: 30px; height: 30px; border-radius: 9999px; font-size: 16px; font-weight: 700; line-height: 1; color: #fef3c7; background: rgba(15,23,42,.75); border: 1px solid rgba(251,191,36,.45); cursor: pointer; }
+        .v3d-labels { position: absolute; inset: 0; }
+        .v3d-label { position: absolute; left: 0; top: 0; white-space: nowrap; text-align: center; font-size: 11px; line-height: 1.35; font-weight: 600; color: #f8fafc; background: rgba(15,23,42,.82); border: 1px solid #fcd34d; border-radius: .6rem; padding: 2px 8px; will-change: transform; }
+        .v3d-info { position: absolute; left: 8px; right: 8px; bottom: 8px; font-size: 11.5px; line-height: 1.6; color: #e2e8f0; background: rgba(15,23,42,.88); border: 1px solid rgba(255,255,255,.14); border-radius: .8rem; padding: 7px 11px; }
+        .v3d-info b { color: #fcd34d; }
+        .mx { font-family: 'Cambria Math','STIX Two Math','Times New Roman',Georgia,serif; font-size: 1.1em; font-weight: 500; letter-spacing: .01em; }
+        .mx i { font-style: italic; }
+        .mx .nb { display: inline-block; white-space: nowrap; margin-right: .2em; }
+    </style>
+</head>
+<body class="antialiased selection:bg-amber-100 selection:text-amber-900">
+
+    <!-- Mobile Top Header -->
+    <header class="lg:hidden sticky top-0 z-40 bg-white/95 backdrop-blur border-b border-slate-200 px-4 py-3 flex items-center justify-between shadow-sm">
+        <div class="flex items-center gap-2.5">
+            <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-amber-600 to-orange-700 flex items-center justify-center text-white font-bold shadow">
+                Ch6
+            </div>
+            <div>
+                <h1 class="text-sm font-bold text-slate-900 leading-tight">Grade 12 Chemistry</h1>
+                <p class="text-xs text-slate-500">Transition Elements</p>
+            </div>
+        </div>
+        <button id="mobile-menu-btn" class="p-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 transition" aria-label="Open Navigation">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+            </svg>
+        </button>
+    </header>
+
+    <!-- Mobile Backdrop -->
+    <div id="sidebar-backdrop" class="fixed inset-0 bg-slate-900/50 backdrop-blur-xs z-40 hidden lg:hidden transition-opacity"></div>
+
+    <div class="flex min-h-screen">
+        <!-- Left Sidebar Taskbar -->
+        <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-80 bg-white border-r border-slate-200 transform -translate-x-full lg:translate-x-0 lg:static lg:inset-auto transition-transform duration-300 ease-in-out flex flex-col shadow-xl lg:shadow-none">
+            <!-- Brand Header + Chapter Switcher -->
+            <div class="p-6 border-b border-slate-100 bg-gradient-to-br from-slate-900 via-amber-950 to-orange-950 text-white">
+                <div class="flex items-center justify-between">
+                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-500/25 text-amber-200 border border-amber-400/30">
+                        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                        Grade 12 Chemistry
+                    </span>
+                    <button id="close-sidebar-btn" class="lg:hidden p-1.5 rounded-lg text-slate-300 hover:text-white hover:bg-white/10">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                    </button>
+                </div>
+                <h2 class="mt-3 text-lg font-bold tracking-tight leading-snug">Chapter 6: Transition Elements</h2>
+                <p class="mt-1 text-xs text-amber-200/85">3d Series၊ အရောင်ဖြစ်ပေါ်ပုံ၊ သံလိုက်ဂုဏ်သတ္တိနှင့် အသုံးဝင်ပုံများ</p>
+
+                <!-- Cross-Chapter Page Navigation Bar -->
+                <div class="mt-4 pt-3 border-t border-white/15 grid grid-cols-5 gap-1.5">
+                    <a href="index.html" class="text-center py-1.5 px-1 rounded-lg bg-white/15 hover:bg-white/25 text-xs font-semibold text-white transition">🏠</a>
+                    <a href="chapter1.html" class="text-center py-1.5 px-1 rounded-lg bg-white/10 hover:bg-white/25 text-xs font-semibold text-white transition">Ch 1</a>
+                    <a href="chapter2.html" class="text-center py-1.5 px-1 rounded-lg bg-white/10 hover:bg-white/25 text-xs font-semibold text-white transition">Ch 2</a>
+                    <a href="chapter3.html" class="text-center py-1.5 px-1 rounded-lg bg-white/10 hover:bg-white/25 text-xs font-semibold text-white transition">Ch 3</a>
+                    <a href="chapter4.html" class="text-center py-1.5 px-1 rounded-lg bg-white/10 hover:bg-white/25 text-xs font-semibold text-white transition">Ch 4</a>
+                    <a href="chapter5.html" class="text-center py-1.5 px-1 rounded-lg bg-white/10 hover:bg-white/25 text-xs font-semibold text-white transition">Ch 5</a>
+                    <a href="chapter6.html" class="text-center py-1.5 px-1 rounded-lg bg-amber-500 text-xs font-semibold text-white shadow-xs">Ch 6</a>
+                    <a href="chapter7.html" class="text-center py-1.5 px-1 rounded-lg bg-white/10 hover:bg-white/25 text-xs font-semibold text-white transition">Ch 7</a>
+                    <a href="chapter8.html" class="col-span-2 text-center py-1.5 px-1 rounded-lg bg-white/10 hover:bg-white/25 text-xs font-semibold text-white transition">Ch 8</a>
+                </div>
+            </div>
+
+            <!-- Navigation List -->
+            <div class="flex-1 overflow-y-auto p-4 space-y-2">
+                <div class="px-3 py-1.5 text-xs font-bold uppercase tracking-wider text-slate-400">
+                    Chapter 6 လေ့လာရန် အပိုင်းများ (5 ခု)
+                </div>
+
+                <button onclick="selectArticle('overview')" id="nav-overview" class="nav-btn w-full text-left p-3.5 rounded-2xl transition-all duration-200 flex items-start gap-3 border border-transparent">
+                    <span class="nav-badge shrink-0 w-9 h-9 rounded-xl flex items-center justify-center text-sm font-bold">🧠</span>
+                    <div>
+                        <div class="font-bold text-sm leading-snug">3d Series Master Table & Mind Map</div>
+                        <div class="text-xs opacity-80 mt-0.5">Sc (21) မှ Zn (30) အထိ ဇယားချုပ်နှင့် အနှစ်ချုပ်</div>
+                    </div>
+                </button>
+
+                <button onclick="selectArticle('6.1')" id="nav-6.1" class="nav-btn w-full text-left p-3.5 rounded-2xl transition-all duration-200 flex items-start gap-3 border border-transparent">
+                    <span class="nav-badge shrink-0 w-9 h-9 rounded-xl flex items-center justify-center text-sm font-bold">6.1</span>
+                    <div>
+                        <div class="font-bold text-sm leading-snug">The 3d Series Transition Elements</div>
+                        <div class="text-xs opacity-80 mt-0.5">Electronic Configurations၊ Cr & Cu ခြွင်းချက်နှင့် 3D</div>
+                    </div>
+                </button>
+
+                <button onclick="selectArticle('6.2')" id="nav-6.2" class="nav-btn w-full text-left p-3.5 rounded-2xl transition-all duration-200 flex items-start gap-3 border border-transparent">
+                    <span class="nav-badge shrink-0 w-9 h-9 rounded-xl flex items-center justify-center text-sm font-bold">6.2</span>
+                    <div>
+                        <div class="font-bold text-sm leading-snug">Characteristic Properties</div>
+                        <div class="text-xs opacity-80 mt-0.5">Oxidation States, Colours, Catalysts & Paramagnetism</div>
+                    </div>
+                </button>
+
+                <button onclick="selectArticle('6.3')" id="nav-6.3" class="nav-btn w-full text-left p-3.5 rounded-2xl transition-all duration-200 flex items-start gap-3 border border-transparent">
+                    <span class="nav-badge shrink-0 w-9 h-9 rounded-xl flex items-center justify-center text-sm font-bold">6.3</span>
+                    <div>
+                        <div class="font-bold text-sm leading-snug">Uses of the 3d Transition Elements</div>
+                        <div class="text-xs opacity-80 mt-0.5">စက်မှု၊ ဆေးပညာ၊ သတ္တုစပ်နှင့် ဇီဝစနစ် အသုံးဝင်ပုံများ</div>
+                    </div>
+                </button>
+
+                <button onclick="selectArticle('worked')" id="nav-worked" class="nav-btn w-full text-left p-3.5 rounded-2xl transition-all duration-200 flex items-start gap-3 border border-transparent">
+                    <span class="nav-badge shrink-0 w-9 h-9 rounded-xl flex items-center justify-center text-sm font-bold">✍️</span>
+                    <div>
+                        <div class="font-bold text-sm leading-snug">Ion Explorer & Exam Q&A</div>
+                        <div class="text-xs opacity-80 mt-0.5">3d Ion စစ်ဆေးစက်နှင့် စာမေးပွဲမေးခွန်းဟောင်း အဖြေများ</div>
+                    </div>
+                </button>
+            </div>
+
+            <!-- Footer Tip -->
+            <div class="p-4 border-t border-slate-100 bg-slate-50">
+                <div class="p-3 rounded-xl bg-amber-50 border border-amber-200/80 text-xs text-amber-950 flex items-start gap-2.5">
+                    <span class="text-base">⚠️</span>
+                    <span>အိုင်းယွန်းဖြစ်ပေါ်သောအခါ <strong>3d ထက် 4s Orbital မှ အီလက်ထရွန်ကို အရင်စွန့်လွှတ်</strong> သည်ကို အထူးသတိပြုပါ။</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="flex-1 min-w-0">
+            <div id="content-container" class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-10 py-6 lg:py-10 space-y-8">
+                <!-- Dynamic Content Rendered Here -->
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // ==========================================
+        // 1. GLOBAL STATE & THREE.JS ENGINE MANAGER
+        // ==========================================
+        let currentArticleId = 'overview';
+        let activeScenes = [];
+
+        function clearActiveScenes() {
+            activeScenes.forEach(item => {
+                if (item.animId) cancelAnimationFrame(item.animId);
+                if (item.renderer) item.renderer.dispose();
+            });
+            activeScenes = [];
+        }
+
+        function init3DViewer(containerId, buildSceneCallback) {
+            const container = document.getElementById(containerId);
+            if (!container || typeof THREE === 'undefined') return null;
+            container.querySelectorAll('canvas,.v3d-ui').forEach(n => n.remove());
+            activeScenes = activeScenes.filter(r => {
+                if (r.cid === containerId) {
+                    cancelAnimationFrame(r.animId);
+                    r.renderer.dispose();
+                    return false;
+                }
+                return true;
+            });
+
+            const width = container.clientWidth || 600;
+            const height = container.clientHeight || 360;
+
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
+            camera.position.set(0, 1.4, 7.6);
+
+            const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            renderer.setSize(width, height);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            container.appendChild(renderer.domElement);
+
+            const ui = document.createElement('div');
+            ui.className = 'v3d-ui';
+            ui.innerHTML = `
+                <button type="button" class="v3d-btn">🏷️ ရှင်းလင်းချက်: ON</button>
+                <div class="v3d-zoom"><button type="button" data-z="in">+</button><button type="button" data-z="out">−</button><button type="button" data-z="reset">⟲</button></div>
+                <div class="v3d-labels"></div>
+                <div class="v3d-hint">👆 ဆွဲ၍လှည့်ပါ · + − ဖြင့် ချုံ့ချဲ့ပါ</div>
+                <div class="v3d-info"></div>`;
+            container.appendChild(ui);
+
+            const labelBox = ui.querySelector('.v3d-labels');
+            const labels = [];
+            const api = {
+                label(text, pos, color = '#fcd34d', obj) {
+                    const el = document.createElement('div');
+                    el.className = 'v3d-label';
+                    el.style.borderColor = color;
+                    el.innerHTML = text;
+                    labelBox.appendChild(el);
+                    labels.push({ el, obj, pos: pos.clone ? pos.clone() : new THREE.Vector3(...pos) });
+                },
+                info(html) { ui.querySelector('.v3d-info').innerHTML = html; }
+            };
+
+            const btn = ui.querySelector('.v3d-btn');
+            btn.addEventListener('click', () => {
+                const on = labelBox.style.display === 'none';
+                labelBox.style.display = on ? '' : 'none';
+                btn.textContent = '🏷️ ရှင်းလင်းချက်: ' + (on ? 'ON' : 'OFF');
+            });
+
+            scene.add(new THREE.AmbientLight(0xffffff, 0.72));
+            const dirLight1 = new THREE.DirectionalLight(0xffffff, 0.9);
+            dirLight1.position.set(6, 9, 7);
+            scene.add(dirLight1);
+            const dirLight2 = new THREE.DirectionalLight(0xfde68a, 0.55);
+            dirLight2.position.set(-6, -4, -5);
+            scene.add(dirLight2);
+
+            const rootGroup = new THREE.Group();
+            scene.add(rootGroup);
+
+            const customUpdate = buildSceneCallback(rootGroup, camera, scene, api);
+            camera.lookAt(0, 0, 0);
+            const camPos0 = camera.position.clone();
+            let zoom = 1;
+            const setZoom = z => { zoom = Math.max(0.55, Math.min(2.3, z)); };
+
+            ui.querySelector('.v3d-zoom').addEventListener('click', e => {
+                const k = e.target.dataset.z;
+                if (k === 'in') setZoom(zoom * 1.25);
+                else if (k === 'out') setZoom(zoom / 1.25);
+                else if (k === 'reset') { zoom = 1; rootGroup.rotation.set(0, 0, 0); autoRotate = true; }
+            });
+
+            let isDragging = false, prevX = 0, prevY = 0, autoRotate = true;
+            const onDown = (x, y) => { isDragging = true; autoRotate = false; prevX = x; prevY = y; ui.querySelector('.v3d-hint').style.opacity = 0; };
+            const onMove = (x, y) => {
+                if (!isDragging) return;
+                rootGroup.rotation.y += (x - prevX) * 0.01;
+                rootGroup.rotation.x = Math.max(-1.2, Math.min(1.2, rootGroup.rotation.x + (y - prevY) * 0.01));
+                prevX = x; prevY = y;
+            };
+            const onUp = () => { isDragging = false; };
+
+            const domElem = renderer.domElement;
+            domElem.addEventListener('mousedown', e => onDown(e.clientX, e.clientY));
+            domElem.addEventListener('wheel', e => { e.preventDefault(); setZoom(zoom * (e.deltaY < 0 ? 1.1 : 1 / 1.1)); }, { passive: false });
+            window.addEventListener('mousemove', e => onMove(e.clientX, e.clientY));
+            window.addEventListener('mouseup', onUp);
+            domElem.addEventListener('touchstart', e => { if (e.touches.length === 1) onDown(e.touches[0].clientX, e.touches[0].clientY); }, { passive: true });
+            domElem.addEventListener('touchmove', e => { if (e.touches.length === 1) onMove(e.touches[0].clientX, e.touches[0].clientY); }, { passive: true });
+            domElem.addEventListener('touchend', onUp);
+
+            window.addEventListener('resize', () => {
+                if (!container.isConnected || !container.clientWidth) return;
+                camera.aspect = container.clientWidth / container.clientHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(container.clientWidth, container.clientHeight);
+            });
+
+            const sceneRecord = { renderer, animId: null, cid: containerId };
+            activeScenes.push(sceneRecord);
+
+            const clock = new THREE.Clock();
+            const v = new THREE.Vector3();
+            function animate() {
+                sceneRecord.animId = requestAnimationFrame(animate);
+                const elapsed = clock.getElapsedTime();
+                if (autoRotate) rootGroup.rotation.y += 0.004;
+                if (typeof customUpdate === 'function') customUpdate(elapsed, rootGroup);
+                camera.position.copy(camPos0).multiplyScalar(1 / zoom);
+                renderer.render(scene, camera);
+
+                const W = container.clientWidth, H = container.clientHeight;
+                scene.updateMatrixWorld();
+                labels.forEach(l => {
+                    v.copy(l.pos);
+                    (l.obj || rootGroup).localToWorld(v).project(camera);
+                    l.el.style.opacity = l.obj && !l.obj.visible ? 0 : 1;
+                    const hw = l.el.offsetWidth / 2 + 4;
+                    const x = Math.max(hw, Math.min(W - hw, (v.x * 0.5 + 0.5) * W));
+                    const y = Math.max(14, Math.min(H - 96, (-v.y * 0.5 + 0.5) * H));
+                    l.el.style.transform = `translate(-50%,-50%) translate(${x}px,${y}px)`;
+                });
+            }
+            animate();
+        }
+
+        function createAtom(radius, colorHex, x = 0, y = 0, z = 0) {
+            const geo = new THREE.SphereGeometry(radius, 28, 28);
+            const mat = new THREE.MeshStandardMaterial({ color: colorHex, roughness: 0.25, metalness: 0.2 });
+            const mesh = new THREE.Mesh(geo, mat);
+            mesh.position.set(x, y, z);
+            return mesh;
+        }
+
+        function createBond(p1, p2, radius = 0.07, colorHex = 0xe2e8f0) {
+            const dir = new THREE.Vector3().subVectors(p2, p1);
+            const geo = new THREE.CylinderGeometry(radius, radius, dir.length(), 16);
+            const mat = new THREE.MeshStandardMaterial({ color: colorHex, roughness: 0.35 });
+            const mesh = new THREE.Mesh(geo, mat);
+            mesh.position.copy(p1).add(p2).multiplyScalar(0.5);
+            mesh.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), dir.clone().normalize());
+            return mesh;
+        }
+
+        // ==========================================
+        // 2. SPECIFIC 3D VISUALIZATIONS FOR CHAPTER 6
+        // ==========================================
+
+        // 3D Viewer 6.1: 3d Orbitals (Cloverleaf dx2-y2 & Donut dz2) vs 4s Electron Loss
+        function render3D_6_1(mode) {
+            init3DViewer('viewer-6-1', (group, camera, scene, ui) => {
+                camera.position.set(1.6, 1.4, 7.2);
+
+                // Coordinate Axes
+                const axisMat = new THREE.LineBasicMaterial({ color: 0x64748b, transparent: true, opacity: 0.55 });
+                [
+                    [new THREE.Vector3(-2.6,0,0), new THREE.Vector3(2.6,0,0)],
+                    [new THREE.Vector3(0,-2.6,0), new THREE.Vector3(0,2.6,0)],
+                    [new THREE.Vector3(0,0,-2.6), new THREE.Vector3(0,0,2.6)]
+                ].forEach(pts => {
+                    group.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts), axisMat));
+                });
+
+                group.add(createAtom(0.24, 0xfef08a, 0, 0, 0));
+
+                if (mode === 'dx2y2') {
+                    // 4-Lobe Cloverleaf along X and Z axes
+                    const lobeGeo = new THREE.SphereGeometry(0.62, 24, 24);
+                    lobeGeo.scale(1.35, 0.62, 0.62);
+                    const matX = new THREE.MeshStandardMaterial({ color: 0xf59e0b, transparent: true, opacity: 0.72 });
+                    const matZ = new THREE.MeshStandardMaterial({ color: 0x38bdf8, transparent: true, opacity: 0.72 });
+
+                    const l1 = new THREE.Mesh(lobeGeo, matX); l1.position.x = 1.05;
+                    const l2 = new THREE.Mesh(lobeGeo, matX); l2.position.x = -1.05;
+                    const l3 = new THREE.Mesh(lobeGeo, matZ); l3.rotation.y = Math.PI / 2; l3.position.z = 1.05;
+                    const l4 = new THREE.Mesh(lobeGeo, matZ); l4.rotation.y = Math.PI / 2; l4.position.z = -1.05;
+                    group.add(l1, l2, l3, l4);
+
+                    ui.label('3d (Cloverleaf 4 Lobes)', [0, 1.65, 0], '#fcd34d');
+                    ui.info('<b>3d Orbital ပုံသဏ္ဌာန် (Cloverleaf Shape)</b> — 3d Subshell တွင် Orbital (၅) ခု (dxy, dyz, dxz, dx²-y², dz²) ရှိပြီး စုစုပေါင်း အီလက်ထရွန် <strong>၁၀ လုံး</strong> အထိ ဝင်ဆံ့နိုင်သည်။');
+                } else {
+                    // dz2: Vertical dumbbell + Equatorial Torus Donut
+                    const lobeGeo = new THREE.SphereGeometry(0.62, 24, 24);
+                    lobeGeo.scale(0.65, 1.35, 0.65);
+                    const matLobe = new THREE.MeshStandardMaterial({ color: 0xf97316, transparent: true, opacity: 0.75 });
+                    const top = new THREE.Mesh(lobeGeo, matLobe); top.position.y = 1.1;
+                    const bot = new THREE.Mesh(lobeGeo, matLobe); bot.position.y = -1.1;
+
+                    const torus = new THREE.Mesh(
+                        new THREE.TorusGeometry(0.95, 0.28, 20, 48),
+                        new THREE.MeshStandardMaterial({ color: 0x38bdf8, transparent: true, opacity: 0.72 })
+                    );
+                    torus.rotation.x = Math.PI / 2;
+                    group.add(top, bot, torus);
+
+                    ui.label('dz² Dumbbell + Donut Ring', [0, 2.05, 0], '#7dd3fc');
+                    ui.info('<b>3dz² Orbital ပုံသဏ္ဌာန်</b> — ဒေါင်လိုက် ဒမ်ဘယ်ပုံ အဖု (၂) ခုနှင့် အလယ်တွင် ကွင်းပုံစံ (Torus ring) ပါဝင်ပြီး d-orbital (၅) ခုလုံးသည် ခွဲထုတ်မထားသော အက်တမ်တွင် စွမ်းအင်တူညီ (Degenerate) ကြသည်။');
+                }
+            });
+        }
+
+        // 3D Viewer 6.2: Octahedral Complex Ion [Cu(H2O)6]2+ vs Paramagnetic Spin Alignment
+        function render3D_6_2(mode) {
+            init3DViewer('viewer-6-2', (group, camera, scene, ui) => {
+                camera.position.set(1.8, 1.5, 7.2);
+
+                if (mode === 'complex') {
+                    // Central Cu2+ ion + 6 Octahedral H2O Ligands
+                    group.add(createAtom(0.55, 0x0284c7, 0, 0, 0));
+                    const dirs = [
+                        [1.8, 0, 0], [-1.8, 0, 0],
+                        [0, 1.8, 0], [0, -1.8, 0],
+                        [0, 0, 1.8], [0, 0, -1.8]
+                    ];
+                    dirs.forEach(([x, y, z]) => {
+                        group.add(createBond(new THREE.Vector3(0,0,0), new THREE.Vector3(x,y,z), 0.06, 0x94a3b8));
+                        group.add(createAtom(0.32, 0xef4444, x, y, z)); // Oxygen of H2O ligand
+                    });
+
+                    ui.label('Central Metal Ion (Cu²⁺: 3d⁹)', [0, 0.85, 0], '#7dd3fc');
+                    ui.label('6 H₂O Ligands (Octahedral)', [1.8, 0.55, 0], '#fca5a5');
+                    ui.info('<b>အရောင်ဖြစ်ပေါ်ပုံ ([Cu(H₂O)₆]²⁺ — အပြာရောင်)</b> — Ligand များ ချဉ်းကပ်လာသောအခါ 3d orbital များ စွမ်းအင်အဆင့် (၂) ဆင့် ကွဲသွားပြီး မျက်စိဖြင့်မြင်ရသော အလင်း (Visible light) မှ အနီ/လိမ္မော်ရောင်ကို စုပ်ယူကာ <strong>အပြာရောင် (Complementary colour)</strong> ကို ထုတ်လွှတ်မြင်ရသည်။');
+                } else {
+                    // Paramagnetic Fe3+ (5 unpaired electrons spinning same direction)
+                    const arrows = [];
+                    for (let i = -2; i <= 2; i++) {
+                        const holder = new THREE.Group();
+                        const orb = createAtom(0.32, 0xf59e0b, 0, 0, 0);
+                        const cone = new THREE.Mesh(
+                            new THREE.ConeGeometry(0.18, 0.45, 16),
+                            new THREE.MeshStandardMaterial({ color: 0x10b981 })
+                        );
+                        cone.position.y = 0.55;
+                        holder.add(orb, cone);
+                        holder.position.set(i * 1.15, 0, 0);
+                        group.add(holder);
+                        arrows.push(holder);
+                    }
+                    ui.label('5 Unpaired 3d Electrons (Fe³⁺: 3d⁵)', [0, 1.25, 0], '#86efac');
+                    ui.info('<b>Paramagnetism (သံလိုက်ဆွဲငင်မှု ရှိခြင်း)</b> — အစုံမဖွဲ့ရသေးသော <strong>Unpaired 3d electrons</strong> များ ပါဝင်သဖြင့် ပြင်ပသံလိုက်စက်ကွင်းသို့ ဆွဲငင်ခံရသည်။ (Zn²⁺: 3d¹⁰ နှင့် Sc³⁺: 3d⁰ တို့တွင် Unpaired e⁻ မရှိ၍ <strong>Diamagnetic</strong> ဖြစ်သည်)။');
+
+                    return (t) => {
+                        arrows.forEach((a, idx) => {
+                            a.rotation.z = Math.sin(t * 2.5 + idx * 0.4) * 0.12;
+                        });
+                    };
+                }
+            });
+        }
+
+        // ==========================================
+        // 3. INTERACTIVE 3d ELEMENT & ION ANALYZER
+        // ==========================================
+        const ELEMENTS_3D = {
+            Sc: { z: 21, name: 'Scandium', dAtom: 1, sAtom: 2, ionColours: { 0: 'Silvery-white metal', 3: 'Colourless (3d⁰)' }, defaultIon: 3 },
+            Ti: { z: 22, name: 'Titanium', dAtom: 2, sAtom: 2, ionColours: { 0: 'Silvery metal', 2: 'Violet (3d²)', 3: 'Purple (3d¹)' }, defaultIon: 3 },
+            V:  { z: 23, name: 'Vanadium', dAtom: 3, sAtom: 2, ionColours: { 0: 'Silvery-grey metal', 2: 'Violet (3d³)', 3: 'Green (3d²)' }, defaultIon: 2 },
+            Cr: { z: 24, name: 'Chromium (Exception!)', dAtom: 5, sAtom: 1, ionColours: { 0: 'Hard silvery metal', 2: 'Blue (3d⁴)', 3: 'Green / Violet (3d³)' }, defaultIon: 3 },
+            Mn: { z: 25, name: 'Manganese', dAtom: 5, sAtom: 2, ionColours: { 0: 'Grey-white metal', 2: 'Pale pink (3d⁵)', 3: 'Violet-red (3d⁴)' }, defaultIon: 2 },
+            Fe: { z: 26, name: 'Iron', dAtom: 6, sAtom: 2, ionColours: { 0: 'Lustrous grey metal', 2: 'Pale green (3d⁶)', 3: 'Yellow / Brown (3d⁵)' }, defaultIon: 3 },
+            Co: { z: 27, name: 'Cobalt', dAtom: 7, sAtom: 2, ionColours: { 0: 'Bluish-grey metal', 2: 'Pink (3d⁷)', 3: 'Blue (3d⁶)' }, defaultIon: 2 },
+            Ni: { z: 28, name: 'Nickel', dAtom: 8, sAtom: 2, ionColours: { 0: 'Silvery-white metal', 2: 'Green (3d⁸)' }, defaultIon: 2 },
+            Cu: { z: 29, name: 'Copper (Exception!)', dAtom: 10, sAtom: 1, ionColours: { 0: 'Reddish-brown metal', 1: 'Colourless (3d¹⁰)', 2: 'Blue (3d⁹)' }, defaultIon: 2 },
+            Zn: { z: 30, name: 'Zinc (Not Transition)', dAtom: 10, sAtom: 2, ionColours: { 0: 'Bluish-silver metal', 2: 'Colourless (3d¹⁰)' }, defaultIon: 2 }
+        };
+
+        function run3dAnalyzer() {
+            const sym = document.getElementById('el-sym')?.value || 'Fe';
+            const charge = parseInt(document.getElementById('el-charge')?.value || '2', 10);
+            const info = ELEMENTS_3D[sym];
+            if (!info) return;
+
+            // Remove electrons from 4s first, then 3d
+            let sRem = info.sAtom;
+            let dRem = info.dAtom;
+            let toLose = charge;
+            const lostFromS = Math.min(sRem, toLose);
+            sRem -= lostFromS;
+            toLose -= lostFromS;
+            dRem = Math.max(0, dRem - toLose);
+
+            // Build 5 d-orbital boxes using Hund's rule
+            const boxes = [0, 0, 0, 0, 0];
+            for (let i = 0; i < dRem; i++) {
+                boxes[i % 5] += 1;
+            }
+            const unpaired = boxes.filter(x => x === 1).length;
+            const magText = unpaired > 0
+                ? `Paramagnetic (${unpaired} unpaired e⁻)`
+                : `Diamagnetic (0 unpaired e⁻)`;
+            const colourText = info.ionColours[charge] || (dRem === 0 || dRem === 10 ? 'Colourless (d⁰ / d¹⁰)' : 'Coloured (Incomplete 3d)');
+
+            const boxHtml = boxes.map((cnt, idx) => {
+                const arrows = cnt === 2 ? '↑↓' : (cnt === 1 ? '↑' : '&nbsp;');
+                return `<div class="w-11 h-11 rounded-xl bg-white/10 border border-amber-300/40 flex items-center justify-center font-bold text-base text-amber-200">${arrows}</div>`;
+            }).join('');
+
+            const configStr = `[Ar] 3d<sup>${dRem}</sup>${sRem > 0 ? ` 4s<sup>${sRem}</sup>` : ''}`;
+            const labelIon = charge === 0 ? `${sym} (Neutral Atom)` : `${sym}<sup>${charge}+</sup> Ion`;
+
+            const out = document.getElementById('el-output');
+            if (out) {
+                out.innerHTML = `
+                    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-3 text-center">
+                        <div class="p-3 rounded-xl bg-white/10 border border-white/15">
+                            <div class="text-xs text-slate-300">${labelIon} (Z = ${info.z})</div>
+                            <div class="text-base sm:text-lg font-bold text-amber-300 mt-0.5">${configStr}</div>
+                        </div>
+                        <div class="p-3 rounded-xl bg-white/10 border border-white/15">
+                            <div class="text-xs text-slate-300">Magnetic Property</div>
+                            <div class="text-sm sm:text-base font-bold ${unpaired > 0 ? 'text-emerald-300' : 'text-slate-300'} mt-1">${magText}</div>
+                        </div>
+                        <div class="p-3 rounded-xl bg-white/10 border border-white/15">
+                            <div class="text-xs text-slate-300">Aqueous Colour / Appearance</div>
+                            <div class="text-sm sm:text-base font-bold text-sky-300 mt-1">${colourText}</div>
+                        </div>
+                        <div class="p-3 rounded-xl bg-white/10 border border-white/15 flex flex-col items-center justify-center">
+                            <div class="text-xs text-slate-300 mb-1.5">3d Orbitals (5 Boxes)</div>
+                            <div class="flex gap-1">${boxHtml}</div>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        // ==========================================
+        // 4. ARTICLE TEMPLATES (OVERVIEW + 6.1 - 6.3 + WORKED)
+        // ==========================================
+        const ARTICLES = {
+            'overview': {
+                badge: 'Chapter 6 Master Summary Table',
+                title: 'The 3d Series Transition Elements ဇယားချုပ်နှင့် အနှစ်ချုပ်',
+                subtitle: 'Scandium (Z = 21) မှ Zinc (Z = 30) အထိ အီလက်ထရွန်ဖွဲ့စည်းပုံ၊ Oxidation States နှင့် အရောင်များ',
+                html: `
+                    <!-- Master Table Card -->
+                    <div class="bg-white rounded-3xl border border-slate-200 p-5 sm:p-7 shadow-sm space-y-5">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                            <div>
+                                <span class="text-xs font-bold uppercase tracking-wider text-amber-600">Period 4 — 3d Block Elements (Z = 21 to 30)</span>
+                                <h3 class="text-lg sm:text-xl font-bold text-slate-900">3d Series ဒြပ်စင် (၁၀) မျိုး နှိုင်းယှဉ်ဇယား (Exam Must-Know)</h3>
+                            </div>
+                            <span class="text-xs px-3 py-1 rounded-full bg-amber-100 text-amber-900 font-semibold self-start">[Ar] = 1s² 2s² 2p⁶ 3s² 3p⁶</span>
+                        </div>
+
+                        <div class="overflow-x-auto rounded-2xl border border-slate-200">
+                            <table class="w-full text-left border-collapse text-xs sm:text-sm">
+                                <thead>
+                                    <tr class="bg-slate-900 text-white">
+                                        <th class="p-3">Element (Symbol)</th>
+                                        <th class="p-3">Z</th>
+                                        <th class="p-3">Essential Config</th>
+                                        <th class="p-3">Oxidation States</th>
+                                        <th class="p-3">ထင်ရှားသော Aqueous Ion အရောင်များ</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-slate-200 bg-white">
+                                    <tr class="bg-slate-100/80">
+                                        <td class="p-3 font-bold text-slate-600">Scandium (Sc)*</td>
+                                        <td class="p-3">21</td>
+                                        <td class="p-3 font-mono font-semibold">[Ar] 3d¹ 4s²</td>
+                                        <td class="p-3">+3 (တစ်မျိုးတည်း)</td>
+                                        <td class="p-3 text-slate-500">Sc³⁺ (3d⁰) = <strong>Colourless</strong></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="p-3 font-bold text-slate-900">Titanium (Ti)</td>
+                                        <td class="p-3">22</td>
+                                        <td class="p-3 font-mono font-semibold">[Ar] 3d² 4s²</td>
+                                        <td class="p-3">+2, +3, <strong>+4</strong></td>
+                                        <td class="p-3">Ti³⁺ = <span class="text-purple-700 font-bold">Purple</span></td>
+                                    </tr>
+                                    <tr class="bg-slate-50/70">
+                                        <td class="p-3 font-bold text-slate-900">Vanadium (V)</td>
+                                        <td class="p-3">23</td>
+                                        <td class="p-3 font-mono font-semibold">[Ar] 3d³ 4s²</td>
+                                        <td class="p-3">+2, +3, +4, <strong>+5</strong></td>
+                                        <td class="p-3">V²⁺ = <span class="text-violet-700 font-bold">Violet</span>, V³⁺ = <span class="text-emerald-700 font-bold">Green</span>, VO²⁺ = <span class="text-blue-700 font-bold">Blue</span>, VO₂⁺ = <span class="text-amber-600 font-bold">Yellow</span></td>
+                                    </tr>
+                                    <tr class="bg-amber-50/70">
+                                        <td class="p-3 font-bold text-amber-900">Chromium (Cr) ⚡</td>
+                                        <td class="p-3">24</td>
+                                        <td class="p-3 font-mono font-bold text-rose-700">[Ar] 3d⁵ 4s¹</td>
+                                        <td class="p-3">+2, <strong>+3</strong>, +6</td>
+                                        <td class="p-3">Cr³⁺ = <span class="text-emerald-700 font-bold">Green</span>, CrO₄²⁻ = <span class="text-amber-600 font-bold">Yellow</span>, Cr₂O₇²⁻ = <span class="text-orange-600 font-bold">Orange</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="p-3 font-bold text-slate-900">Manganese (Mn)</td>
+                                        <td class="p-3">25</td>
+                                        <td class="p-3 font-mono font-semibold">[Ar] 3d⁵ 4s²</td>
+                                        <td class="p-3"><strong>+2</strong>, +3, +4, +6, <strong>+7</strong></td>
+                                        <td class="p-3">Mn²⁺ = <span class="text-pink-600 font-bold">Pale pink</span>, MnO₄⁻ = <span class="text-purple-800 font-bold">Deep purple</span></td>
+                                    </tr>
+                                    <tr class="bg-slate-50/70">
+                                        <td class="p-3 font-bold text-slate-900">Iron (Fe)</td>
+                                        <td class="p-3">26</td>
+                                        <td class="p-3 font-mono font-semibold">[Ar] 3d⁶ 4s²</td>
+                                        <td class="p-3"><strong>+2, +3</strong>, +6</td>
+                                        <td class="p-3">Fe²⁺ = <span class="text-emerald-700 font-bold">Pale green</span>, Fe³⁺ = <span class="text-amber-700 font-bold">Yellow / Brown</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="p-3 font-bold text-slate-900">Cobalt (Co)</td>
+                                        <td class="p-3">27</td>
+                                        <td class="p-3 font-mono font-semibold">[Ar] 3d⁷ 4s²</td>
+                                        <td class="p-3"><strong>+2</strong>, +3</td>
+                                        <td class="p-3">Co²⁺ = <span class="text-rose-600 font-bold">Pink</span></td>
+                                    </tr>
+                                    <tr class="bg-slate-50/70">
+                                        <td class="p-3 font-bold text-slate-900">Nickel (Ni)</td>
+                                        <td class="p-3">28</td>
+                                        <td class="p-3 font-mono font-semibold">[Ar] 3d⁸ 4s²</td>
+                                        <td class="p-3"><strong>+2</strong>, +3</td>
+                                        <td class="p-3">Ni²⁺ = <span class="text-emerald-700 font-bold">Green</span></td>
+                                    </tr>
+                                    <tr class="bg-amber-50/70">
+                                        <td class="p-3 font-bold text-amber-900">Copper (Cu) ⚡</td>
+                                        <td class="p-3">29</td>
+                                        <td class="p-3 font-mono font-bold text-rose-700">[Ar] 3d¹⁰ 4s¹</td>
+                                        <td class="p-3">+1, <strong>+2</strong></td>
+                                        <td class="p-3">Cu⁺ (3d¹⁰) = Colourless, Cu²⁺ (3d⁹) = <span class="text-blue-700 font-bold">Blue</span></td>
+                                    </tr>
+                                    <tr class="bg-slate-100/80">
+                                        <td class="p-3 font-bold text-slate-600">Zinc (Zn)*</td>
+                                        <td class="p-3">30</td>
+                                        <td class="p-3 font-mono font-semibold">[Ar] 3d¹⁰ 4s²</td>
+                                        <td class="p-3">+2 (တစ်မျိုးတည်း)</td>
+                                        <td class="p-3 text-slate-500">Zn²⁺ (3d¹⁰) = <strong>Colourless</strong></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <p class="myanmar-text text-xs text-slate-600">
+                            *<strong>မှတ်ချက်:</strong> <strong>Scandium (Sc)</strong> နှင့် <strong>Zinc (Zn)</strong> တို့သည် d-block elements များဖြစ်သော်လည်း အိုင်းယွန်းဖြစ်ချိန်တွင် တစ်စိတ်တစ်ပိုင်းပြည့်နေသော 3d orbital (Incomplete 3d subshell) မရှိသဖြင့် <strong>Typical transition elements များအဖြစ် မသတ်မှတ်ပါ</strong>။ ⚡ <strong>Cr</strong> နှင့် <strong>Cu</strong> တို့သည် Half-filled (3d⁵) နှင့် Completely-filled (3d¹⁰) တည်ငြိမ်မှုကြောင့် ခြွင်းချက်ဖြစ်သည်။
+                        </p>
+                    </div>
+
+                    <!-- Quick Jump Cards -->
+                    <div class="bg-white rounded-3xl border border-slate-200 p-5 sm:p-7 shadow-sm space-y-4">
+                        <h3 class="text-lg font-bold text-slate-900">🧠 Chapter 6 အပိုင်းတစ်ခုချင်းစီသို့ အမြန်သွားရန်</h3>
+                        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
+                            <button onclick="selectArticle('6.1')" class="p-4 rounded-2xl bg-amber-50 border border-amber-200 text-left hover:bg-amber-100 transition">
+                                <div class="font-bold text-amber-950 text-sm">6.1 The 3d Series →</div>
+                                <p class="text-amber-800 mt-1">3d Orbital 3D ပုံစံ၊ Cr/Cu ခြွင်းချက်နှင့် 4s အရင်ဆုံးရှုံးပုံ</p>
+                            </button>
+                            <button onclick="selectArticle('6.2')" class="p-4 rounded-2xl bg-sky-50 border border-sky-200 text-left hover:bg-sky-100 transition">
+                                <div class="font-bold text-sky-950 text-sm">6.2 Properties →</div>
+                                <p class="text-sky-800 mt-1">Octahedral Complex 3D၊ အရောင်၊ ဓာတ်ကူနှင့် Paramagnetism</p>
+                            </button>
+                            <button onclick="selectArticle('6.3')" class="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-left hover:bg-emerald-100 transition">
+                                <div class="font-bold text-emerald-950 text-sm">6.3 Industrial Uses →</div>
+                                <p class="text-emerald-800 mt-1">Ti, Cr, Mn, Fe, Co, Ni, Cu, Zn နေ့စဉ်အသုံးဝင်ပုံများ</p>
+                            </button>
+                            <button onclick="selectArticle('worked')" class="p-4 rounded-2xl bg-purple-50 border border-purple-200 text-left hover:bg-purple-100 transition">
+                                <div class="font-bold text-purple-950 text-sm">Ion Analyzer & Q&A →</div>
+                                <p class="text-purple-800 mt-1">3d Ion စစ်ဆေးစက်နှင့် စာမေးပွဲမေးခွန်းဟောင်း အဖြေများ</p>
+                            </button>
+                        </div>
+                    </div>
+                `
+            },
+
+            '6.1': {
+                badge: 'Article 6.1',
+                title: 'The 3d Series Transition Elements',
+                subtitle: 'd-block နှင့် Transition Elements ကွာခြားချက်၊ Cr နှင့် Cu ခြွင်းချက်များနှင့် 3D d-Orbitals',
+                html: `
+                    <!-- 3D d-Orbitals Viewer -->
+                    <div class="bg-white rounded-3xl border border-slate-200 p-5 sm:p-7 shadow-sm space-y-4">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                            <div>
+                                <span class="text-xs font-bold uppercase tracking-wider text-amber-600">Interactive 3D Atomic Orbitals</span>
+                                <h3 class="text-lg font-bold text-slate-900">3d Orbitals ၏ သုံးဖက်မြင် ပုံသဏ္ဌာန် (Cloverleaf & Donut)</h3>
+                            </div>
+                            <div class="flex flex-wrap gap-2">
+                                <button onclick="render3D_6_1('dx2y2')" class="px-3.5 py-2 rounded-xl text-xs font-semibold bg-amber-600 text-white hover:bg-amber-700 transition">🍀 Cloverleaf (dx²-y²)</button>
+                                <button onclick="render3D_6_1('dz2')" class="px-3.5 py-2 rounded-xl text-xs font-semibold bg-sky-600 text-white hover:bg-sky-700 transition">🍩 Donut Ring (dz²)</button>
+                            </div>
+                        </div>
+                        <div id="viewer-6-1" class="canvas-container"></div>
+                    </div>
+
+                    <!-- Core Rules & Exceptions -->
+                    <div class="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 shadow-sm space-y-5">
+                        <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2.5">
+                            <span class="w-8 h-8 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center text-sm font-bold">6.1</span>
+                            အီလက်ထရွန်ဖွဲ့စည်းပုံ စည်းမျဉ်းများနှင့် အရေးကြီး ခြွင်းချက် (၃) ချက်
+                        </h3>
+                        <p class="myanmar-text text-slate-700 text-sm sm:text-base">
+                            <strong>Transition Element (IUPAC Definition):</strong> အက်တမ်အခြေအနေတွင်ဖြစ်စေ၊ အသုံးများသော အိုင်းယွန်း (Common ion) အခြေအနေတွင်ဖြစ်စေ <strong>တစ်စိတ်တစ်ပိုင်းသာ ပြည့်နေသော d subshell (Incomplete d subshell: 3d¹ မှ 3d⁹)</strong> ပါရှိသည့် ဒြပ်စင်ကို Transition element ဟုခေါ်သည်။ Periodic Table ၏ Group 3 မှ Group 12 အတွင်းရှိ d-block တွင် တည်ရှိသည်။
+                        </p>
+
+                        <div class="grid md:grid-cols-3 gap-4 text-xs sm:text-sm myanmar-text">
+                            <div class="p-4 rounded-2xl bg-rose-50/80 border border-rose-200 space-y-1.5">
+                                <div class="font-bold text-rose-900">၁။ Cr (Z=24) နှင့် Cu (Z=29) ခြွင်းချက်</div>
+                                <p class="text-slate-700">
+                                    Aufbau အရ [Ar]3d⁴ 4s² ဖြစ်ရမည့်အစား <strong>Cr = [Ar]3d⁵ 4s¹</strong> (Half-filled stability) နှင့် <strong>Cu = [Ar]3d¹⁰ 4s¹</strong> (Completely-filled stability) ဖြစ်သွားသည် — အဘယ်ကြောင့်ဆိုသော် 3d နှင့် 4s စွမ်းအင်ချင်း အလွန်နီးကပ်သောကြောင့် ဖြစ်သည်။
+                                </p>
+                            </div>
+                            <div class="p-4 rounded-2xl bg-sky-50/80 border border-sky-200 space-y-1.5">
+                                <div class="font-bold text-sky-900">၂။ Cation ဖြစ်လျှင် 4s မှ အရင်စွန့်လွှတ်သည်</div>
+                                <p class="text-slate-700">
+                                    အီလက်ထရွန်ဖြည့်စဉ်က 4s ကို အရင်ဖြည့်သော်လည်း အဖိုအိုင်းယွန်း (Cation) ဖြစ်ပေါ်သောအခါ အပြင်ဘက်ဆုံးပတ်လမ်းဖြစ်သော <strong>4s မှ အီလက်ထရွန်ကို အရင်ဆုံး စွန့်လွှတ်</strong> ပြီးမှ 3d မှ စွန့်လွှတ်သည်။<br>
+                                    <code class="text-xs font-bold text-sky-800">Fe: [Ar]3d⁶4s² → Fe²⁺: [Ar]3d⁶ → Fe³⁺: [Ar]3d⁵</code>
+                                </p>
+                            </div>
+                            <div class="p-4 rounded-2xl bg-slate-100 border border-slate-200 space-y-1.5">
+                                <div class="font-bold text-slate-900">၃။ Sc နှင့် Zn ဘာကြောင့် မပါဝင်သလဲ?</div>
+                                <p class="text-slate-700">
+                                    <strong>Sc³⁺</strong> တွင် 3d⁰ (လုံးဝမရှိ) ဖြစ်ပြီး <strong>Zn²⁺</strong> တွင် 3d¹⁰ (အပြည့်ဖြစ်နေ) သောကြောင့် Incomplete 3d subshell မရှိပါ။ ထို့ကြောင့် အရောင်မဲ့ (Colourless) ဖြစ်ပြီး Variable oxidation state မပြနိုင်ပါ။
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                `,
+                onMount: () => render3D_6_1('dx2y2')
+            },
+
+            '6.2': {
+                badge: 'Article 6.2',
+                title: 'Characteristic Properties of the 3d Series Transition Elements',
+                subtitle: 'Group I သတ္တုများနှင့် နှိုင်းယှဉ်ချက်၊ Variable Oxidation States, Colours, Catalysts & Magnetism',
+                html: `
+                    <!-- 3D Octahedral Complex & Paramagnetism Viewer -->
+                    <div class="bg-white rounded-3xl border border-slate-200 p-5 sm:p-7 shadow-sm space-y-4">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                            <div>
+                                <span class="text-xs font-bold uppercase tracking-wider text-sky-600">Interactive 3D Transition Properties</span>
+                                <h3 class="text-lg font-bold text-slate-900">Octahedral Complex Ion (အရောင်) နှင့် Paramagnetism 3D</h3>
+                            </div>
+                            <div class="flex flex-wrap gap-2">
+                                <button onclick="render3D_6_2('complex')" class="px-3.5 py-2 rounded-xl text-xs font-semibold bg-sky-600 text-white hover:bg-sky-700 transition">💎 [Cu(H₂O)₆]²⁺ Octahedral</button>
+                                <button onclick="render3D_6_2('magnet')" class="px-3.5 py-2 rounded-xl text-xs font-semibold bg-emerald-600 text-white hover:bg-emerald-700 transition">🧲 Paramagnetic Spins (Fe³⁺)</button>
+                            </div>
+                        </div>
+                        <div id="viewer-6-2" class="canvas-container"></div>
+                    </div>
+
+                    <!-- Comparison: Transition Elements vs Group I Alkali Metals -->
+                    <div class="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 shadow-sm space-y-5">
+                        <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2.5">
+                            <span class="w-8 h-8 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center text-sm font-bold">(a)</span>
+                            General Properties: Transition Elements vs Group I Alkali Metals
+                        </h3>
+                        <div class="overflow-x-auto rounded-2xl border border-slate-200">
+                            <table class="w-full text-left border-collapse text-xs sm:text-sm">
+                                <thead>
+                                    <tr class="bg-slate-900 text-white">
+                                        <th class="p-3.5">ဂုဏ်သတ္တိ (Property)</th>
+                                        <th class="p-3.5">3d Transition Elements (ဥပမာ- Fe, Cu)</th>
+                                        <th class="p-3.5">Group I Alkali Metals (ဥပမာ- Na, K)</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-slate-200 bg-white myanmar-text">
+                                    <tr><td class="p-3 font-bold">မာကျောမှုနှင့် သိပ်သည်းဆ</td><td class="p-3 text-emerald-800 font-semibold">အလွန်မာကျောပြီး သိပ်သည်းဆမြင့်မား (Hard & High density)</td><td class="p-3 text-slate-600">ပျော့ပျောင်းပြီး သိပ်သည်းဆနိမ့် (Soft, low density)</td></tr>
+                                    <tr class="bg-slate-50/70"><td class="p-3 font-bold">အရည်ပျော်မှတ် & ဆူမှတ်</td><td class="p-3 text-emerald-800 font-semibold">အလွန်မြင့်မား (High m.p. & b.p. — 3d & 4s နှစ်ခုလုံး Metallic bond တွင် ပါဝင်)</td><td class="p-3 text-slate-600">နိမ့်သည် (Low m.p. & b.p.)</td></tr>
+                                    <tr><td class="p-3 font-bold">ရေ/လေ နှင့် ဓာတ်ပြုမှု</td><td class="p-3">ဓာတ်ပြုမှု နှေးကွေး/နည်းပါး (Less reactive; သံချေးတက်ခြင်းမှာ နှေးကွေးသည်)</td><td class="p-3">ရေအေးနှင့်ပင် ပြင်းထန်စွာ ဓာတ်ပြု (Very reactive)</td></tr>
+                                    <tr class="bg-slate-50/70"><td class="p-3 font-bold">Oxidation States & Colours</td><td class="p-3 text-amber-800 font-semibold">Variable oxidation states ရှိပြီး အရောင်ရှိဒြပ်ပေါင်းများ ဖြစ်ပေါ်</td><td class="p-3 text-slate-600">+1 တစ်မျိုးတည်းသာရှိပြီး အဖြူရောင်/အရောင်မဲ့ ဒြပ်ပေါင်းများသာ ဖြစ်</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- 4 Signature Transition Properties -->
+                    <div class="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 shadow-sm space-y-5">
+                        <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2.5">
+                            <span class="w-8 h-8 rounded-xl bg-sky-100 text-sky-700 flex items-center justify-center text-sm font-bold">(b)</span>
+                            Transition Elements တို့၏ ထူးခြားသော ဂုဏ်သတ္တိ (၄) မျိုး
+                        </h3>
+
+                        <div class="grid md:grid-cols-2 gap-4 text-xs sm:text-sm myanmar-text">
+                            <div class="p-5 rounded-2xl bg-amber-50/80 border border-amber-200 space-y-1.5">
+                                <div class="font-bold text-amber-950 text-base">1. Variable Oxidation States (ဓာတ်တိုးကိန်း အမျိုးမျိုးရှိခြင်း)</div>
+                                <p class="text-slate-700">
+                                    3d နှင့် 4s subshell များ၏ စွမ်းအင်အဆင့်ချင်း အလွန်နီးကပ်နေသောကြောင့် ဓာတုစည်းဖွဲ့ရာတွင် 4s အပြင် 3d အီလက်ထရွန်များကိုပါ အရေအတွက်အမျိုးမျိုး စွန့်လွှတ်/မျှဝေနိုင်သည်။ (ဥပမာ- <strong>Mn</strong> သည် +2, +3, +4, +6, +7 အထိ အများဆုံးပြသည်)။
+                                </p>
+                            </div>
+
+                            <div class="p-5 rounded-2xl bg-sky-50/80 border border-sky-200 space-y-1.5">
+                                <div class="font-bold text-sky-950 text-base">2. Formation of Coloured Compounds & Ions (အရောင်ရှိခြင်း)</div>
+                                <p class="text-slate-700">
+                                    တစ်စိတ်တစ်ပိုင်းပြည့်နေသော 3d orbital (3d¹ မှ 3d⁹) များကြောင့် Visible light မှ စွမ်းအင်အချို့ကို စုပ်ယူပြီး အီလက်ထရွန်များ d-orbital အဆင့်မြင့်သို့ ခုန်တက်ခြင်း (<strong>d–d transition</strong>) ကြောင့် စုပ်ယူခံရသောအရောင်၏ ဆန့်ကျင်ဘက်အရောင် (Complementary colour) ကို မြင်ရသည်။
+                                </p>
+                            </div>
+
+                            <div class="p-5 rounded-2xl bg-emerald-50/80 border border-emerald-200 space-y-1.5">
+                                <div class="font-bold text-emerald-950 text-base">3. Catalytic Activity (ဓာတ်ကူပစ္စည်းအဖြစ် စွမ်းဆောင်နိုင်ခြင်း)</div>
+                                <p class="text-slate-700">
+                                    Unpaired 3d အီလက်ထရွန်များဖြင့် ဓာတ်ပြုမော်လီကျူးများကို မျက်နှာပြင်ပေါ် ဖမ်းယူနိုင်ခြင်း (Adsorption) နှင့် Variable oxidation states ပြောင်းလဲနိုင်ခြင်းတို့ကြောင့် Ea နိမ့်သော လမ်းကြောင်းသစ်ပေးနိုင်သည်။<br>
+                                    • <strong>Fe:</strong> Haber process (NH₃) &nbsp;|&nbsp; <strong>V₂O₅:</strong> Contact process (H₂SO₄)<br>
+                                    • <strong>Ni:</strong> Hydrogenation of vegetable oils &nbsp;|&nbsp; <strong>MnO₂:</strong> H₂O₂ ပြိုကွဲမှု
+                                </p>
+                            </div>
+
+                            <div class="p-5 rounded-2xl bg-purple-50/80 border border-purple-200 space-y-1.5">
+                                <div class="font-bold text-purple-950 text-base">4. Magnetic Properties (သံလိုက်ဂုဏ်သတ္တိ ရှိခြင်း)</div>
+                                <p class="text-slate-700">
+                                    • <strong>Paramagnetic:</strong> Unpaired 3d electrons ပါရှိသော အက်တမ်/အိုင်းယွန်းများ (ဥပမာ- Fe³⁺, Mn²⁺, Cu²⁺) သည် သံလိုက်စက်ကွင်းသို့ ဆွဲငင်ခံရသည် (Unpaired e⁻ များလေ ပိုပြင်းလေ)။<br>
+                                    • <strong>Diamagnetic:</strong> အီလက်ထရွန်အားလုံး စုံတွဲဖြစ်နေသော Sc³⁺ (3d⁰), Cu⁺ (3d¹⁰), Zn²⁺ (3d¹⁰) တို့မှာ သံလိုက်မဆွဲပါ။<br>
+                                    • <strong>Ferromagnetic:</strong> <strong>Fe, Co, Ni</strong> သတ္တု ၃ မျိုးမှာ အမြဲတမ်းသံလိုက် ပြုလုပ်နိုင်သည်။
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                `,
+                onMount: () => render3D_6_2('complex')
+            },
+
+            '6.3': {
+                badge: 'Article 6.3',
+                title: 'Uses of the 3d Series Transition Elements',
+                subtitle: 'စက်မှုလုပ်ငန်း၊ ဆောက်လုပ်ရေး၊ ဆေးပညာနှင့် ဇီဝစနစ်များတွင် 3d သတ္တုများ အသုံးဝင်ပုံ',
+                html: `
+                    <div class="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 shadow-sm space-y-5">
+                        <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2.5">
+                            <span class="w-8 h-8 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center text-sm font-bold">6.3</span>
+                            3d Series Transition Elements တစ်ခုချင်းစီ၏ အသုံးဝင်ပုံများ (Textbook Summary)
+                        </h3>
+
+                        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 text-xs sm:text-sm myanmar-text">
+                            <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-1">
+                                <div class="font-bold text-slate-900 text-base">✈️ Titanium (Ti)</div>
+                                <p class="text-slate-700">ပေါ့ပါးခိုင်ခံ့ပြီး သံချေးမတက်သဖြင့် လေယာဉ်ကိုယ်ထည်၊ အာကာသယာဉ်၊ ခွဲစိတ်ခန်းသုံး အရိုးအစားထိုးပစ္စည်း (Surgical implants) နှင့် TiO₂ ကို အဖြူရောင်ဆေးသုတ်ဆေး (White pigment) တို့တွင် သုံးသည်။</p>
+                            </div>
+
+                            <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-1">
+                                <div class="font-bold text-indigo-900 text-base">⚙️ Vanadium (V)</div>
+                                <p class="text-slate-700">သံမဏိကို ပိုမိုခိုင်ခံ့စေရန် Ferrovanadium alloy အဖြစ် ကားအစိတ်အပိုင်းများနှင့် ကိရိယာတန်ဆာပလာများတွင် သုံးသည်။ V₂O₅ ကို Contact process တွင် Catalyst အဖြစ် သုံးသည်။</p>
+                            </div>
+
+                            <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-1">
+                                <div class="font-bold text-emerald-900 text-base">✨ Chromium (Cr)</div>
+                                <p class="text-slate-700">သံချေးမတက်သော <strong>Stainless steel (Fe + Cr + Ni)</strong> ပြုလုပ်ရာတွင်လည်းကောင်း၊ ကားဘန်ပါနှင့် ရေပိုက်ခေါင်းများ အရောင်တောက်စေရန် <strong>Electroplating (Chrome plating)</strong> တွင်လည်းကောင်း သုံးသည်။</p>
+                            </div>
+
+                            <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-1">
+                                <div class="font-bold text-purple-900 text-base">🔋 Manganese (Mn)</div>
+                                <p class="text-slate-700">မီးရထားသံလမ်းများအတွက် အလွန်မာကျောသော သံမဏိစပ်ရာတွင်လည်းကောင်း၊ MnO₂ ကို ဓာတ်ခဲခြောက် (Dry cell batteries) နှင့် ဓာတ်ကူပစ္စည်းအဖြစ်လည်းကောင်း သုံးသည်။</p>
+                            </div>
+
+                            <div class="p-4 rounded-2xl bg-amber-50/70 border border-amber-200 space-y-1">
+                                <div class="font-bold text-amber-950 text-base">🏗️ Iron (Fe)</div>
+                                <p class="text-slate-700">တံတား၊ အဆောက်အဦ၊ သင်္ဘောနှင့် စက်ပစ္စည်းများအတွက် Steel အဖြစ် အများဆုံးသုံးသည်။ Haber process တွင် Catalyst ဖြစ်ပြီး ခန္ဓာကိုယ်သွေးနီဥ <strong>Haemoglobin</strong> တွင် အောက်စီဂျင်သယ်ဆောင်ပေးသည်။</p>
+                            </div>
+
+                            <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-1">
+                                <div class="font-bold text-blue-900 text-base">☢️ Cobalt (Co)</div>
+                                <p class="text-slate-700">အပူဒဏ်ခံ Jet engine alloys၊ အပြာရောင်မှန်/ကြွေထည် ဆိုးဆေး (Cobalt blue)၊ <strong>Vitamin B₁₂</strong> နှင့် ရေဒီယိုသတ္တိကြွ <strong>Cobalt-60</strong> ကို ကင်ဆာရောဂါကုသရာတွင် သုံးသည်။</p>
+                            </div>
+
+                            <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-1">
+                                <div class="font-bold text-teal-900 text-base">🪙 Nickel (Ni)</div>
+                                <p class="text-slate-700">အကြွေစေ့များ (Coins)၊ Stainless steel၊ Nichrome အပူပေးနန်းကြိုးများနှင့် ဟင်းရွက်ဆီမှ မာဂျရင်းထောပတ်ချက်ရာ (Hydrogenation) တွင် Catalyst အဖြစ် သုံးသည်။</p>
+                            </div>
+
+                            <div class="p-4 rounded-2xl bg-orange-50/70 border border-orange-200 space-y-1">
+                                <div class="font-bold text-orange-950 text-base">🔌 Copper (Cu)</div>
+                                <p class="text-slate-700">လျှပ်စစ်နှင့် အပူ စီးကူးမှု အလွန်ကောင်းသဖြင့် လျှပ်စစ်ဝါယာကြိုးများ၊ ရေပိုက်များနှင့် <strong>Brass (Cu + Zn)</strong>၊ <strong>Bronze (Cu + Sn)</strong> သတ္တုစပ်များ ပြုလုပ်ရာတွင် သုံးသည်။</p>
+                            </div>
+
+                            <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-1">
+                                <div class="font-bold text-slate-900 text-base">🛡️ Zinc (Zn)</div>
+                                <p class="text-slate-700">သံပြားများ သံချေးမတက်စေရန် သွပ်ရည်စိမ်ခြင်း (<strong>Galvanising iron</strong>)၊ Brass သတ္တုစပ်နှင့် ဓာတ်ခဲအပြင်ဘက်အခွံများ ပြုလုပ်ရာတွင် အသုံးပြုသည်။</p>
+                            </div>
+                        </div>
+                    </div>
+                `
+            },
+
+            'worked': {
+                badge: 'Interactive 3d Ion Analyzer & Exam Q&A',
+                title: '3d Element & Ion Analyzer နှင့် စာမေးပွဲမေးခွန်းဟောင်း အဖြေများ',
+                subtitle: 'ဒြပ်စင်နှင့် အိုင်းယွန်းဓာတ်အား ရွေးချယ်၍ Configuration, Unpaired e⁻, Magnetism & Colour စစ်ဆေးပါ',
+                html: `
+                    <!-- Interactive 3d Ion Analyzer -->
+                    <div class="formula-card rounded-3xl p-6 sm:p-8 text-white shadow-xl space-y-4">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                            <h3 class="text-lg sm:text-xl font-bold text-amber-300">🔬 Interactive 3d Element & Ion Property Analyzer</h3>
+                            <span class="text-xs text-slate-300">ဒြပ်စင်နှင့် Oxidation State (+0, +1, +2, +3) ရွေးချယ်စစ်ဆေးပါ</span>
+                        </div>
+                        <div class="grid sm:grid-cols-2 gap-3 text-xs max-w-xl">
+                            <div>
+                                <label class="block text-slate-300 mb-1">3d Series Element ရွေးပါ</label>
+                                <select id="el-sym" onchange="run3dAnalyzer()" class="w-full px-3 py-2 rounded-xl bg-slate-800 border border-white/20 text-white font-bold">
+                                    <option value="Sc">Sc (Z = 21) — Scandium</option>
+                                    <option value="Ti">Ti (Z = 22) — Titanium</option>
+                                    <option value="V">V (Z = 23) — Vanadium</option>
+                                    <option value="Cr">Cr (Z = 24) — Chromium (Exception)</option>
+                                    <option value="Mn">Mn (Z = 25) — Manganese</option>
+                                    <option value="Fe" selected>Fe (Z = 26) — Iron</option>
+                                    <option value="Co">Co (Z = 27) — Cobalt</option>
+                                    <option value="Ni">Ni (Z = 28) — Nickel</option>
+                                    <option value="Cu">Cu (Z = 29) — Copper (Exception)</option>
+                                    <option value="Zn">Zn (Z = 30) — Zinc</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-slate-300 mb-1">အခြေအနေ (Atom or Cation Charge)</label>
+                                <select id="el-charge" onchange="run3dAnalyzer()" class="w-full px-3 py-2 rounded-xl bg-slate-800 border border-white/20 text-white font-bold">
+                                    <option value="0">0 (Neutral Atom)</option>
+                                    <option value="1">+1 Ion (M⁺)</option>
+                                    <option value="2">+2 Ion (M²⁺)</option>
+                                    <option value="3" selected>+3 Ion (M³⁺)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div id="el-output" class="pt-1"></div>
+                    </div>
+
+                    <!-- Exam-Style Q&A -->
+                    <div class="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 shadow-sm space-y-4 text-xs sm:text-sm myanmar-text">
+                        <h3 class="text-xl font-bold text-slate-900">✍️ စာမေးပွဲတွင် မေးလေ့ရှိသော အရေးကြီး မေးခွန်းနှင့် အဖြေများ</h3>
+
+                        <div class="p-4 rounded-2xl bg-amber-50/70 border border-amber-200 space-y-1.5">
+                            <div class="font-bold text-amber-950">Q1. Why are zinc (Zn) and scandium (Sc) not regarded as typical transition elements although they are d-block elements?</div>
+                            <p class="text-slate-800">
+                                <strong>Ans:</strong> A transition element must have an <strong>incomplete d subshell</strong> either in the neutral atom or in its common ions. Scandium forms only Sc³⁺ ([Ar]3d⁰) which has an empty 3d subshell, while zinc forms only Zn²⁺ ([Ar]3d¹⁰) which has a completely filled 3d subshell. Hence, neither forms ions with an incomplete 3d subshell.<br>
+                                <span class="text-amber-900">(မြန်မာလို- Sc³⁺ တွင် 3d⁰ ဖြစ်ပြီး Zn²⁺ တွင် 3d¹⁰ ဖြစ်နေသဖြင့် တစ်စိတ်တစ်ပိုင်းပြည့်နေသော 3d orbital မရှိသောကြောင့် ဖြစ်သည်)</span>
+                            </p>
+                        </div>
+
+                        <div class="p-4 rounded-2xl bg-sky-50/70 border border-sky-200 space-y-1.5">
+                            <div class="font-bold text-sky-950">Q2. Explain why Cu²⁺ aqueous solution is blue whereas Zn²⁺ aqueous solution is colourless.</div>
+                            <p class="text-slate-800">
+                                <strong>Ans:</strong> Cu²⁺ ([Ar]3d⁹) has an <strong>incomplete 3d subshell</strong> (1 unpaired electron), allowing d–d electron transitions by absorbing visible light and transmitting blue light. In contrast, Zn²⁺ ([Ar]3d¹⁰) has a <strong>completely filled 3d subshell</strong>, so no d–d transition can occur and the solution is colourless.
+                            </p>
+                        </div>
+
+                        <div class="p-4 rounded-2xl bg-emerald-50/70 border border-emerald-200 space-y-1.5">
+                            <div class="font-bold text-emerald-950">Q3. Write down the essential electronic configurations of Cr, Cr³⁺, Fe²⁺, Fe³⁺, Cu, Cu²⁺.</div>
+                            <div class="bg-slate-900 text-amber-200 p-3.5 rounded-xl font-mono text-xs grid sm:grid-cols-2 gap-1.5">
+                                <div>• Cr (Z=24): [Ar] 3d⁵ 4s¹</div>
+                                <div>• Cr³⁺: [Ar] 3d³ (3 unpaired e⁻)</div>
+                                <div>• Fe²⁺: [Ar] 3d⁶ (4 unpaired e⁻)</div>
+                                <div>• Fe³⁺: [Ar] 3d⁵ (5 unpaired e⁻)</div>
+                                <div>• Cu (Z=29): [Ar] 3d¹⁰ 4s¹</div>
+                                <div>• Cu²⁺: [Ar] 3d⁹ (1 unpaired e⁻)</div>
+                            </div>
+                        </div>
+                    </div>
+                `,
+                onMount: () => run3dAnalyzer()
+            }
+        };
+
+        // ==========================================
+        // 5. NAVIGATION & UI CONTROLLER
+        // ==========================================
+        function selectArticle(id) {
+            currentArticleId = id;
+            const article = ARTICLES[id];
+            if (!article) return;
+
+            clearActiveScenes();
+
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('bg-amber-50', 'text-amber-950', 'border-amber-200', 'shadow-xs');
+                btn.classList.add('text-slate-600', 'hover:bg-slate-50');
+                const badge = btn.querySelector('.nav-badge');
+                if (badge) {
+                    badge.classList.remove('bg-amber-600', 'text-white');
+                    badge.classList.add('bg-slate-100', 'text-slate-600');
+                }
+            });
+
+            const activeBtn = document.getElementById(`nav-${id}`);
+            if (activeBtn) {
+                activeBtn.classList.remove('text-slate-600', 'hover:bg-slate-50');
+                activeBtn.classList.add('bg-amber-50', 'text-amber-950', 'border-amber-200', 'shadow-xs');
+                const badge = activeBtn.querySelector('.nav-badge');
+                if (badge) {
+                    badge.classList.remove('bg-slate-100', 'text-slate-600');
+                    badge.classList.add('bg-amber-600', 'text-white');
+                }
+            }
+
+            const container = document.getElementById('content-container');
+            const ids = ['overview', '6.1', '6.2', '6.3', 'worked'];
+            const idx = ids.indexOf(id);
+            const prevId = idx > 0 ? ids[idx - 1] : null;
+            const nextId = idx < ids.length - 1 ? ids[idx + 1] : null;
+
+            container.innerHTML = `
+                <div class="border-b border-slate-200 pb-5">
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-800 mb-2">
+                        ${article.badge}
+                    </span>
+                    <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">${article.title}</h1>
+                    <p class="mt-1 text-sm sm:text-base text-slate-600 font-medium">${article.subtitle}</p>
+                </div>
+
+                ${article.html}
+
+                <div class="pt-4 pb-8 flex items-center justify-between gap-4 border-t border-slate-200">
+                    ${prevId ? `
+                        <button onclick="selectArticle('${prevId}')" class="px-4 py-3 rounded-2xl bg-white border border-slate-200 hover:border-amber-300 hover:bg-amber-50 text-slate-700 text-xs sm:text-sm font-semibold transition flex items-center gap-2 shadow-xs">
+                            <span>←</span> ယခင်အပိုင်း (${prevId === 'overview' ? '3d Table' : prevId})
+                        </button>
+                    ` : '<div></div>'}
+
+                    ${nextId ? `
+                        <button onclick="selectArticle('${nextId}')" class="px-5 py-3 rounded-2xl bg-amber-600 hover:bg-amber-700 text-white text-xs sm:text-sm font-semibold transition flex items-center gap-2 shadow-sm">
+                            နောက်တစ်ပိုင်း (${nextId === 'worked' ? 'Ion Analyzer & Q&A' : nextId}) <span>→</span>
+                        </button>
+                    ` : `
+                        <a href="chapter7.html" class="px-5 py-3 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs sm:text-sm font-semibold transition flex items-center gap-2 shadow-sm">
+                            Chapter 7 သို့ ဆက်သွားရန် <span>→</span>
+                        </a>
                     `}
                 </div>
             `;
