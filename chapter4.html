@@ -1,0 +1,1159 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Grade 12 Chemistry - Chapter 4: Chemical Equilibrium</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Three.js for 3D Dynamic Equilibrium & Le Chatelier Visualizations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <!-- Google Fonts: Inter & Noto Sans Myanmar -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Myanmar:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'Noto Sans Myanmar', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', 'Noto Sans Myanmar', sans-serif;
+            line-height: 1.85;
+            background-color: #f8fafc;
+            color: #1e293b;
+            overflow-x: hidden;
+        }
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        .canvas-container {
+            position: relative;
+            width: 100%;
+            height: 380px;
+            border-radius: 1rem;
+            overflow: hidden;
+            background: radial-gradient(circle at center, #1e1b4b 0%, #0f172a 100%);
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.45);
+            touch-action: none;
+        }
+        @media (min-width: 768px) {
+            .canvas-container {
+                height: 430px;
+            }
+        }
+        .myanmar-text {
+            line-height: 1.98;
+        }
+        .formula-card {
+            background: linear-gradient(135deg, #0f172a 0%, #312e81 100%);
+        }
+        .math-box {
+            font-family: 'Inter', monospace;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.16);
+        }
+        .v3d-ui { position: absolute; inset: 0; pointer-events: none; font-family: 'Inter','Noto Sans Myanmar',sans-serif; }
+        .v3d-btn { position: absolute; top: 8px; right: 10px; pointer-events: auto; font-size: 11px; font-weight: 600; color: #fef3c7; background: rgba(15,23,42,.7); border: 1px solid rgba(251,191,36,.45); padding: 3px 10px; border-radius: 9999px; cursor: pointer; }
+        .v3d-hint { position: absolute; top: 10px; left: 10px; font-size: 10.5px; color: #cbd5e1; transition: opacity .4s; }
+        .v3d-zoom { position: absolute; right: 10px; top: 38px; display: flex; flex-direction: column; gap: 6px; }
+        .v3d-zoom button { pointer-events: auto; width: 30px; height: 30px; border-radius: 9999px; font-size: 16px; font-weight: 700; line-height: 1; color: #fef3c7; background: rgba(15,23,42,.75); border: 1px solid rgba(251,191,36,.45); cursor: pointer; }
+        .v3d-labels { position: absolute; inset: 0; }
+        .v3d-label { position: absolute; left: 0; top: 0; white-space: nowrap; text-align: center; font-size: 11px; line-height: 1.35; font-weight: 600; color: #f8fafc; background: rgba(15,23,42,.82); border: 1px solid #a5b4fc; border-radius: .6rem; padding: 2px 8px; will-change: transform; }
+        .v3d-info { position: absolute; left: 8px; right: 8px; bottom: 8px; font-size: 11.5px; line-height: 1.6; color: #e2e8f0; background: rgba(15,23,42,.88); border: 1px solid rgba(255,255,255,.14); border-radius: .8rem; padding: 7px 11px; }
+        .v3d-info b { color: #fcd34d; }
+        .mx { font-family: 'Cambria Math','STIX Two Math','Times New Roman',Georgia,serif; font-size: 1.1em; font-weight: 500; letter-spacing: .01em; }
+        .math-box.mx { font-size: 1.02rem; line-height: 2.25; }
+        .mx i { font-style: italic; }
+        .mx .mu { font-size: .82em; opacity: .88; }
+        .mx .nb { display: inline-block; white-space: nowrap; margin-right: .2em; }
+        .mx .fr { display: inline-flex; flex-direction: column; vertical-align: middle; text-align: center; margin: 0 .25em; line-height: 1.3; }
+        .mx .fr > span:first-child { border-bottom: 1.5px solid currentColor; padding: 0 .3em .08em; }
+        .mx .fr > span:last-child { padding: .08em .3em 0; }
+    </style>
+</head>
+<body class="antialiased selection:bg-indigo-100 selection:text-indigo-900">
+
+    <!-- Mobile Top Header -->
+    <header class="lg:hidden sticky top-0 z-40 bg-white/95 backdrop-blur border-b border-slate-200 px-4 py-3 flex items-center justify-between shadow-sm">
+        <div class="flex items-center gap-2.5">
+            <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-indigo-600 to-purple-700 flex items-center justify-center text-white font-bold shadow">
+                Ch4
+            </div>
+            <div>
+                <h1 class="text-sm font-bold text-slate-900 leading-tight">Grade 12 Chemistry</h1>
+                <p class="text-xs text-slate-500">Chemical Equilibrium</p>
+            </div>
+        </div>
+        <button id="mobile-menu-btn" class="p-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 transition" aria-label="Open Navigation">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+            </svg>
+        </button>
+    </header>
+
+    <!-- Mobile Backdrop -->
+    <div id="sidebar-backdrop" class="fixed inset-0 bg-slate-900/50 backdrop-blur-xs z-40 hidden lg:hidden transition-opacity"></div>
+
+    <div class="flex min-h-screen">
+        <!-- Left Sidebar Taskbar -->
+        <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-80 bg-white border-r border-slate-200 transform -translate-x-full lg:translate-x-0 lg:static lg:inset-auto transition-transform duration-300 ease-in-out flex flex-col shadow-xl lg:shadow-none">
+            <!-- Brand Header + Chapter Switcher -->
+            <div class="p-6 border-b border-slate-100 bg-gradient-to-br from-slate-900 via-indigo-950 to-purple-950 text-white">
+                <div class="flex items-center justify-between">
+                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-indigo-500/25 text-indigo-200 border border-indigo-400/30">
+                        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                        Grade 12 Chemistry
+                    </span>
+                    <button id="close-sidebar-btn" class="lg:hidden p-1.5 rounded-lg text-slate-300 hover:text-white hover:bg-white/10">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                    </button>
+                </div>
+                <h2 class="mt-3 text-lg font-bold tracking-tight leading-snug">Chapter 4: Chemical Equilibrium</h2>
+                <p class="mt-1 text-xs text-indigo-200/85">ပုံသေနည်းအစုံ၊ Le Chatelier နှင့် Kc / Kp တွက်စာများ</p>
+
+                <!-- အခန်း ၁ မှ ၈ အထိ ပြောင်းရန် ခလုတ်များ -->
+                <div class="mt-4 pt-3 border-t border-white/15 grid grid-cols-5 gap-1.5">
+                    <a href="index.html" class="text-center py-1.5 px-1 rounded-lg bg-white/15 hover:bg-white/25 text-xs font-semibold text-white transition">🏠</a>
+                    <a href="chapter1.html" class="text-center py-1.5 px-1 rounded-lg bg-white/10 hover:bg-white/25 text-xs font-semibold text-white transition">Ch 1</a>
+                    <a href="chapter2.html" class="text-center py-1.5 px-1 rounded-lg bg-white/10 hover:bg-white/25 text-xs font-semibold text-white transition">Ch 2</a>
+                    <a href="chapter3.html" class="text-center py-1.5 px-1 rounded-lg bg-white/10 hover:bg-white/25 text-xs font-semibold text-white transition">Ch 3</a>
+                    <a href="chapter4.html" class="text-center py-1.5 px-1 rounded-lg bg-indigo-500 text-xs font-semibold text-white shadow-xs">Ch 4</a>
+                    <a href="chapter5.html" class="text-center py-1.5 px-1 rounded-lg bg-white/10 hover:bg-white/25 text-xs font-semibold text-white transition">Ch 5</a>
+                    <a href="chapter6.html" class="text-center py-1.5 px-1 rounded-lg bg-white/10 hover:bg-white/25 text-xs font-semibold text-white transition">Ch 6</a>
+                    <a href="chapter7.html" class="text-center py-1.5 px-1 rounded-lg bg-white/10 hover:bg-white/25 text-xs font-semibold text-white transition">Ch 7</a>
+                    <a href="chapter8.html" class="col-span-2 text-center py-1.5 px-1 rounded-lg bg-white/10 hover:bg-white/25 text-xs font-semibold text-white transition">Ch 8</a>
+                </div>
+            </div>
+
+            <!-- Navigation List -->
+            <div class="flex-1 overflow-y-auto p-4 space-y-2">
+                <div class="px-3 py-1.5 text-xs font-bold uppercase tracking-wider text-slate-400">
+                    Chapter 4 လေ့လာရန် အပိုင်းများ (5 ခု)
+                </div>
+
+                <button onclick="selectArticle('formulas')" id="nav-formulas" class="nav-btn w-full text-left p-3.5 rounded-2xl transition-all duration-200 flex items-start gap-3 border border-transparent">
+                    <span class="nav-badge shrink-0 w-9 h-9 rounded-xl flex items-center justify-center text-sm font-bold">📐</span>
+                    <div>
+                        <div class="font-bold text-sm leading-snug">Master Formulas & Mind Map</div>
+                        <div class="text-xs opacity-80 mt-0.5">Kc, Kp ပုံသေနည်းအစုံနှင့် အခန်းချိတ်ဆက်မှု</div>
+                    </div>
+                </button>
+
+                <button onclick="selectArticle('4.1')" id="nav-4.1" class="nav-btn w-full text-left p-3.5 rounded-2xl transition-all duration-200 flex items-start gap-3 border border-transparent">
+                    <span class="nav-badge shrink-0 w-9 h-9 rounded-xl flex items-center justify-center text-sm font-bold">4.1</span>
+                    <div>
+                        <div class="font-bold text-sm leading-snug">State of Dynamic Equilibrium</div>
+                        <div class="text-xs opacity-80 mt-0.5">ဒိုင်းနမစ် မျှခြေ၊ ဝိသေသလက္ခဏာ (၄) ချက် & ဂရပ်ဖ်</div>
+                    </div>
+                </button>
+
+                <button onclick="selectArticle('4.2')" id="nav-4.2" class="nav-btn w-full text-left p-3.5 rounded-2xl transition-all duration-200 flex items-start gap-3 border border-transparent">
+                    <span class="nav-badge shrink-0 w-9 h-9 rounded-xl flex items-center justify-center text-sm font-bold">4.2</span>
+                    <div>
+                        <div class="font-bold text-sm leading-snug">Le Chatelier's Principle</div>
+                        <div class="text-xs opacity-80 mt-0.5">မျှခြေပြောင်းလဲစေသော အချက် (၄) ချက် & Haber/Contact</div>
+                    </div>
+                </button>
+
+                <button onclick="selectArticle('4.3')" id="nav-4.3" class="nav-btn w-full text-left p-3.5 rounded-2xl transition-all duration-200 flex items-start gap-3 border border-transparent">
+                    <span class="nav-badge shrink-0 w-9 h-9 rounded-xl flex items-center justify-center text-sm font-bold">4.3</span>
+                    <div>
+                        <div class="font-bold text-sm leading-snug">Equilibrium Constants (Kc & Kp)</div>
+                        <div class="text-xs opacity-80 mt-0.5">Homogeneous/Heterogeneous & Interactive Calculator</div>
+                    </div>
+                </button>
+
+                <button onclick="selectArticle('worked')" id="nav-worked" class="nav-btn w-full text-left p-3.5 rounded-2xl transition-all duration-200 flex items-start gap-3 border border-transparent">
+                    <span class="nav-badge shrink-0 w-9 h-9 rounded-xl flex items-center justify-center text-sm font-bold">📝</span>
+                    <div>
+                        <div class="font-bold text-sm leading-snug">Worked Examples & ICE Table</div>
+                        <div class="text-xs opacity-80 mt-0.5">စာမေးပွဲပုံစံ Kc, Kp နှင့် ICE တွက်စာ အဆင့်ဆင့်</div>
+                    </div>
+                </button>
+            </div>
+
+            <!-- Footer Tip -->
+            <div class="p-4 border-t border-slate-100 bg-slate-50">
+                <div class="p-3 rounded-xl bg-indigo-50 border border-indigo-200/80 text-xs text-indigo-950 flex items-start gap-2.5">
+                    <span class="text-base">🔑</span>
+                    <span><strong>Temperature (အပူချိန်)</strong> တစ်ခုတည်းကသာ <strong>Kc နှင့် Kp တန်ဖိုး</strong> ကို ပြောင်းလဲစေနိုင်ပါသည်။</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="flex-1 min-w-0">
+            <div id="content-container" class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-10 py-6 lg:py-10 space-y-8">
+                <!-- Dynamic Content Rendered Here -->
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // ==========================================
+        // 1. GLOBAL STATE & THREE.JS ENGINE MANAGER
+        // ==========================================
+        let currentArticleId = 'formulas';
+        let activeScenes = [];
+
+        function clearActiveScenes() {
+            activeScenes.forEach(item => {
+                if (item.animId) cancelAnimationFrame(item.animId);
+                if (item.renderer) item.renderer.dispose();
+            });
+            activeScenes = [];
+        }
+
+        function init3DViewer(containerId, buildSceneCallback) {
+            const container = document.getElementById(containerId);
+            if (!container || typeof THREE === 'undefined') return null;
+            container.querySelectorAll('canvas,.v3d-ui').forEach(n => n.remove());
+            activeScenes = activeScenes.filter(r => {
+                if (r.cid === containerId) {
+                    cancelAnimationFrame(r.animId);
+                    r.renderer.dispose();
+                    return false;
+                }
+                return true;
+            });
+
+            const width = container.clientWidth || 600;
+            const height = container.clientHeight || 360;
+
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
+            camera.position.set(0, 1.6, 7.6);
+
+            const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            renderer.setSize(width, height);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            container.appendChild(renderer.domElement);
+
+            const ui = document.createElement('div');
+            ui.className = 'v3d-ui';
+            ui.innerHTML = `
+                <button type="button" class="v3d-btn">🏷️ ရှင်းလင်းချက်: ON</button>
+                <div class="v3d-zoom"><button type="button" data-z="in">+</button><button type="button" data-z="out">−</button><button type="button" data-z="reset">⟲</button></div>
+                <div class="v3d-labels"></div>
+                <div class="v3d-hint">👆 ဆွဲ၍လှည့်ပါ · + − ဖြင့် ချုံ့ချဲ့ပါ</div>
+                <div class="v3d-info"></div>`;
+            container.appendChild(ui);
+
+            const labelBox = ui.querySelector('.v3d-labels');
+            const labels = [];
+            const api = {
+                label(text, pos, color = '#a5b4fc', obj) {
+                    const el = document.createElement('div');
+                    el.className = 'v3d-label';
+                    el.style.borderColor = color;
+                    el.innerHTML = text;
+                    labelBox.appendChild(el);
+                    labels.push({ el, obj, pos: pos.clone ? pos.clone() : new THREE.Vector3(...pos) });
+                },
+                info(html) { ui.querySelector('.v3d-info').innerHTML = html; }
+            };
+
+            const btn = ui.querySelector('.v3d-btn');
+            btn.addEventListener('click', () => {
+                const on = labelBox.style.display === 'none';
+                labelBox.style.display = on ? '' : 'none';
+                btn.textContent = '🏷️ ရှင်းလင်းချက်: ' + (on ? 'ON' : 'OFF');
+            });
+
+            scene.add(new THREE.AmbientLight(0xffffff, 0.72));
+            const dirLight1 = new THREE.DirectionalLight(0xffffff, 0.9);
+            dirLight1.position.set(6, 9, 7);
+            scene.add(dirLight1);
+            const dirLight2 = new THREE.DirectionalLight(0xa5b4fc, 0.55);
+            dirLight2.position.set(-6, -4, -5);
+            scene.add(dirLight2);
+
+            const rootGroup = new THREE.Group();
+            scene.add(rootGroup);
+
+            const customUpdate = buildSceneCallback(rootGroup, camera, scene, api);
+            camera.lookAt(0, 0, 0);
+            const camPos0 = camera.position.clone();
+            let zoom = 1;
+            const setZoom = z => { zoom = Math.max(0.55, Math.min(2.3, z)); };
+
+            ui.querySelector('.v3d-zoom').addEventListener('click', e => {
+                const k = e.target.dataset.z;
+                if (k === 'in') setZoom(zoom * 1.25);
+                else if (k === 'out') setZoom(zoom / 1.25);
+                else if (k === 'reset') { zoom = 1; rootGroup.rotation.set(0, 0, 0); autoRotate = true; }
+            });
+
+            let isDragging = false, prevX = 0, prevY = 0, autoRotate = true;
+            const onDown = (x, y) => { isDragging = true; autoRotate = false; prevX = x; prevY = y; ui.querySelector('.v3d-hint').style.opacity = 0; };
+            const onMove = (x, y) => {
+                if (!isDragging) return;
+                rootGroup.rotation.y += (x - prevX) * 0.01;
+                rootGroup.rotation.x = Math.max(-1.2, Math.min(1.2, rootGroup.rotation.x + (y - prevY) * 0.01));
+                prevX = x; prevY = y;
+            };
+            const onUp = () => { isDragging = false; };
+
+            const domElem = renderer.domElement;
+            domElem.addEventListener('mousedown', e => onDown(e.clientX, e.clientY));
+            domElem.addEventListener('wheel', e => { e.preventDefault(); setZoom(zoom * (e.deltaY < 0 ? 1.1 : 1 / 1.1)); }, { passive: false });
+            window.addEventListener('mousemove', e => onMove(e.clientX, e.clientY));
+            window.addEventListener('mouseup', onUp);
+            domElem.addEventListener('touchstart', e => { if (e.touches.length === 1) onDown(e.touches[0].clientX, e.touches[0].clientY); }, { passive: true });
+            domElem.addEventListener('touchmove', e => { if (e.touches.length === 1) onMove(e.touches[0].clientX, e.touches[0].clientY); }, { passive: true });
+            domElem.addEventListener('touchend', onUp);
+
+            window.addEventListener('resize', () => {
+                if (!container.isConnected || !container.clientWidth) return;
+                camera.aspect = container.clientWidth / container.clientHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(container.clientWidth, container.clientHeight);
+            });
+
+            const sceneRecord = { renderer, animId: null, cid: containerId };
+            activeScenes.push(sceneRecord);
+
+            const clock = new THREE.Clock();
+            const v = new THREE.Vector3();
+            function animate() {
+                sceneRecord.animId = requestAnimationFrame(animate);
+                const elapsed = clock.getElapsedTime();
+                if (autoRotate) rootGroup.rotation.y += 0.0035;
+                if (typeof customUpdate === 'function') customUpdate(elapsed, rootGroup);
+                camera.position.copy(camPos0).multiplyScalar(1 / zoom);
+                renderer.render(scene, camera);
+
+                const W = container.clientWidth, H = container.clientHeight;
+                scene.updateMatrixWorld();
+                labels.forEach(l => {
+                    v.copy(l.pos);
+                    (l.obj || rootGroup).localToWorld(v).project(camera);
+                    l.el.style.opacity = l.obj && !l.obj.visible ? 0 : 1;
+                    const hw = l.el.offsetWidth / 2 + 4;
+                    const x = Math.max(hw, Math.min(W - hw, (v.x * 0.5 + 0.5) * W));
+                    const y = Math.max(14, Math.min(H - 96, (-v.y * 0.5 + 0.5) * H));
+                    l.el.style.transform = `translate(-50%,-50%) translate(${x}px,${y}px)`;
+                });
+            }
+            animate();
+        }
+
+        function createAtom(radius, colorHex, x = 0, y = 0, z = 0) {
+            const geo = new THREE.SphereGeometry(radius, 28, 28);
+            const mat = new THREE.MeshStandardMaterial({ color: colorHex, roughness: 0.28, metalness: 0.15 });
+            const mesh = new THREE.Mesh(geo, mat);
+            mesh.position.set(x, y, z);
+            return mesh;
+        }
+
+        // ==========================================
+        // 2. SPECIFIC 3D VISUALIZATIONS FOR CHAPTER 4
+        // ==========================================
+
+        // 3D Viewer 4.1: Dynamic Equilibrium in Closed System (N2O4 <=> 2NO2) vs Open System
+        function render3D_4_1(mode) {
+            init3DViewer('viewer-4-1', (group, camera, scene, ui) => {
+                camera.position.set(0, 1.2, 7.6);
+
+                // Closed glass box
+                const boxGeo = new THREE.BoxGeometry(4.4, 2.8, 2.6);
+                const edges = new THREE.LineSegments(
+                    new THREE.EdgesGeometry(boxGeo),
+                    new THREE.LineBasicMaterial({ color: mode === 'dynamic' ? 0x818cf8 : 0xf43f5e })
+                );
+                group.add(edges);
+
+                if (mode === 'dynamic') {
+                    // Sealed Lid
+                    const lid = new THREE.Mesh(
+                        new THREE.BoxGeometry(4.5, 0.16, 2.7),
+                        new THREE.MeshStandardMaterial({ color: 0x6366f1, metalness: 0.4, roughness: 0.3 })
+                    );
+                    lid.position.y = 1.45;
+                    group.add(lid);
+
+                    // Top pair: N2O4 -> 2 NO2 (Forward)
+                    const fLeft = createAtom(0.28, 0xd97706, -1.2, 0.65, 0);
+                    const fRight = createAtom(0.28, 0xd97706, -0.7, 0.65, 0);
+                    // Bottom pair: 2 NO2 -> N2O4 (Reverse)
+                    const rLeft = createAtom(0.28, 0x38bdf8, -1.5, -0.65, 0);
+                    const rRight = createAtom(0.28, 0x38bdf8, 1.5, -0.65, 0);
+                    group.add(fLeft, fRight, rLeft, rRight);
+
+                    ui.label('Sealed Closed System', [0, 1.75, 0], '#a5b4fc');
+                    ui.label('Forward: N₂O₄ → 2NO₂', [0, 1.05, 0], '#fbbf24');
+                    ui.label('Reverse: 2NO₂ → N₂O₄', [0, -1.05, 0], '#7dd3fc');
+                    ui.info('<b>Dynamic Equilibrium (Rate_f = Rate_r)</b> — အပေါ်ဘက်တွင် N₂O₄ ၁ မော်လီကျူး ပြိုကွဲနေချိန် အောက်ဘက်တွင် NO₂ ၂ မော်လီကျူး ပြန်ပေါင်းစပ်နေသဖြင့် စုစုပေါင်းအရောင်နှင့် ပြင်းအား မပြောင်းလဲဘဲ တည်ငြိမ်နေသည်။');
+
+                    return (t) => {
+                        const p = (Math.sin(t * 2.2) + 1) / 2; // 0 to 1
+                        // Forward splits apart
+                        fLeft.position.x = -0.26 - p * 1.25;
+                        fRight.position.x = 0.26 + p * 1.25;
+                        // Reverse combines together at same rate
+                        rLeft.position.x = -1.51 + p * 1.25;
+                        rRight.position.x = 1.51 - p * 1.25;
+                    };
+                } else {
+                    // Open System: CaCO3(s) -> CaO(s) + CO2(g) escaping upward
+                    const solidBed = new THREE.Mesh(
+                        new THREE.BoxGeometry(4.2, 0.45, 2.4),
+                        new THREE.MeshStandardMaterial({ color: 0xe2e8f0, roughness: 0.6 })
+                    );
+                    solidBed.position.y = -1.15;
+                    group.add(solidBed);
+
+                    const gases = [];
+                    for (let i = 0; i < 10; i++) {
+                        const g = createAtom(0.18, 0xf43f5e, (Math.random() - 0.5) * 3.4, -0.7 + i * 0.35, (Math.random() - 0.5) * 1.6);
+                        group.add(g);
+                        gases.push(g);
+                    }
+
+                    ui.label('Open Top (အဖုံးပွင့်)', [0, 1.65, 0], '#fca5a5');
+                    ui.label('CO₂(g) Escaping!', [1.5, 0.9, 0], '#fda4af');
+                    ui.label('CaCO₃(s) & CaO(s)', [0, -1.15, 0], '#e2e8f0');
+                    ui.info('<b>Open System (အဖုံးပွင့်စနစ်)</b> — CO₂ ဓာတ်ငွေ့များ အပြင်သို့ လွတ်ထွက်သွားသဖြင့် Reverse reaction မဖြစ်နိုင်တော့ဘဲ <strong>Equilibrium လုံးဝ မရောက်နိုင်ပါ</strong>။');
+
+                    return (t) => {
+                        gases.forEach((g, idx) => {
+                            g.position.y = -0.7 + ((t * 1.1 + idx * 0.38) % 3.4);
+                        });
+                    };
+                }
+            });
+        }
+
+        // 3D Viewer 4.2: Le Chatelier's Principle (Pressure Compression on N2 + 3H2 <=> 2NH3)
+        function render3D_4_2(mode) {
+            init3DViewer('viewer-4-2', (group, camera, scene, ui) => {
+                camera.position.set(0, 1.0, 7.6);
+
+                const isHighP = (mode === 'high-p');
+                const boxH = isHighP ? 1.8 : 3.2;
+
+                const cylGeo = new THREE.BoxGeometry(4.2, boxH, 2.4);
+                const edges = new THREE.LineSegments(
+                    new THREE.EdgesGeometry(cylGeo),
+                    new THREE.LineBasicMaterial({ color: isHighP ? 0xf59e0b : 0x38bdf8 })
+                );
+                edges.position.y = isHighP ? -0.7 : 0;
+                group.add(edges);
+
+                // Piston plate on top
+                const piston = new THREE.Mesh(
+                    new THREE.BoxGeometry(4.3, 0.22, 2.5),
+                    new THREE.MeshStandardMaterial({ color: isHighP ? 0xf59e0b : 0x64748b, metalness: 0.5 })
+                );
+                piston.position.y = isHighP ? 0.25 : 1.65;
+                group.add(piston);
+
+                const particles = [];
+                if (isHighP) {
+                    // High Pressure -> Shifts to FEWER gas moles (more NH3 molecules: 4 NH3 + 1 N2)
+                    for (let i = 0; i < 5; i++) {
+                        const nh3 = new THREE.Group();
+                        nh3.add(createAtom(0.28, 0x3b82f6, 0, 0, 0));
+                        nh3.add(createAtom(0.15, 0xf8fafc, 0.26, -0.15, 0));
+                        nh3.add(createAtom(0.15, 0xf8fafc, -0.26, -0.15, 0));
+                        nh3.add(createAtom(0.15, 0xf8fafc, 0, -0.15, 0.26));
+                        nh3.position.set(-1.5 + i * 0.75, -0.75 + (i % 2) * 0.35, (i % 3 - 1) * 0.5);
+                        group.add(nh3);
+                        particles.push(nh3);
+                    }
+                    ui.label('High Pressure (ထုထည်ငယ်)', [0, 0.65, 0], '#fcd34d');
+                    ui.label('Shifts Right → More NH₃ (2 mol gas)', [0, -1.8, 0], '#86efac');
+                    ui.info('<b>ဖိအားတိုးခြင်း (High Pressure)</b> — ဘယ်ဘက်တွင် ဓာတ်ငွေ့ 4 mol (N₂ + 3H₂) ရှိပြီး ညာဘက်တွင် 2 mol (2NH₃) သာရှိသဖြင့် ဖိအားလျော့စေရန် <strong>ဓာတ်ငွေ့မိုးလ်နည်းရာ ညာဘက် (NH₃ ဘက်)</strong> သို့ ရွေ့သည်။');
+                } else {
+                    // Low Pressure -> More separate N2 and H2 molecules (4 moles gas side)
+                    for (let i = 0; i < 8; i++) {
+                        const isN2 = i < 2;
+                        const p = createAtom(isN2 ? 0.28 : 0.18, isN2 ? 0x3b82f6 : 0xf8fafc, -1.6 + (i % 4) * 1.05, -0.8 + Math.floor(i / 4) * 1.4, (i % 3 - 1) * 0.5);
+                        group.add(p);
+                        particles.push(p);
+                    }
+                    ui.label('Low Pressure (ထုထည်ကျယ်)', [0, 2.0, 0], '#7dd3fc');
+                    ui.label('More Reactant Gas Moles (4 mol)', [0, -1.85, 0], '#fca5a5');
+                    ui.info('<b>ဖိအားလျှော့ခြင်း (Low Pressure)</b> — ထုထည်ကျယ်လာသောအခါ ဖိအားပြန်တက်စေရန် <strong>ဓာတ်ငွေ့မိုးလ်များရာ ဘယ်ဘက် (N₂ + 3H₂ ဘက်)</strong> သို့ ရွေ့သည်။');
+                }
+
+                return (t) => {
+                    particles.forEach((p, idx) => {
+                        p.position.y += Math.sin(t * 3 + idx) * 0.006;
+                    });
+                };
+            });
+        }
+
+        // ==========================================
+        // 3. INTERACTIVE CALCULATORS (Kc & Kp)
+        // ==========================================
+        function runKcCalc() {
+            const a = parseFloat(document.getElementById('kc-a')?.value) || 1;
+            const cA = parseFloat(document.getElementById('kc-ca')?.value) || 0;
+            const b = parseFloat(document.getElementById('kc-b')?.value) || 1;
+            const cB = parseFloat(document.getElementById('kc-cb')?.value) || 0;
+            const c = parseFloat(document.getElementById('kc-c')?.value) || 1;
+            const cC = parseFloat(document.getElementById('kc-cc')?.value) || 0;
+            const d = parseFloat(document.getElementById('kc-d')?.value) || 0;
+            const cD = parseFloat(document.getElementById('kc-cd')?.value) || 1;
+
+            const num = Math.pow(cC, c) * (d > 0 ? Math.pow(cD, d) : 1);
+            const den = Math.pow(cA, a) * (b > 0 ? Math.pow(cB, b) : 1);
+            const kc = den > 0 ? num / den : 0;
+            const dn = (c + d) - (a + b);
+            const unitStr = dn === 0 ? 'No units (ယူနစ်မရှိ)' : (dn === 1 ? 'mol dm⁻³' : `mol^${dn} dm^${-3 * dn}`);
+            const favStr = kc > 1 ? 'Kc > 1 → Products ဖြစ်ပေါ်မှု အားသာသည်' : (kc < 1 ? 'Kc < 1 → Reactants ဘက် အားသာသည်' : 'Kc = 1');
+
+            const out = document.getElementById('kc-output');
+            if (out) {
+                out.innerHTML = `
+                    <div class="grid sm:grid-cols-3 gap-3 text-center">
+                        <div class="p-3 rounded-xl bg-white/10 border border-white/15">
+                            <div class="text-xs text-slate-300">Calculated Kc</div>
+                            <div class="text-lg font-bold text-amber-300">${kc.toFixed(3)}</div>
+                        </div>
+                        <div class="p-3 rounded-xl bg-white/10 border border-white/15">
+                            <div class="text-xs text-slate-300">Units of Kc (Δn = ${dn})</div>
+                            <div class="text-base font-bold text-sky-300">${unitStr}</div>
+                        </div>
+                        <div class="p-3 rounded-xl bg-white/10 border border-white/15">
+                            <div class="text-xs text-slate-300">Position of Equilibrium</div>
+                            <div class="text-xs sm:text-sm font-bold text-emerald-300 mt-1">${favStr}</div>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        function runKpCalc() {
+            const pN2 = parseFloat(document.getElementById('kp-n2')?.value) || 0;
+            const pH2 = parseFloat(document.getElementById('kp-h2')?.value) || 0;
+            const pNH3 = parseFloat(document.getElementById('kp-nh3')?.value) || 0;
+
+            // N2(g) + 3H2(g) <=> 2NH3(g)
+            const denom = pN2 * Math.pow(pH2, 3);
+            const kp = denom > 0 ? Math.pow(pNH3, 2) / denom : 0;
+
+            const out = document.getElementById('kp-output');
+            if (out) {
+                out.innerHTML = `
+                    <div class="grid sm:grid-cols-2 gap-3 text-center">
+                        <div class="p-3 rounded-xl bg-white/10 border border-white/15">
+                            <div class="text-xs text-slate-300">Kp = (P_NH₃)² / [P_N₂ × (P_H₂)³]</div>
+                            <div class="text-lg font-bold text-amber-300">${kp.toExponential(3)} atm⁻²</div>
+                        </div>
+                        <div class="p-3 rounded-xl bg-white/10 border border-white/15">
+                            <div class="text-xs text-slate-300">Total Pressure (P_total)</div>
+                            <div class="text-lg font-bold text-sky-300">${(pN2 + pH2 + pNH3).toFixed(2)} atm</div>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        // ==========================================
+        // 4. ARTICLE TEMPLATES (FORMULAS + 4.1 - 4.3 + WORKED)
+        // ==========================================
+        const ARTICLES = {
+            'formulas': {
+                badge: 'Chapter 4 Master Formula Sheet',
+                title: 'ဖတ်စာအုပ်ပါ Chemical Equilibrium ပုံသေနည်းအားလုံး စုစည်းချက်',
+                subtitle: 'Grade 12 Chemistry Chapter 4 မှ Kc, Kp, Partial Pressure နှင့် Equilibrium Rules များ',
+                html: `
+                    <!-- All Textbook Formulas Card -->
+                    <div class="formula-card rounded-3xl p-6 sm:p-8 text-white shadow-xl space-y-6">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-white/15 pb-4">
+                            <div>
+                                <span class="text-xs font-bold uppercase tracking-wider text-indigo-300">Grade 12 Textbook (Chapter 4)</span>
+                                <h3 class="text-xl sm:text-2xl font-bold text-white mt-0.5">Chemical Equilibrium ပုံသေနည်း (၈) မျိုး စုစည်းချက်</h3>
+                            </div>
+                            <span class="text-xs px-3 py-1 rounded-full bg-indigo-500/25 text-indigo-200 border border-indigo-400/30 self-start">Exam Must-Know</span>
+                        </div>
+
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <!-- Formula 1 -->
+                            <div class="p-4 rounded-2xl bg-white/5 border border-white/10 space-y-2">
+                                <div class="text-xs font-bold text-amber-300 uppercase">၁။ Dynamic Equilibrium အခြေအနေ</div>
+                                <div class="mx math-box p-3 rounded-xl text-xs sm:text-sm font-bold text-amber-200 text-center">
+                                    Rate<sub>forward</sub> = Rate<sub>reverse</sub>
+                                </div>
+                                <p class="myanmar-text text-xs text-slate-300">
+                                    ပိတ်ထားသော စနစ် (Closed system) နှင့် ကိန်းသေအပူချိန်တွင် အရှေ့သွားနှုန်းနှင့် အနောက်ပြန်နှုန်း တူညီသောအခြေအနေဖြစ်သည်။
+                                </p>
+                            </div>
+
+                            <!-- Formula 2 -->
+                            <div class="p-4 rounded-2xl bg-white/5 border border-white/10 space-y-2">
+                                <div class="text-xs font-bold text-sky-300 uppercase">၂။ Equilibrium Constant (K<sub>c</sub>) — ပြင်းအားဖြင့်</div>
+                                <div class="mx math-box p-3 rounded-xl text-xs sm:text-sm font-bold text-sky-200 text-center">
+                                    <i>K</i><sub>c</sub> = <span class="fr"><span>[C]<sup><i>c</i></sup> [D]<sup><i>d</i></sup></span><span>[A]<sup><i>a</i></sup> [B]<sup><i>b</i></sup></span></span>
+                                </div>
+                                <p class="myanmar-text text-xs text-slate-300">
+                                    ညီမျှခြင်း <code>aA + bB ⇌ cC + dD</code> အတွက် Product ပြင်းအားများမြှောက်လဒ်ကို Reactant ပြင်းအားများမြှောက်လဒ်ဖြင့် စားရသည်။ <code>[ ]</code> = mol dm⁻³။
+                                </p>
+                            </div>
+
+                            <!-- Formula 3 -->
+                            <div class="p-4 rounded-2xl bg-white/5 border border-white/10 space-y-2">
+                                <div class="text-xs font-bold text-emerald-300 uppercase">၃။ Equilibrium Constant (K<sub>p</sub>) — ဓာတ်ငွေ့တစ်ပိုင်းဖိအားဖြင့်</div>
+                                <div class="mx math-box p-3 rounded-xl text-xs sm:text-sm font-bold text-emerald-200 text-center">
+                                    <i>K</i><sub>p</sub> = <span class="fr"><span>(<i>P</i><sub>C</sub>)<sup><i>c</i></sup> (<i>P</i><sub>D</sub>)<sup><i>d</i></sup></span><span>(<i>P</i><sub>A</sub>)<sup><i>a</i></sup> (<i>P</i><sub>B</sub>)<sup><i>b</i></sup></span></span>
+                                </div>
+                                <p class="myanmar-text text-xs text-slate-300">
+                                    ဓာတ်ငွေ့များပါဝင်သော မျှခြေများအတွက် သုံးသည်။ <code>P</code> သည် ဓာတ်ငွေ့တစ်မျိုးချင်းစီ၏ Partial pressure (atm သို့မဟုတ် Pa/kPa) ဖြစ်သည်။
+                                </p>
+                            </div>
+
+                            <!-- Formula 4 -->
+                            <div class="p-4 rounded-2xl bg-white/5 border border-white/10 space-y-2">
+                                <div class="text-xs font-bold text-purple-300 uppercase">၄။ Partial Pressure နှင့် Mole Fraction ရှာနည်း</div>
+                                <div class="mx math-box p-3 rounded-xl text-xs sm:text-sm font-bold text-purple-200 text-center">
+                                    <i>P</i><sub>A</sub> = <i>X</i><sub>A</sub> × <i>P</i><sub>total</sub> = <span class="fr"><span><i>n</i><sub>A</sub></span><span><i>n</i><sub>total</sub></span></span> × <i>P</i><sub>total</sub>
+                                </div>
+                                <p class="myanmar-text text-xs text-slate-300">
+                                    စုစုပေါင်းဖိအား (P_total) နှင့် မိုးလ်အရေအတွက်များ ပေးထားလျှင် ဓာတ်ငွေ့တစ်မျိုးချင်းစီ၏ Partial pressure ကို ဤပုံသေနည်းဖြင့် အရင်ရှာရသည်။
+                                </p>
+                            </div>
+
+                            <!-- Formula 5 -->
+                            <div class="p-4 rounded-2xl bg-white/5 border border-white/10 space-y-2">
+                                <div class="text-xs font-bold text-rose-300 uppercase">၅။ Heterogeneous Equilibria စည်းမျဉ်း (အထူးသတိပြုရန်!)</div>
+                                <div class="mx math-box p-3 rounded-xl text-xs sm:text-sm font-bold text-rose-200 text-center">
+                                    CaCO<sub>3</sub>(s) ⇌ CaO(s) + CO<sub>2</sub>(g) &nbsp;⇒&nbsp; <i>K</i><sub>c</sub> = [CO<sub>2</sub>] , <i>K</i><sub>p</sub> = <i>P</i><sub>CO<sub>2</sub></sub>
+                                </div>
+                                <p class="myanmar-text text-xs text-slate-300">
+                                    အခဲစစ်စစ် <strong>(s)</strong> နှင့် အရည်စစ်စစ် <strong>(l)</strong> များ၏ ပြင်းအားမှာ ကိန်းသေဖြစ်၍ Kc နှင့် Kp ပုံသေနည်းထဲတွင် <strong>လုံးဝ မထည့်သွင်းရပါ</strong>။ <strong>(g)</strong> နှင့် <strong>(aq)</strong> ကိုသာ ထည့်ရသည်။
+                                </p>
+                            </div>
+
+                            <!-- Formula 6 -->
+                            <div class="p-4 rounded-2xl bg-white/5 border border-white/10 space-y-2">
+                                <div class="text-xs font-bold text-teal-300 uppercase">၆။ Kc နှင့် Kp ယူနစ် (Units) ရှာနည်း</div>
+                                <div class="mx math-box p-3 rounded-xl text-xs sm:text-sm font-bold text-teal-200 text-center">
+                                    Unit of <i>K</i><sub>c</sub> = (mol dm<sup>−3</sup>)<sup>Δ<i>n</i></sup> &nbsp;|&nbsp; Unit of <i>K</i><sub>p</sub> = (atm)<sup>Δ<i>n</i></sup>
+                                </div>
+                                <p class="myanmar-text text-xs text-slate-300">
+                                    <code>Δn = (Products မိုးလ်ပေါင်း) - (Reactants မိုးလ်ပေါင်း)</code> ဖြစ်သည်။ <strong>Δn = 0</strong> ဖြစ်လျှင် Kc နှင့် Kp တွင် <strong>ယူနစ်မရှိပါ (No units)</strong>။
+                                </p>
+                            </div>
+
+                            <!-- Formula 7 & 8 -->
+                            <div class="p-4 rounded-2xl bg-white/5 border border-white/10 space-y-2 md:col-span-2">
+                                <div class="text-xs font-bold text-yellow-300 uppercase">၇။ ညီမျှခြင်း ပြောင်းပြန်လှန်ခြင်း / မြှောက်ခြင်း နှင့် K တန်ဖိုး အဓိပ္ပာယ်</div>
+                                <div class="grid sm:grid-cols-2 gap-3 text-xs">
+                                    <div class="math-box p-3 rounded-xl text-yellow-200">
+                                        • ပြောင်းပြန်လှန်လျှင်: <span class="mx"><i>K</i><sub>reverse</sub> = <span class="fr"><span>1</span><span><i>K</i><sub>forward</sub></span></span></span><br>
+                                        • ဂဏန်း <i>n</i> ဖြင့်မြှောက်လျှင်: <span class="mx"><i>K</i><sub>new</sub> = (<i>K</i><sub>old</sub>)<sup><i>n</i></sup></span>
+                                    </div>
+                                    <div class="math-box p-3 rounded-xl text-yellow-200">
+                                        • <strong>K &gt; 1 (ကြီးလျှင်):</strong> Products များသည် (Forward အားသာ)<br>
+                                        • <strong>K &lt; 1 (သေးလျှင်):</strong> Reactants များသည် (Reverse အားသာ)
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Mind Map Navigation -->
+                    <div class="bg-white rounded-3xl border border-slate-200 p-5 sm:p-7 shadow-sm space-y-4">
+                        <h3 class="text-lg font-bold text-slate-900">🧠 Chapter 4 အပိုင်းတစ်ခုချင်းစီသို့ အမြန်သွားရန်</h3>
+                        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
+                            <button onclick="selectArticle('4.1')" class="p-4 rounded-2xl bg-indigo-50 border border-indigo-200 text-left hover:bg-indigo-100 transition">
+                                <div class="font-bold text-indigo-950 text-sm">4.1 Dynamic Equilibrium →</div>
+                                <p class="text-indigo-800 mt-1">3D ပိတ်/ပွင့် စနစ်၊ ဝိသေသလက္ခဏာ ၄ ချက်နှင့် ဂရပ်ဖ်များ</p>
+                            </button>
+                            <button onclick="selectArticle('4.2')" class="p-4 rounded-2xl bg-purple-50 border border-purple-200 text-left hover:bg-purple-100 transition">
+                                <div class="font-bold text-purple-950 text-sm">4.2 Le Chatelier's Principle →</div>
+                                <p class="text-purple-800 mt-1">အချက် (၄) ချက် သက်ရောက်မှုနှင့် Haber / Contact Process</p>
+                            </button>
+                            <button onclick="selectArticle('4.3')" class="p-4 rounded-2xl bg-sky-50 border border-sky-200 text-left hover:bg-sky-100 transition">
+                                <div class="font-bold text-sky-950 text-sm">4.3 Kc & Kp Constants →</div>
+                                <p class="text-sky-800 mt-1">Homogeneous/Heterogeneous & Interactive Calculator</p>
+                            </button>
+                            <button onclick="selectArticle('worked')" class="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-left hover:bg-emerald-100 transition">
+                                <div class="font-bold text-emerald-950 text-sm">ICE Table & Exercises →</div>
+                                <p class="text-emerald-800 mt-1">စာမေးပွဲပုံစံ တွက်စာအဆင့်ဆင့် ရှင်းလင်းချက်</p>
+                            </button>
+                        </div>
+                    </div>
+                `
+            },
+
+            '4.1': {
+                badge: 'Article 4.1',
+                title: 'State of Dynamic Equilibrium',
+                subtitle: 'ပြန်လှန်ဓာတ်ပြုမှုများ (Reversible Reactions)၊ ဒိုင်းနမစ် မျှခြေနှင့် ဂရပ်ဖ်များ',
+                html: `
+                    <!-- 3D Dynamic Equilibrium Simulator -->
+                    <div class="bg-white rounded-3xl border border-slate-200 p-5 sm:p-7 shadow-sm space-y-4">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                            <div>
+                                <span class="text-xs font-bold uppercase tracking-wider text-indigo-600">Interactive 3D Equilibrium Vessel</span>
+                                <h3 class="text-lg font-bold text-slate-900">Closed System (Dynamic Equilibrium) vs Open System 3D</h3>
+                            </div>
+                            <div class="flex flex-wrap gap-2">
+                                <button onclick="render3D_4_1('dynamic')" class="px-3.5 py-2 rounded-xl text-xs font-semibold bg-indigo-600 text-white hover:bg-indigo-700 transition">🔒 Closed System (N₂O₄ ⇌ 2NO₂)</button>
+                                <button onclick="render3D_4_1('open')" class="px-3.5 py-2 rounded-xl text-xs font-semibold bg-rose-600 text-white hover:bg-rose-700 transition">🔓 Open System (CaCO₃ → CO₂↑)</button>
+                            </div>
+                        </div>
+                        <div id="viewer-4-1" class="canvas-container"></div>
+                    </div>
+
+                    <!-- Explanation & 4 Characteristics -->
+                    <div class="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 shadow-sm space-y-5">
+                        <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2.5">
+                            <span class="w-8 h-8 rounded-xl bg-indigo-100 text-indigo-700 flex items-center justify-center text-sm font-bold">4.1</span>
+                            Dynamic Equilibrium ဆိုတာဘာလဲ? ဝိသေသလက္ခဏာ (၄) ချက်
+                        </h3>
+                        <p class="myanmar-text text-slate-700 text-sm sm:text-base">
+                            ဓာတုဓာတ်ပြုမှုအချို့သည် တစ်ဖက်သတ် (Irreversible: $\rightarrow$) ဖြစ်သော်လည်း အချို့ဓာတ်ပြုမှုများမှာ Reactants မှ Products ဖြစ်သကဲ့သို့ Products မှ Reactants သို့လည်း ပြန်ပြောင်းနိုင်သော <strong>ပြန်လှန်ဓာတ်ပြုမှု (Reversible reactions: $\rightleftharpoons$)</strong> များဖြစ်ကြသည်။ အရှေ့သွားနှုန်း ($\text{Rate}_f$) နှင့် အနောက်ပြန်နှုန်း ($\text{Rate}_r$) တူညီသွားသောအခါ <strong>Dynamic Equilibrium (ဒိုင်းနမစ် မျှခြေ)</strong> သို့ ရောက်ရှိသည်။
+                        </p>
+
+                        <div class="grid sm:grid-cols-2 gap-4 text-xs sm:text-sm myanmar-text">
+                            <div class="p-4 rounded-2xl bg-indigo-50/70 border border-indigo-200">
+                                <div class="font-bold text-indigo-950 mb-1">၁။ နှုန်းချင်း တူညီခြင်း (Equal Rates)</div>
+                                <p class="text-slate-700">Forward reaction rate နှင့် Reverse reaction rate တို့ တိကျစွာ တူညီနေသည် (ဓာတ်ပြုမှု ရပ်တန့်သွားခြင်း မဟုတ်ဘဲ နှစ်ဖက်လုံး တူညီသောနှုန်းဖြင့် ဆက်ဖြစ်နေသည်)။</p>
+                            </div>
+                            <div class="p-4 rounded-2xl bg-sky-50/70 border border-sky-200">
+                                <div class="font-bold text-sky-950 mb-1">၂။ ပြင်းအားနှင့် ဂုဏ်သတ္တိများ ကိန်းသေဖြစ်နေခြင်း</div>
+                                <p class="text-slate-700">Reactants နှင့် Products တို့၏ ပြင်းအား (Concentration)၊ အရောင်၊ ဖိအားတို့ မပြောင်းလဲဘဲ <strong>ကိန်းသေ (Constant)</strong> ဖြစ်နေသည် (ပြင်းအားချင်း <strong>တူညီရန် မလိုပါ — Constant ≠ Equal</strong>)။</p>
+                            </div>
+                            <div class="p-4 rounded-2xl bg-purple-50/70 border border-purple-200">
+                                <div class="font-bold text-purple-950 mb-1">၃။ ပိတ်ထားသော စနစ် (Closed System) ဖြစ်ရမည်</div>
+                                <p class="text-slate-700">ပတ်ဝန်းကျင်သို့ မည်သည့်ဒြပ်ပစ္စည်းမှ ဝင်ထွက်လွတ်ထွက်ခြင်း မရှိသော ပိတ်ထားသည့် စနစ်အတွင်း၌သာ Dynamic equilibrium ဖြစ်နိုင်သည်။</p>
+                            </div>
+                            <div class="p-4 rounded-2xl bg-emerald-50/70 border border-emerald-200">
+                                <div class="font-bold text-emerald-950 mb-1">၄။ မည်သည့်ဘက်မှမဆို စတင်နိုင်ခြင်း</div>
+                                <p class="text-slate-700">အပူချိန်တူညီပါက Reactants သက်သက်မှ စတင်သည်ဖြစ်စေ၊ Products သက်သက်မှ စတင်သည်ဖြစ်စေ တူညီသော မျှခြေအခြေအနေသို့ ရောက်ရှိနိုင်သည်။</p>
+                            </div>
+                        </div>
+
+                        <!-- SVG Graphs: Rate-Time & Concentration-Time -->
+                        <div class="bg-slate-50 rounded-2xl p-4 border border-slate-200">
+                            <div class="text-xs font-bold text-slate-600 uppercase tracking-wider mb-2">ပုံပြကားချပ် — Dynamic Equilibrium ဂရပ်ဖ် (၂) မျိုး (စာမေးပွဲမေးလေ့ရှိသော ပုံများ)</div>
+                            <svg viewBox="0 0 700 220" class="w-full h-auto">
+                                <!-- Left: Rate vs Time -->
+                                <rect x="10" y="10" width="330" height="200" rx="14" fill="#ffffff" stroke="#c7d2fe" stroke-width="2"/>
+                                <text x="175" y="34" text-anchor="middle" font-size="12.5" font-weight="bold" fill="#3730a3">(A) Rate vs Time Graph (နှုန်းချင်းတူညီ)</text>
+                                <line x1="48" y1="48" x2="48" y2="178" stroke="#475569" stroke-width="2"/>
+                                <line x1="48" y1="178" x2="320" y2="178" stroke="#475569" stroke-width="2"/>
+                                <text x="24" y="115" transform="rotate(-90 24,115)" text-anchor="middle" font-size="11" font-weight="bold" fill="#334155">Reaction Rate</text>
+                                <text x="185" y="198" text-anchor="middle" font-size="11" fill="#334155">Time →</text>
+
+                                <path d="M 48 62 Q 110 112, 185 114 L 310 114" fill="none" stroke="#e11d48" stroke-width="2.8"/>
+                                <text x="105" y="72" font-size="10.5" font-weight="bold" fill="#be123c">Forward Rate</text>
+
+                                <path d="M 48 176 Q 110 116, 185 114 L 310 114" fill="none" stroke="#0284c7" stroke-width="2.8"/>
+                                <text x="105" y="166" font-size="10.5" font-weight="bold" fill="#0369a1">Reverse Rate</text>
+
+                                <line x1="185" y1="48" x2="185" y2="178" stroke="#16a34a" stroke-width="1.8" stroke-dasharray="4,3"/>
+                                <text x="248" y="104" text-anchor="middle" font-size="10.5" font-weight="bold" fill="#15803d">Rate_f = Rate_r</text>
+                                <text x="185" y="190" text-anchor="middle" font-size="9.5" font-weight="bold" fill="#15803d">t_eq</text>
+
+                                <!-- Right: Concentration vs Time -->
+                                <rect x="360" y="10" width="330" height="200" rx="14" fill="#ffffff" stroke="#bae6fd" stroke-width="2"/>
+                                <text x="525" y="34" text-anchor="middle" font-size="12.5" font-weight="bold" fill="#0369a1">(B) Concentration vs Time (ကိန်းသေဖြစ်)</text>
+                                <line x1="398" y1="48" x2="398" y2="178" stroke="#475569" stroke-width="2"/>
+                                <line x1="398" y1="178" x2="670" y2="178" stroke="#475569" stroke-width="2"/>
+                                <text x="374" y="115" transform="rotate(-90 374,115)" text-anchor="middle" font-size="11" font-weight="bold" fill="#334155">Concentration</text>
+                                <text x="535" y="198" text-anchor="middle" font-size="11" fill="#334155">Time →</text>
+
+                                <path d="M 398 176 Q 460 88, 535 84 L 660 84" fill="none" stroke="#10b981" stroke-width="2.8"/>
+                                <text x="595" y="75" text-anchor="middle" font-size="10.5" font-weight="bold" fill="#047857">[Products] Constant</text>
+
+                                <path d="M 398 60 Q 460 135, 535 138 L 660 138" fill="none" stroke="#f59e0b" stroke-width="2.8"/>
+                                <text x="595" y="152" text-anchor="middle" font-size="10.5" font-weight="bold" fill="#b45309">[Reactants] Constant</text>
+
+                                <line x1="535" y1="48" x2="535" y2="178" stroke="#16a34a" stroke-width="1.8" stroke-dasharray="4,3"/>
+                                <text x="535" y="190" text-anchor="middle" font-size="9.5" font-weight="bold" fill="#15803d">t_eq</text>
+                            </svg>
+                        </div>
+                    </div>
+                `,
+                onMount: () => render3D_4_1('dynamic')
+            },
+
+            '4.2': {
+                badge: 'Article 4.2',
+                title: "Le Chatelier's Principle & Factors Affecting Equilibrium",
+                subtitle: 'ပြင်းအား၊ ဖိအား၊ အပူချိန်၊ ဓာတ်ကူပစ္စည်း သက်ရောက်မှုနှင့် စက်မှုလုပ်ငန်း အသုံးချမှုများ',
+                html: `
+                    <!-- 3D Le Chatelier Pressure Simulator -->
+                    <div class="bg-white rounded-3xl border border-slate-200 p-5 sm:p-7 shadow-sm space-y-4">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                            <div>
+                                <span class="text-xs font-bold uppercase tracking-wider text-purple-600">Interactive 3D Le Chatelier Simulation</span>
+                                <h3 class="text-lg font-bold text-slate-900">N₂(g) + 3H₂(g) ⇌ 2NH₃(g) အပေါ် ဖိအား (Pressure) သက်ရောက်မှု 3D</h3>
+                            </div>
+                            <div class="flex flex-wrap gap-2">
+                                <button onclick="render3D_4_2('high-p')" class="px-3.5 py-2 rounded-xl text-xs font-semibold bg-amber-600 text-white hover:bg-amber-700 transition">⬇️ High Pressure (NH₃ ဘက်ရွေ့)</button>
+                                <button onclick="render3D_4_2('low-p')" class="px-3.5 py-2 rounded-xl text-xs font-semibold bg-sky-600 text-white hover:bg-sky-700 transition">⬆️ Low Pressure (N₂ + 3H₂ ဘက်ရွေ့)</button>
+                            </div>
+                        </div>
+                        <div id="viewer-4-2" class="canvas-container"></div>
+                    </div>
+
+                    <!-- Le Chatelier's Principle & 4 Factors -->
+                    <div class="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 shadow-sm space-y-5">
+                        <div class="p-5 rounded-2xl bg-purple-50 border border-purple-200 space-y-2">
+                            <div class="font-bold text-purple-950 text-sm sm:text-base">📘 Le Chatelier's Principle (လာရှာတဲလီယာ နိယာမ)</div>
+                            <p class="myanmar-text text-slate-800 text-sm sm:text-base">
+                                "မျှခြေအခြေအနေ (Equilibrium) တွင်ရှိနေသော စနစ်တစ်ခု၏ <strong>ပြင်းအား (Concentration)၊ ဖိအား (Pressure) သို့မဟုတ် အပူချိန် (Temperature)</strong> တို့ကို ပြောင်းလဲလိုက်ပါက ထိုပြောင်းလဲမှုဒဏ်ကို <strong>လျော့နည်းဆန့်ကျင်စေမည့် ဘက်သို့ (Counteract the change)</strong> မျှခြေနေရာ ရွေ့လျားသွားသည်။"
+                            </p>
+                        </div>
+
+                        <!-- Summary Table of All 4 Factors -->
+                        <div class="overflow-x-auto rounded-2xl border border-slate-200">
+                            <table class="w-full text-left border-collapse text-xs sm:text-sm">
+                                <thead>
+                                    <tr class="bg-slate-900 text-white">
+                                        <th class="p-3.5">အချက် (Factor)</th>
+                                        <th class="p-3.5">ပြောင်းလဲမှု (Change)</th>
+                                        <th class="p-3.5">မျှခြေရွေ့လျားပုံ (Equilibrium Shift)</th>
+                                        <th class="p-3.5">K တန်ဖိုး ပြောင်းလား?</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-slate-200 bg-white myanmar-text">
+                                    <tr>
+                                        <td class="p-3.5 font-bold text-indigo-800">1. Concentration<br>(ပြင်းအား)</td>
+                                        <td class="p-3.5">Reactant ထပ်ထည့် (သို့) Product ဖယ်ထုတ်<br>Product ထပ်ထည့် (သို့) Reactant ဖယ်ထုတ်</td>
+                                        <td class="p-3.5"><strong>Forward (ညာဘက်)</strong> သို့ရွေ့<br><strong>Reverse (ဘယ်ဘက်)</strong> သို့ရွေ့</td>
+                                        <td class="p-3.5 font-bold text-rose-600">မပြောင်းလဲပါ (No)</td>
+                                    </tr>
+                                    <tr class="bg-slate-50/70">
+                                        <td class="p-3.5 font-bold text-amber-800">2. Pressure<br>(ဖိအား - ဓာတ်ငွေ့သာ)</td>
+                                        <td class="p-3.5">ဖိအားတိုး (ထုထည်လျှော့)<br>ဖိအားလျှော့ (ထုထည်တိုး)<br>နှစ်ဖက်စလုံး ဓာတ်ငွေ့မိုးလ်တူလျှင် (Δn = 0)</td>
+                                        <td class="p-3.5"><strong>ဓာတ်ငွေ့မိုးလ်နည်းရာဘက်</strong> သို့ရွေ့<br><strong>ဓာတ်ငွေ့မိုးလ်များရာဘက်</strong> သို့ရွေ့<br><strong>သက်ရောက်မှု မရှိပါ (No shift)</strong></td>
+                                        <td class="p-3.5 font-bold text-rose-600">မပြောင်းလဲပါ (No)</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="p-3.5 font-bold text-rose-800">3. Temperature<br>(အပူချိန်)</td>
+                                        <td class="p-3.5">အပူချိန်မြှင့် (Increase T)<br>အပူချိန်လျှော့ (Decrease T)</td>
+                                        <td class="p-3.5"><strong>Endothermic (ΔH = +)</strong> ဘက်သို့ရွေ့<br><strong>Exothermic (ΔH = -)</strong> ဘက်သို့ရွေ့</td>
+                                        <td class="p-3.5 font-bold text-emerald-700">ပြောင်းလဲသည်! (Yes)</td>
+                                    </tr>
+                                    <tr class="bg-slate-50/70">
+                                        <td class="p-3.5 font-bold text-teal-800">4. Catalyst<br>(ဓာတ်ကူပစ္စည်း)</td>
+                                        <td class="p-3.5">Catalyst ထည့်ပေးခြင်း</td>
+                                        <td class="p-3.5">မျှခြေနေရာ <strong>မရွေ့ပါ</strong> (နှစ်ဖက်လုံးကို နှုန်းတူမြန်စေပြီး မျှခြေမြန်မြန်ရောက်စေသည်)</td>
+                                        <td class="p-3.5 font-bold text-rose-600">မပြောင်းလဲပါ (No)</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Industrial Applications: Haber & Contact Process -->
+                        <div class="grid md:grid-cols-2 gap-4 text-xs sm:text-sm myanmar-text pt-2">
+                            <div class="p-5 rounded-2xl bg-indigo-50/80 border border-indigo-200 space-y-2">
+                                <div class="font-bold text-indigo-950 text-base">🏭 1. Haber Process (အမိုးနီးယား ထုတ်လုပ်ခြင်း)</div>
+                                <div class="font-mono text-xs font-bold text-indigo-800 bg-white p-2.5 rounded-xl border border-indigo-100">
+                                    N₂(g) + 3H₂(g) ⇌ 2NH₃(g) &nbsp;&nbsp;(ΔH = -92 kJ mol⁻¹)
+                                </div>
+                                <p class="text-slate-700">
+                                    • <strong>သီအိုရီအရ:</strong> Exothermic ဖြစ်၍ အပူချိန်နိမ့်ရမည်၊ 4 mol → 2 mol ဖြစ်၍ ဖိအားမြင့်ရမည်။<br>
+                                    • <strong>လက်တွေ့စက်ရုံအခြေအနေ (Optimum):</strong> အပူချိန်အရမ်းနိမ့်လျှင် ဓာတ်ပြုနှုန်းနှေးသဖြင့် <strong>450°C</strong>၊ <strong>200 atm</strong> နှင့် <strong>Iron (Fe) catalyst</strong> ကို အသုံးပြုသည်။
+                                </p>
+                            </div>
+
+                            <div class="p-5 rounded-2xl bg-amber-50/80 border border-amber-200 space-y-2">
+                                <div class="font-bold text-amber-950 text-base">🏭 2. Contact Process (ဆာလ်ဖျူရစ်အက်ဆစ် ထုတ်လုပ်ခြင်း)</div>
+                                <div class="font-mono text-xs font-bold text-amber-900 bg-white p-2.5 rounded-xl border border-amber-100">
+                                    2SO₂(g) + O₂(g) ⇌ 2SO₃(g) &nbsp;&nbsp;(ΔH = -197 kJ mol⁻¹)
+                                </div>
+                                <p class="text-slate-700">
+                                    • <strong>သီအိုရီအရ:</strong> Exothermic ဖြစ်၍ အပူချိန်နိမ့်ရမည်၊ 3 mol → 2 mol ဖြစ်၍ ဖိအားမြင့်ရမည်။<br>
+                                    • <strong>လက်တွေ့စက်ရုံအခြေအနေ (Optimum):</strong> 1–2 atm တွင်ပင် SO₃ 99% ရပြီးဖြစ်၍ ကုန်ကျစရိတ်သက်သာစေရန် <strong>450°C</strong>၊ <strong>1–2 atm</strong> နှင့် <strong>V₂O₅ catalyst</strong> ကို အသုံးပြုသည်။
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                `,
+                onMount: () => render3D_4_2('high-p')
+            },
+
+            '4.3': {
+                badge: 'Article 4.3',
+                title: 'Equilibrium Constants (Kc and Kp)',
+                subtitle: 'Homogeneous & Heterogeneous Equilibria နှင့် Interactive Kc / Kp Calculators',
+                html: `
+                    <!-- Interactive Kc Calculator -->
+                    <div class="formula-card rounded-3xl p-6 sm:p-8 text-white shadow-xl space-y-4">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                            <h3 class="text-lg sm:text-xl font-bold text-amber-300">🧮 Interactive K<sub>c</sub> Calculator (<span class="mx"><i>a</i>A + <i>b</i>B ⇌ <i>c</i>C + <i>d</i>D</span>)</h3>
+                            <span class="text-xs text-slate-300">မူရင်းဥပမာ: H₂ + I₂ ⇌ 2HI တန်ဖိုးများ ထည့်ထားပါသည်</span>
+                        </div>
+                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
+                            <div class="p-3 rounded-xl bg-white/5 border border-white/10 space-y-2">
+                                <div class="font-bold text-rose-300">Reactant A</div>
+                                <label class="block text-slate-300">Coeff (a): <input id="kc-a" type="number" value="1" oninput="runKcCalc()" class="w-16 px-2 py-1 rounded bg-white/10 text-white font-bold"></label>
+                                <label class="block text-slate-300">[A] (M): <input id="kc-ca" type="number" step="0.01" value="0.20" oninput="runKcCalc()" class="w-20 px-2 py-1 rounded bg-white/10 text-white font-bold"></label>
+                            </div>
+                            <div class="p-3 rounded-xl bg-white/5 border border-white/10 space-y-2">
+                                <div class="font-bold text-rose-300">Reactant B (မရှိလျှင် b=0)</div>
+                                <label class="block text-slate-300">Coeff (b): <input id="kc-b" type="number" value="1" oninput="runKcCalc()" class="w-16 px-2 py-1 rounded bg-white/10 text-white font-bold"></label>
+                                <label class="block text-slate-300">[B] (M): <input id="kc-cb" type="number" step="0.01" value="0.20" oninput="runKcCalc()" class="w-20 px-2 py-1 rounded bg-white/10 text-white font-bold"></label>
+                            </div>
+                            <div class="p-3 rounded-xl bg-white/5 border border-white/10 space-y-2">
+                                <div class="font-bold text-emerald-300">Product C</div>
+                                <label class="block text-slate-300">Coeff (c): <input id="kc-c" type="number" value="2" oninput="runKcCalc()" class="w-16 px-2 py-1 rounded bg-white/10 text-white font-bold"></label>
+                                <label class="block text-slate-300">[C] (M): <input id="kc-cc" type="number" step="0.01" value="1.60" oninput="runKcCalc()" class="w-20 px-2 py-1 rounded bg-white/10 text-white font-bold"></label>
+                            </div>
+                            <div class="p-3 rounded-xl bg-white/5 border border-white/10 space-y-2">
+                                <div class="font-bold text-emerald-300">Product D (မရှိလျှင် d=0)</div>
+                                <label class="block text-slate-300">Coeff (d): <input id="kc-d" type="number" value="0" oninput="runKcCalc()" class="w-16 px-2 py-1 rounded bg-white/10 text-white font-bold"></label>
+                                <label class="block text-slate-300">[D] (M): <input id="kc-cd" type="number" step="0.01" value="1.00" oninput="runKcCalc()" class="w-20 px-2 py-1 rounded bg-white/10 text-white font-bold"></label>
+                            </div>
+                        </div>
+                        <div id="kc-output" class="pt-1"></div>
+                    </div>
+
+                    <!-- Interactive Kp Calculator for Haber Process -->
+                    <div class="bg-slate-900 rounded-3xl p-6 sm:p-8 text-white shadow-lg space-y-4">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                            <h3 class="text-lg font-bold text-sky-300">🧮 Haber Process K<sub>p</sub> Calculator (<span class="mx">N<sub>2</sub>(g) + 3H<sub>2</sub>(g) ⇌ 2NH<sub>3</sub>(g)</span>)</h3>
+                            <span class="text-xs text-slate-400">Partial Pressures (atm) ထည့်တွက်ပါ</span>
+                        </div>
+                        <div class="grid grid-cols-3 gap-3 text-xs">
+                            <div>
+                                <label class="block text-slate-300 mb-1">P(N₂) (atm)</label>
+                                <input id="kp-n2" type="number" step="0.1" value="2.0" oninput="runKpCalc()" class="w-full px-3 py-2 rounded-xl bg-white/10 border border-white/20 text-white font-bold">
+                            </div>
+                            <div>
+                                <label class="block text-slate-300 mb-1">P(H₂) (atm)</label>
+                                <input id="kp-h2" type="number" step="0.1" value="3.0" oninput="runKpCalc()" class="w-full px-3 py-2 rounded-xl bg-white/10 border border-white/20 text-white font-bold">
+                            </div>
+                            <div>
+                                <label class="block text-slate-300 mb-1">P(NH₃) (atm)</label>
+                                <input id="kp-nh3" type="number" step="0.1" value="1.5" oninput="runKpCalc()" class="w-full px-3 py-2 rounded-xl bg-white/10 border border-white/20 text-white font-bold">
+                            </div>
+                        </div>
+                        <div id="kp-output"></div>
+                    </div>
+
+                    <!-- Homogeneous vs Heterogeneous Equilibria Guide -->
+                    <div class="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 shadow-sm space-y-5">
+                        <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2.5">
+                            <span class="w-8 h-8 rounded-xl bg-sky-100 text-sky-700 flex items-center justify-center text-sm font-bold">4.3</span>
+                            Homogeneous vs Heterogeneous Equilibria (Kc & Kp ရေးနည်း)
+                        </h3>
+                        <div class="grid md:grid-cols-2 gap-4 text-xs sm:text-sm myanmar-text">
+                            <div class="p-5 rounded-2xl bg-sky-50/70 border border-sky-200 space-y-2">
+                                <div class="font-bold text-sky-950 text-base">1. Homogeneous Equilibria (အခြေအနေတူ မျှခြေ)</div>
+                                <p class="text-slate-700">Reactants နှင့် Products အားလုံး <strong>အခြေအနေတစ်ခုတည်း (All gases သို့မဟုတ် All aqueous)</strong> တွင် ရှိနေခြင်းဖြစ်သည်။ အားလုံးကို Kc/Kp ထဲ ထည့်ရေးရသည်။</p>
+                                <div class="bg-white p-3 rounded-xl font-mono text-xs text-slate-800 space-y-1">
+                                    <div>CH₃COOH(aq) + C₂H₅OH(aq) ⇌ CH₃COOC₂H₅(aq) + H₂O(l)</div>
+                                    <div class="text-sky-800 font-bold">(မှတ်ချက်: ဤ Esterification တွင် H₂O(l) သည် solvent မဟုတ်ဘဲ product ဖြစ်၍ Kc ထဲထည့်ရေးသည်)</div>
+                                </div>
+                            </div>
+
+                            <div class="p-5 rounded-2xl bg-rose-50/70 border border-rose-200 space-y-2">
+                                <div class="font-bold text-rose-950 text-base">2. Heterogeneous Equilibria (အခြေအနေမတူ မျှခြေ)</div>
+                                <p class="text-slate-700">အခဲ <strong>(s)</strong>၊ အရည် <strong>(l)</strong>၊ ဓာတ်ငွေ့ <strong>(g)</strong> တို့ ရောနှောပါဝင်နေခြင်းဖြစ်သည်။ <strong>Pure solids (s) နှင့် Pure liquids (l) တို့ကို Kc နှင့် Kp ထဲမှ ဖယ်ထုတ်ထားရမည်</strong>။</p>
+                                <div class="bg-white p-3 rounded-xl font-mono text-xs text-slate-800 space-y-1">
+                                    <div>3Fe(s) + 4H₂O(g) ⇌ Fe₃O₄(s) + 4H₂(g)</div>
+                                    <div class="mx text-rose-800 font-bold"><i>K</i><sub>c</sub> = <span class="fr"><span>[H<sub>2</sub>]<sup>4</sup></span><span>[H<sub>2</sub>O]<sup>4</sup></span></span> , &nbsp; <i>K</i><sub>p</sub> = <span class="fr"><span>(<i>P</i><sub>H<sub>2</sub></sub>)<sup>4</sup></span><span>(<i>P</i><sub>H<sub>2</sub>O</sub>)<sup>4</sup></span></span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `,
+                onMount: () => {
+                    runKcCalc();
+                    runKpCalc();
+                }
+            },
+
+            'worked': {
+                badge: 'Chapter 4 Exam Worked Examples',
+                title: 'စာမေးပွဲပုံစံ တွက်စာများနှင့် ICE Table တွက်နည်းအဆင့်ဆင့်',
+                subtitle: 'Kc, Kp တိုက်ရိုက်တွက်နည်း၊ Partial Pressure ရှာနည်းနှင့် ICE Table ပုစ္ဆာနမူနာများ',
+                html: `
+                    <!-- ICE Table Step-by-Step Guide -->
+                    <div class="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 shadow-sm space-y-6">
+                        <div class="border-b border-slate-100 pb-3">
+                            <span class="text-xs font-bold uppercase tracking-wider text-emerald-600">Exam Problem-Solving Mastery</span>
+                            <h3 class="text-xl font-bold text-slate-900 mt-1">ICE Table နည်းလမ်း (Initial – Change – Equilibrium) ဖြင့် Kc ရှာနည်း</h3>
+                        </div>
+
+                        <!-- Worked Example 1: ICE Table -->
+                        <div class="p-5 rounded-2xl bg-indigo-50/70 border border-indigo-200 space-y-3 text-xs sm:text-sm">
+                            <div class="font-bold text-indigo-950 text-base">တွက်စာ (၁) — ICE Table ဖြင့် Kc တွက်နည်း (Textbook Standard)</div>
+                            <p class="myanmar-text text-slate-800">
+                                <strong>ပုစ္ဆာ:</strong> 1.0 dm³ ရှိသော ပိတ်ထားသည့်အိုးထဲသို့ <strong>H₂ 0.50 mol</strong> နှင့် <strong>I₂ 0.50 mol</strong> ထည့်၍ 450°C တွင် အပူပေးရာ မျှခြေရောက်ချိန်တွင် <strong>HI 0.78 mol</strong> ဖြစ်ပေါ်လာသည်။ ထိုအပူချိန်ရှိ <strong>Kc</strong> ကို တွက်ချက်ပါ။
+                            </p>
+
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-center border-collapse bg-white rounded-xl overflow-hidden text-xs font-mono">
+                                    <thead>
+                                        <tr class="bg-indigo-900 text-white">
+                                            <th class="p-2.5 text-left">H₂(g) + I₂(g) ⇌ 2HI(g)</th>
+                                            <th class="p-2.5">H₂</th>
+                                            <th class="p-2.5">I₂</th>
+                                            <th class="p-2.5">2HI</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="divide-y divide-slate-200 text-slate-800">
+                                        <tr><td class="p-2.5 text-left font-bold">Initial moles (ကနဦးမိုးလ်)</td><td>0.50</td><td>0.50</td><td>0</td></tr>
+                                        <tr class="bg-slate-50"><td class="p-2.5 text-left font-bold">Change in moles (ပြောင်းလဲမိုးလ်)</td><td>-x (-0.39)</td><td>-x (-0.39)</td><td>+2x (+0.78)</td></tr>
+                                        <tr><td class="p-2.5 text-left font-bold text-indigo-800">Equilibrium moles (မျှခြေမိုးလ်)</td><td>0.50 - 0.39 = <strong>0.11</strong></td><td>0.50 - 0.39 = <strong>0.11</strong></td><td><strong>0.78</strong></td></tr>
+                                        <tr class="bg-emerald-50"><td class="p-2.5 text-left font-bold text-emerald-900">Equilibrium Conc. (÷ 1.0 dm³)</td><td><strong>0.11 M</strong></td><td><strong>0.11 M</strong></td><td><strong>0.78 M</strong></td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="bg-slate-900 text-white p-4 rounded-xl font-mono text-xs space-y-1.5">
+                                <div class="text-amber-300">ရှင်းလင်းချက်: 2x = 0.78 mol ဖြစ်၍ x = 0.39 mol ရသည်။</div>
+                                <div class="mx"><i>K</i><sub>c</sub> = <span class="fr"><span>[HI]<sup>2</sup></span><span>[H<sub>2</sub>][I<sub>2</sub>]</span></span> = <span class="fr"><span>(0.78)<sup>2</sup></span><span>(0.11)(0.11)</span></span> = <span class="fr"><span>0.6084</span><span>0.0121</span></span> = <strong class="text-emerald-300">50.28 (no units)</strong></div>
+                            </div>
+                        </div>
+
+                        <!-- Worked Example 2: Kp Calculation -->
+                        <div class="p-5 rounded-2xl bg-amber-50/70 border border-amber-200 space-y-3 text-xs sm:text-sm">
+                            <div class="font-bold text-amber-950 text-base">တွက်စာ (၂) — Partial Pressure နှင့် Kp တွက်နည်း (PCl₅ ⇌ PCl₃ + Cl₂)</div>
+                            <p class="myanmar-text text-slate-800">
+                                <strong>ပုစ္ဆာ:</strong> PCl₅(g) ⇌ PCl₃(g) + Cl₂(g) မျှခြေအခြေအနေတွင် <strong>PCl₅ = 0.40 mol</strong>, <strong>PCl₃ = 0.60 mol</strong> နှင့် <strong>Cl₂ = 0.60 mol</strong> တို့ရှိပြီး စုစုပေါင်းဖိအား (Total pressure) မှာ <strong>2.0 atm</strong> ဖြစ်လျှင် <strong>Kp</strong> ကို တွက်ချက်ပါ။
+                            </p>
+                            <div class="bg-slate-900 text-white p-4 rounded-xl font-mono text-xs space-y-1.5">
+                                <div>Step 1: Total moles (n_total) = 0.40 + 0.60 + 0.60 = 1.60 mol</div>
+                                <div class="mx">Step 2: <i>P</i><sub>PCl<sub>5</sub></sub> = <span class="fr"><span>0.40</span><span>1.60</span></span> × 2.0 = 0.50 atm &nbsp;|&nbsp; <i>P</i><sub>PCl<sub>3</sub></sub> = <i>P</i><sub>Cl<sub>2</sub></sub> = <span class="fr"><span>0.60</span><span>1.60</span></span> × 2.0 = 0.75 atm</div>
+                                <div class="mx">Step 3: <i>K</i><sub>p</sub> = <span class="fr"><span><i>P</i><sub>PCl<sub>3</sub></sub> × <i>P</i><sub>Cl<sub>2</sub></sub></span><span><i>P</i><sub>PCl<sub>5</sub></sub></span></span> = <span class="fr"><span>0.75 × 0.75</span><span>0.50</span></span> = <strong class="text-amber-300">1.125 atm</strong></div>
+                            </div>
+                        </div>
+
+                        <!-- Worked Example 3: Heterogeneous Equilibrium -->
+                        <div class="p-5 rounded-2xl bg-emerald-50/70 border border-emerald-200 space-y-2 text-xs sm:text-sm">
+                            <div class="font-bold text-emerald-950 text-base">တွက်စာ (၃) — Heterogeneous Equilibrium (အခဲနှင့် ဓာတ်ငွေ့ ရောနေလျှင်)</div>
+                            <p class="myanmar-text text-slate-800">
+                                <strong>ပုစ္ဆာ:</strong> NH₄HS(s) ⇌ NH₃(g) + H₂S(g) မျှခြေတွင် စုစုပေါင်းဖိအားမှာ <strong>0.66 atm</strong> ဖြစ်လျှင် Kp ကို ရှာပါ။
+                            </p>
+                            <div class="bg-slate-900 text-white p-4 rounded-xl font-mono text-xs space-y-1.5">
+                                <div>NH₄HS(s) သည် အခဲ (solid) ဖြစ်၍ Kp ထဲတွင် မထည့်သွင်းရပါ။</div>
+                                <div>NH₃ နှင့် H₂S သည် မိုးလ်အချိုး (1 : 1) တူညီသဖြင့် P(NH₃) = P(H₂S) = 0.66 ÷ 2 = 0.33 atm</div>
+                                <div class="mx"><i>K</i><sub>p</sub> = <i>P</i><sub>NH<sub>3</sub></sub> × <i>P</i><sub>H<sub>2</sub>S</sub> = 0.33 × 0.33 = <strong class="text-emerald-300">0.1089 atm<sup>2</sup></strong></div>
+                            </div>
+                        </div>
+                    </div>
+                `
+            }
+        };
+
+        // ==========================================
+        // 5. NAVIGATION & UI CONTROLLER
+        // ==========================================
+        function selectArticle(id) {
+            currentArticleId = id;
+            const article = ARTICLES[id];
+            if (!article) return;
+
+            clearActiveScenes();
+
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('bg-indigo-50', 'text-indigo-950', 'border-indigo-200', 'shadow-xs');
+                btn.classList.add('text-slate-600', 'hover:bg-slate-50');
+                const badge = btn.querySelector('.nav-badge');
+                if (badge) {
+                    badge.classList.remove('bg-indigo-600', 'text-white');
+                    badge.classList.add('bg-slate-100', 'text-slate-600');
+                }
+            });
+
+            const activeBtn = document.getElementById(`nav-${id}`);
+            if (activeBtn) {
+                activeBtn.classList.remove('text-slate-600', 'hover:bg-slate-50');
+                activeBtn.classList.add('bg-indigo-50', 'text-indigo-950', 'border-indigo-200', 'shadow-xs');
+                const badge = activeBtn.querySelector('.nav-badge');
+                if (badge) {
+                    badge.classList.remove('bg-slate-100', 'text-slate-600');
+                    badge.classList.add('bg-indigo-600', 'text-white');
+                }
+            }
+
+            const container = document.getElementById('content-container');
+            const ids = ['formulas', '4.1', '4.2', '4.3', 'worked'];
+            const idx = ids.indexOf(id);
+            const prevId = idx > 0 ? ids[idx - 1] : null;
+            const nextId = idx < ids.length - 1 ? ids[idx + 1] : null;
+
+            container.innerHTML = `
+                <div class="border-b border-slate-200 pb-5">
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-indigo-100 text-indigo-800 mb-2">
+                        ${article.badge}
+                    </span>
+                    <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">${article.title}</h1>
+                    <p class="mt-1 text-sm sm:text-base text-slate-600 font-medium">${article.subtitle}</p>
+                </div>
+
+                ${article.html}
+
+                <div class="pt-4 pb-8 flex items-center justify-between gap-4 border-t border-slate-200">
+                    ${prevId ? `
+                        <button onclick="selectArticle('${prevId}')" class="px-4 py-3 rounded-2xl bg-white border border-slate-200 hover:border-indigo-300 hover:bg-indigo-50 text-slate-700 text-xs sm:text-sm font-semibold transition flex items-center gap-2 shadow-xs">
+                            <span>←</span> ယခင်အပိုင်း (${prevId === 'formulas' ? 'Formulas' : prevId})
+                        </button>
+                    ` : '<div></div>'}
+
+                    ${nextId ? `
+                        <button onclick="selectArticle('${nextId}')" class="px-5 py-3 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs sm:text-sm font-semibold transition flex items-center gap-2 shadow-sm">
+                            နောက်တစ်ပိုင်း (${nextId === 'worked' ? 'Worked Examples' : nextId}) <span>→</span>
+                        </button>
+                    ` : `
+                        <a href="chapter5.html" class="px-5 py-3 rounded-2xl bg-purple-600 hover:bg-purple-700 text-white text-xs sm:text-sm font-semibold transition flex items-center gap-2 shadow-sm">
+                            Chapter 5 သို့ ဆက်သွားရန် <span>→</span>
+                        </a>
+                    `}
+                </div>
+            `;
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            closeMobileSidebar();
+
+            if (typeof article.onMount === 'function') {
+                setTimeout(() => article.onMount(), 50);
+            }
+        }
+
+        const sidebar = document.getElementById('sidebar');
+        const backdrop = document.getElementById('sidebar-backdrop');
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const closeSidebarBtn = document.getElementById('close-sidebar-btn');
+
+        function openMobileSidebar() {
+            sidebar.classList.remove('-translate-x-full');
+            backdrop.classList.remove('hidden');
+        }
+        function closeMobileSidebar() {
+            sidebar.classList.add('-translate-x-full');
+            backdrop.classList.add('hidden');
+        }
+
+        mobileMenuBtn.addEventListener('click', openMobileSidebar);
+        closeSidebarBtn.addEventListener('click', closeMobileSidebar);
+        backdrop.addEventListener('click', closeMobileSidebar);
+
+        window.onload = function() {
+            selectArticle('formulas');
+        };
+    </script>
+</body>
+</html>
