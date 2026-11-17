@@ -49,7 +49,7 @@
         .canvas-container {
             position: relative;
             width: 100%;
-            height: 340px;
+            height: 380px;
             border-radius: 1rem;
             overflow: hidden;
             background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%);
@@ -58,7 +58,7 @@
         }
         @media (min-width: 768px) {
             .canvas-container {
-                height: 390px;
+                height: 440px;
             }
         }
         .myanmar-text {
@@ -72,8 +72,6 @@
             background: rgba(255, 255, 255, 0.08);
             border: 1px solid rgba(255, 255, 255, 0.16);
         }
-        .canvas-container { height: 380px; }
-        @media (min-width: 768px) { .canvas-container { height: 440px; } }
         .v3d-ui { position: absolute; inset: 0; pointer-events: none; font-family: 'Inter','Noto Sans Myanmar',sans-serif; }
         .v3d-legend { position: absolute; top: 8px; left: 10px; display: flex; gap: 8px; font-size: 11px; font-weight: 700; color: #e2e8f0; background: rgba(15,23,42,.65); padding: 3px 9px; border-radius: 9999px; border: 1px solid rgba(255,255,255,.15); }
         .v3d-legend i { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 4px; }
@@ -138,19 +136,17 @@
                 <p class="mt-1 text-xs text-emerald-200/85">ပုံသေနည်းအစုံ၊ Ea ရှင်းလင်းချက်နှင့် Exercise No.7</p>
 
                 <!-- Cross-Chapter Page Navigation Bar -->
-                <!-- အခန်း ၁ မှ ၈ အထိ ပြောင်းရန် ခလုတ်များ -->
-<div class="mt-4 pt-3 border-t border-white/15 grid grid-cols-5 gap-1.5">
-    <a href="index.html" class="text-center py-1.5 px-1 rounded-lg bg-white/15 hover:bg-white/25 text-xs font-semibold text-white transition">🏠</a>
-    <a href="chapter1.html" class="text-center py-1.5 px-1 rounded-lg bg-white/10 hover:bg-white/25 text-xs font-semibold text-white transition">Ch 1</a>
-    <a href="chapter2.html" class="text-center py-1.5 px-1 rounded-lg bg-white/10 hover:bg-white/25 text-xs font-semibold text-white transition">Ch 2</a>
-    <a href="chapter3.html" class="text-center py-1.5 px-1 rounded-lg bg-white/10 hover:bg-white/25 text-xs font-semibold text-white transition">Ch 3</a>
-    <a href="chapter4.html" class="text-center py-1.5 px-1 rounded-lg bg-white/10 hover:bg-white/25 text-xs font-semibold text-white transition">Ch 4</a>
-    <a href="chapter5.html" class="text-center py-1.5 px-1 rounded-lg bg-white/10 hover:bg-white/25 text-xs font-semibold text-white transition">Ch 5</a>
-    <a href="chapter6.html" class="text-center py-1.5 px-1 rounded-lg bg-white/10 hover:bg-white/25 text-xs font-semibold text-white transition">Ch 6</a>
-    <a href="chapter7.html" class="text-center py-1.5 px-1 rounded-lg bg-white/10 hover:bg-white/25 text-xs font-semibold text-white transition">Ch 7</a>
-    <a href="chapter8.html" class="col-span-2 text-center py-1.5 px-1 rounded-lg bg-white/10 hover:bg-white/25 text-xs font-semibold text-white transition">Ch 8</a>
-</div>
-                
+                <div class="mt-4 pt-3 border-t border-white/15 grid grid-cols-5 gap-1.5">
+                    <a href="index.html" class="text-center py-1.5 px-1 rounded-lg bg-white/15 hover:bg-white/25 text-xs font-semibold text-white transition">🏠</a>
+                    <a href="chapter1.html" class="text-center py-1.5 px-1 rounded-lg bg-white/10 hover:bg-white/25 text-xs font-semibold text-white transition">Ch 1</a>
+                    <a href="chapter2.html" class="text-center py-1.5 px-1 rounded-lg bg-white/10 hover:bg-white/25 text-xs font-semibold text-white transition">Ch 2</a>
+                    <a href="chapter3.html" class="text-center py-1.5 px-1 rounded-lg bg-emerald-500 text-xs font-semibold text-white shadow-xs">Ch 3</a>
+                    <a href="chapter4.html" class="text-center py-1.5 px-1 rounded-lg bg-white/10 hover:bg-white/25 text-xs font-semibold text-white transition">Ch 4</a>
+                    <a href="chapter5.html" class="text-center py-1.5 px-1 rounded-lg bg-white/10 hover:bg-white/25 text-xs font-semibold text-white transition">Ch 5</a>
+                    <a href="chapter6.html" class="text-center py-1.5 px-1 rounded-lg bg-white/10 hover:bg-white/25 text-xs font-semibold text-white transition">Ch 6</a>
+                    <a href="chapter7.html" class="text-center py-1.5 px-1 rounded-lg bg-white/10 hover:bg-white/25 text-xs font-semibold text-white transition">Ch 7</a>
+                    <a href="chapter8.html" class="col-span-2 text-center py-1.5 px-1 rounded-lg bg-white/10 hover:bg-white/25 text-xs font-semibold text-white transition">Ch 8</a>
+                </div>
             </div>
 
             <!-- Navigation List -->
@@ -195,7 +191,7 @@
                     <span class="nav-badge shrink-0 w-9 h-9 rounded-xl flex items-center justify-center text-sm font-bold">Q.7</span>
                     <div>
                         <div class="font-bold text-sm leading-snug">Exercise No. 7 အကျယ်ချဲ့ ရှင်းလင်းချက်</div>
-                        <div class="text-xs opacity-80 mt-0.5">ကလေးအရွယ် နားလည်လွယ်သော ဥပမာများဖြင့်</div>
+                        <div class="text-xs opacity-80 mt-0.5">MgCl₂ နှင့် NaCl ပြိုင်တူဓာတ်ပြုမှု တွက်စာနှင့် ရှင်းလင်းချက်</div>
                     </div>
                 </button>
             </div>
@@ -372,7 +368,13 @@
         }
 
         // Annotations: floating labels + explanation per 3D scene
-        const ANNOT = {"viewer-3-2:effective": {"l": [["H<sub>2</sub>", [0, 0.95, 0], "#e2e8f0", "H"], ["I<sub>2</sub>", [0, 1.15, 0], "#d8b4fe", "I"], ["HI (product)", [1.4, 2.0, 0], "#86efac"]], "i": "<b>Effective collision</b> — စွမ်းအင် ≥ E<sub>a</sub> နှင့် ဦးတည်ရာမှန်၍ တိုက်မိသည်။ အဝါလက်စွပ် = activated complex၊ ထို့နောက် HI ၂ မော်လီကျူး ခွဲထွက်သည်"}, "viewer-3-2:ineffective": {"l": [["H<sub>2</sub>", [0, 0.95, 0], "#e2e8f0", "H"], ["I<sub>2</sub>", [0, 1.15, 0], "#d8b4fe", "I"], ["Wrong orientation", [0, 1.7, 0], "#fca5a5"]], "i": "<b>Ineffective collision</b> — ဦးတည်ရာမမှန် (ဘေးတိုက်ထိ) သဖြင့် စည်းမပြတ်ဘဲ ပြန်ကန်ထွက်သွားသည်၊ HI မဖြစ်ပေါ်"}, "viewer-3-3:lump": {"l": [["Big lump", [0, 1.7, 0], "#7dd3fc"], ["H⁺ (acid particles)", [2.2, 1.9, 0], "#fca5a5"]], "i": "<b>အတုံးကြီး</b> — အပြင်မျက်နှာပြင်သာ acid နှင့်ထိ၍ collision နည်းသဖြင့် ဓာတ်ပြုနှေးသည်"}, "viewer-3-3:powder": {"l": [["Small pieces ×8", [0, 1.9, 0], "#86efac"], ["More exposed surface", [2.2, 0, 0], "#fde68a"]], "i": "<b>အမှုန့်/အတုံးသေး</b> — ခွဲလိုက်လျှင် surface area များ၍ collision များသဖြင့် ဓာတ်ပြုမြန်သည်"}, "viewer-3-3:catalyst": {"l": [["Catalyst surface", [0, -1.6, 0], "#fcd34d"], ["Active sites", [2.4, -0.3, 0], "#fef08a"], ["Reactant molecules", [0, 1.8, 0], "#7dd3fc"]], "i": "<b>Catalyst</b> — reactant များ active site တွင် adsorb ဖြစ်၍ E<sub>a</sub> နိမ့်သောလမ်းကြောင်းဖြင့် ဓာတ်ပြုမြန်စေပြီး ကိုယ်တိုင်မကုန်ဆုံးပါ"}};
+        const ANNOT = {
+            "viewer-3-2:effective": {"l": [["H<sub>2</sub>", [0, 0.95, 0], "#e2e8f0", "H"], ["I<sub>2</sub>", [0, 1.15, 0], "#d8b4fe", "I"], ["HI (product)", [1.4, 2.0, 0], "#86efac"]], "i": "<b>Effective collision</b> — စွမ်းအင် ≥ E<sub>a</sub> နှင့် ဦးတည်ရာမှန်၍ တိုက်မိသည်။ အဝါလက်စွပ် = activated complex၊ ထို့နောက် HI ၂ မော်လီကျူး ခွဲထွက်သည်"},
+            "viewer-3-2:ineffective": {"l": [["H<sub>2</sub>", [0, 0.95, 0], "#e2e8f0", "H"], ["I<sub>2</sub>", [0, 1.15, 0], "#d8b4fe", "I"], ["Wrong orientation", [0, 1.7, 0], "#fca5a5"]], "i": "<b>Ineffective collision</b> — ဦးတည်ရာမမှန် (ဘေးတိုက်ထိ) သဖြင့် စည်းမပြတ်ဘဲ ပြန်ကန်ထွက်သွားသည်၊ HI မဖြစ်ပေါ်"},
+            "viewer-3-3:lump": {"l": [["Big lump", [0, 1.7, 0], "#7dd3fc"], ["H⁺ (acid particles)", [2.2, 1.9, 0], "#fca5a5"]], "i": "<b>အတုံးကြီး</b> — အပြင်မျက်နှာပြင်သာ acid နှင့်ထိ၍ collision နည်းသဖြင့် ဓာတ်ပြုနှေးသည်"},
+            "viewer-3-3:powder": {"l": [["Small pieces ×8", [0, 1.9, 0], "#86efac"], ["More exposed surface", [2.2, 0, 0], "#fde68a"]], "i": "<b>အမှုန့်/အတုံးသေး</b> — ခွဲလိုက်လျှင် surface area များ၍ collision များသဖြင့် ဓာတ်ပြုမြန်သည်"},
+            "viewer-3-3:catalyst": {"l": [["Catalyst surface", [0, -1.6, 0], "#fcd34d"], ["Active sites", [2.4, -0.3, 0], "#fef08a"], ["Reactant molecules", [0, 1.8, 0], "#7dd3fc"]], "i": "<b>Catalyst</b> — reactant များ active site တွင် adsorb ဖြစ်၍ E<sub>a</sub> နိမ့်သောလမ်းကြောင်းဖြင့် ဓာတ်ပြုမြန်စေပြီး ကိုယ်တိုင်မကုန်ဆုံးပါ"}
+        };
         function ANN(ui, id, mode, objs) {
             const a = ANNOT[id + ':' + mode]; if (!a) return;
             a.l.forEach(([t, p, c, o]) => ui.label(t, new THREE.Vector3(...p), c, o && objs && objs[o]));
@@ -383,7 +385,6 @@
         // 2. SPECIFIC 3D VISUALIZATIONS FOR CHAPTER 3
         // ==========================================
 
-        // 3D Viewer 3.2: Effective vs Ineffective Molecular Collisions (H2 + I2 -> 2HI)
         function render3D_3_2(mode) {
             init3DViewer('viewer-3-2', (group, camera, scene, ui) => {
                 camera.position.set(0, 0.8, 7.6);
@@ -462,7 +463,6 @@
             });
         }
 
-        // 3D Viewer 3.3: Factors Affecting Rate (Surface Area & Catalyst Adsorption)
         function render3D_3_3(mode) {
             init3DViewer('viewer-3-3', (group, camera, scene, ui) => { ANN(ui, 'viewer-3-3', mode);
                 camera.position.set(2.4, 2.2, 6.8);
@@ -537,7 +537,7 @@
         }
 
         // ==========================================
-        // 3. INTERACTIVE REACTION RATE CALCULATOR
+        // 3. INTERACTIVE CALCULATORS (3.1 & EX 7)
         // ==========================================
         function runRateCalc() {
             const c1 = parseFloat(document.getElementById('rate-c1')?.value) || 0;
@@ -565,6 +565,45 @@
                         <div class="p-3 rounded-xl bg-white/10 border border-white/15">
                             <div class="text-xs text-slate-300">Overall Reaction Rate (÷ coeff)</div>
                             <div class="text-lg font-bold text-emerald-300">${generalRate.toFixed(5)} mol dm⁻³ s⁻¹</div>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        function runEx7Calc() {
+            const massMgCl2 = parseFloat(document.getElementById('ex7-mass')?.value) || 0;
+            const timeMin = parseFloat(document.getElementById('ex7-time')?.value) || 1;
+            const mrMgCl2 = 95; // 24 + 2(35.5) = 95 g mol^-1
+            const arNa = 23;
+
+            const molMgCl2 = massMgCl2 / mrMgCl2;
+            const rateMin = molMgCl2 / timeMin;
+            const rateSec = molMgCl2 / (timeMin * 60);
+            const molNaCl = rateMin * timeMin;
+            const molNa = molNaCl; // 2 mol NaCl : 2 mol Na = 1 : 1
+            const massNa = molNa * arNa;
+
+            const out = document.getElementById('ex7-output');
+            if (out) {
+                out.innerHTML = `
+                    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-3 text-center">
+                        <div class="p-3 rounded-xl bg-white/10 border border-white/15">
+                            <div class="text-xs text-slate-300">(i) Moles of MgCl₂</div>
+                            <div class="text-base sm:text-lg font-bold text-amber-300">${molMgCl2.toFixed(5)} mol</div>
+                        </div>
+                        <div class="p-3 rounded-xl bg-white/10 border border-white/15">
+                            <div class="text-xs text-slate-300">(ii) Rate of Reaction</div>
+                            <div class="text-base sm:text-lg font-bold text-sky-300">${rateMin.toFixed(5)} mol min⁻¹</div>
+                            <div class="text-[11px] text-slate-300">(${rateSec.toExponential(2)} mol s⁻¹)</div>
+                        </div>
+                        <div class="p-3 rounded-xl bg-white/10 border border-white/15">
+                            <div class="text-xs text-slate-300">(iii-a) Moles of NaCl</div>
+                            <div class="text-base sm:text-lg font-bold text-emerald-300">${molNaCl.toFixed(5)} mol</div>
+                        </div>
+                        <div class="p-3 rounded-xl bg-white/10 border border-white/15">
+                            <div class="text-xs text-slate-300">(iii-b) Mass of Na Needed</div>
+                            <div class="text-base sm:text-lg font-bold text-rose-300">${massNa.toFixed(4)} g</div>
                         </div>
                     </div>
                 `;
@@ -692,7 +731,7 @@
                             </button>
                             <button onclick="selectArticle('ex7')" class="p-4 rounded-2xl bg-purple-50 border border-purple-200 text-left hover:bg-purple-100 transition">
                                 <div class="font-bold text-purple-900 text-sm">Exercise No. 7 →</div>
-                                <p class="text-purple-800 mt-1">ကလေးအရွယ် နားလည်လွယ်သော ဥပမာများဖြင့်</p>
+                                <p class="text-purple-800 mt-1">MgCl₂ နှင့် NaCl ပြိုင်တူဓာတ်ပြုမှု တွက်စာ အဆင့်ဆင့်ရှင်းလင်းချက်</p>
                             </button>
                         </div>
                     </div>
@@ -857,7 +896,7 @@
                             </div>
                         </div>
 
-                        <!-- Detailed SVG Diagram 1: Exothermic vs Endothermic Energy Profiles (showing Ea forward, Ea reverse, Transition State, ΔH) -->
+                        <!-- Detailed SVG Diagram 1: Exothermic vs Endothermic Energy Profiles -->
                         <div class="bg-slate-50 rounded-2xl p-4 sm:p-5 border border-slate-200 space-y-3">
                             <div class="text-xs font-bold text-slate-600 uppercase tracking-wider">ပုံပြကားချပ် (၁) — Exothermic နှင့် Endothermic ၏ Activation Energy (Ea) နှိုင်းယှဉ်ပုံ</div>
                             <svg viewBox="0 0 740 265" class="w-full h-auto">
@@ -869,7 +908,6 @@
                                 <text x="24" y="135" transform="rotate(-90 24,135)" text-anchor="middle" font-size="11" font-weight="bold" fill="#475569">Potential Energy</text>
                                 <text x="195" y="236" text-anchor="middle" font-size="11" fill="#475569">Reaction Progress →</text>
 
-                                <!-- Reactant & Product Lines -->
                                 <line x1="65" y1="125" x2="145" y2="125" stroke="#1e293b" stroke-width="3"/>
                                 <text x="105" y="116" text-anchor="middle" font-size="11" font-weight="bold" fill="#1e293b">Reactants</text>
                                 <line x1="65" y1="125" x2="310" y2="125" stroke="#94a3b8" stroke-width="1" stroke-dasharray="4,3"/>
@@ -877,17 +915,14 @@
                                 <line x1="235" y1="185" x2="325" y2="185" stroke="#1e293b" stroke-width="3"/>
                                 <text x="280" y="202" text-anchor="middle" font-size="11" font-weight="bold" fill="#1e293b">Products</text>
 
-                                <!-- Curve -->
                                 <path d="M 145 125 C 175 125, 180 62, 200 62 C 220 62, 225 185, 235 185" fill="none" stroke="#e11d48" stroke-width="3"/>
                                 <circle cx="200" cy="62" r="5" fill="#f59e0b"/>
                                 <text x="200" y="52" text-anchor="middle" font-size="10.5" font-weight="bold" fill="#b45309">Transition State (Activated Complex)</text>
 
-                                <!-- Ea(forward) Arrow -->
                                 <line x1="165" y1="125" x2="165" y2="66" stroke="#0284c7" stroke-width="2"/>
                                 <polygon points="161,68 169,68 165,62" fill="#0284c7"/>
                                 <text x="132" y="95" text-anchor="middle" font-size="10.5" font-weight="bold" fill="#0369a1">Ea(f) နည်း</text>
 
-                                <!-- ΔH Arrow -->
                                 <line x1="285" y1="125" x2="285" y2="181" stroke="#e11d48" stroke-width="2"/>
                                 <polygon points="281,179 289,179 285,185" fill="#e11d48"/>
                                 <text x="315" y="158" text-anchor="middle" font-size="10.5" font-weight="bold" fill="#be123c">ΔH (-)</text>
@@ -900,7 +935,6 @@
                                 <text x="394" y="135" transform="rotate(-90 394,135)" text-anchor="middle" font-size="11" font-weight="bold" fill="#475569">Potential Energy</text>
                                 <text x="565" y="236" text-anchor="middle" font-size="11" fill="#475569">Reaction Progress →</text>
 
-                                <!-- Reactant & Product Lines -->
                                 <line x1="435" y1="185" x2="515" y2="185" stroke="#1e293b" stroke-width="3"/>
                                 <text x="475" y="202" text-anchor="middle" font-size="11" font-weight="bold" fill="#1e293b">Reactants</text>
                                 <line x1="435" y1="185" x2="680" y2="185" stroke="#94a3b8" stroke-width="1" stroke-dasharray="4,3"/>
@@ -908,17 +942,14 @@
                                 <line x1="605" y1="115" x2="695" y2="115" stroke="#1e293b" stroke-width="3"/>
                                 <text x="650" y="106" text-anchor="middle" font-size="11" font-weight="bold" fill="#1e293b">Products</text>
 
-                                <!-- Curve -->
                                 <path d="M 515 185 C 535 185, 545 62, 570 62 C 590 62, 595 115, 605 115" fill="none" stroke="#0284c7" stroke-width="3"/>
                                 <circle cx="570" cy="62" r="5" fill="#f59e0b"/>
                                 <text x="570" y="52" text-anchor="middle" font-size="10.5" font-weight="bold" fill="#b45309">Transition State (Activated Complex)</text>
 
-                                <!-- Ea(forward) Arrow -->
                                 <line x1="532" y1="185" x2="532" y2="66" stroke="#0284c7" stroke-width="2"/>
                                 <polygon points="528,68 536,68 532,62" fill="#0284c7"/>
                                 <text x="492" y="128" text-anchor="middle" font-size="10.5" font-weight="bold" fill="#0369a1">Ea(f) ကြီး</text>
 
-                                <!-- ΔH Arrow -->
                                 <line x1="655" y1="185" x2="655" y2="119" stroke="#0284c7" stroke-width="2"/>
                                 <polygon points="651,121 659,121 655,115" fill="#0284c7"/>
                                 <text x="685" y="155" text-anchor="middle" font-size="10.5" font-weight="bold" fill="#0369a1">ΔH (+)</text>
@@ -938,22 +969,17 @@
                                 <text x="26" y="105" transform="rotate(-90 26,105)" text-anchor="middle" font-size="11" font-weight="bold" fill="#334155">Number of Particles</text>
                                 <text x="380" y="198" text-anchor="middle" font-size="11" font-weight="bold" fill="#334155">Kinetic Energy (E) →</text>
 
-                                <!-- Shaded Area under curve past Ea(cat) and Ea -->
                                 <path d="M 380 120 Q 430 155, 560 176 L 560 178 L 380 178 Z" fill="#bbf7d0" opacity="0.8"/>
                                 <path d="M 455 154 Q 500 169, 560 176 L 560 178 L 455 178 Z" fill="#fecdd3" opacity="0.9"/>
 
-                                <!-- Distribution Curve -->
                                 <path d="M 65 178 Q 130 35, 220 45 Q 310 55, 380 120 Q 445 166, 560 176" fill="none" stroke="#1e293b" stroke-width="3"/>
 
-                                <!-- Vertical Line: Ea (With Catalyst - Lower) -->
                                 <line x1="380" y1="45" x2="380" y2="178" stroke="#059669" stroke-width="2.5" stroke-dasharray="5,4"/>
                                 <text x="372" y="42" text-anchor="end" font-size="11" font-weight="bold" fill="#047857">Ea' (With Catalyst - နိမ့်)</text>
 
-                                <!-- Vertical Line: Ea (Without Catalyst - Higher) -->
                                 <line x1="455" y1="70" x2="455" y2="178" stroke="#e11d48" stroke-width="2.5"/>
                                 <text x="462" y="68" text-anchor="start" font-size="11" font-weight="bold" fill="#be123c">Ea (Without Catalyst - မြင့်)</text>
 
-                                <!-- Callouts -->
                                 <text x="530" y="105" font-size="11" font-weight="bold" fill="#047857">✅ အစိမ်းရောင်ဧရိယာ = Catalyst သုံးလျှင်</text>
                                 <text x="530" y="122" font-size="11" fill="#065f46">E ≥ Ea' ရှိသော အမှုန်အရေအတွက် ပိုများလာ</text>
                                 <text x="530" y="142" font-size="11" font-weight="bold" fill="#be123c">❌ ပန်းရောင်ဧရိယာ = Catalyst မပါလျှင် (နည်း)</text>
@@ -1025,187 +1051,187 @@
             },
 
             'ex7': {
-                badge: 'Chapter 3 Exercise No. 7 Deep Dive',
-                title: 'Exercise နံပါတ် (၇) အကျယ်ချဲ့ ရှင်းလင်းချက်',
-                subtitle: 'ကလေးအရွယ်ပင် နားလည်လွယ်စေမည့် ဥပမာများ၊ ပုံပြကားချပ်များနှင့် စာမေးပွဲဖြေဆိုရန် အဖြေအပြည့်အစုံ',
+                badge: 'Chapter 3 Exercise No. 7',
+                title: 'Exercise နံပါတ် (၇) တွက်ချက်ပုံနှင့် အဆင့်ဆင့် ရှင်းလင်းချက်',
+                subtitle: 'သီးခြားဓာတ်ပြုအိုး (၂) လုံးအတွင်း MgCl₂ နှင့် NaCl ပြိုင်တူဖြစ်ပေါ်မှု ပုစ္ဆာ',
                 html: `
                     <!-- Question Box -->
-                    <div class="bg-gradient-to-r from-purple-700 to-indigo-800 rounded-3xl p-6 sm:p-8 text-white shadow-lg space-y-3">
-                        <span class="inline-block px-3 py-1 rounded-full bg-white/15 text-xs font-bold tracking-wide">Grade 12 Textbook — Chapter 3 Exercises (No. 7)</span>
-                        <h3 class="text-lg sm:text-xl font-bold leading-snug">
-                            7. (a) List any five factors that affect the rate of reactions.<br>
-                            <span class="text-purple-200 text-base font-medium">(ဓာတ်ပြုမှုနှုန်းကို ပြောင်းလဲစေသော အချက် ၅ ချက်ကို ဖော်ပြပါ။)</span>
-                        </h3>
-                        <h3 class="text-lg sm:text-xl font-bold leading-snug pt-2 border-t border-white/15">
-                            7. (b) Substances burn more rapidly in pure oxygen than in air. Explain why.<br>
-                            <span class="text-purple-200 text-base font-medium">(ပစ္စည်းများသည် သာမန်လေထုထဲထက် အောက်စီဂျင်စစ်စစ်ထဲတွင် အဘယ်ကြောင့် ပိုမိုလျင်မြန်စွာ လောင်ကျွမ်းသနည်း? ရှင်းပြပါ။)</span>
-                        </h3>
-                    </div>
-
-                    <!-- PART 7(a): Kid-Friendly Analogies + Exam Answer -->
-                    <div class="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 shadow-sm space-y-5">
-                        <div class="flex items-center justify-between flex-wrap gap-2">
-                            <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2.5">
-                                <span class="w-8 h-8 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center text-sm font-bold">7(a)</span>
-                                ကလေးအရွယ်ကို ရှင်းပြသလို လွယ်ကူသော ဥပမာများဖြင့် နားလည်ခြင်း
-                            </h3>
-                            <span class="text-xs px-3 py-1 rounded-full bg-purple-50 text-purple-800 border border-purple-200 font-semibold">စာမေးပွဲတွင် ကြိုက်ရာ ၅ ချက် ရေးနိုင်သည်</span>
-                        </div>
-
-                        <div class="grid md:grid-cols-2 gap-4 text-xs sm:text-sm myanmar-text">
-                            <!-- Analogy 1 -->
-                            <div class="p-4 rounded-2xl bg-blue-50/70 border border-blue-200 space-y-1.5">
-                                <div class="font-bold text-blue-900 text-sm">၁။ Concentration of reactants (ပြင်းအား)</div>
-                                <p class="text-slate-700">
-                                    🧸 <strong>ကလေးဥပမာ:</strong> ကစားကွင်းတစ်ခုထဲမှာ ကလေး <strong>၅ ယောက်</strong> ပဲ ပြေးလွှားနေတာနဲ့ ကလေး <strong>၁၀၀ ယောက်</strong> ပြည့်ကျပ်ပြီး ပြေးလွှားနေတာ ဘယ်ကွင်းမှာ အချင်းချင်း ဝင်တိုက်မိဖို့ ပိုများမလဲ? လူများတဲ့ကွင်းမှာ ခဏခဏ ဝင်တိုက်မိသလိုပဲ၊ ပြင်းအားများရင် မော်လီကျူးတွေ ခဏခဏ တိုက်မိပြီး ဓာတ်ပြုမှု ပိုမြန်ပါတယ်။
-                                </p>
-                            </div>
-
-                            <!-- Analogy 2 -->
-                            <div class="p-4 rounded-2xl bg-emerald-50/70 border border-emerald-200 space-y-1.5">
-                                <div class="font-bold text-emerald-900 text-sm">၂။ Surface area of solid reactants (မျက်နှာပြင်ဧရိယာ)</div>
-                                <p class="text-slate-700">
-                                    🍬 <strong>ကလေးဥပမာ:</strong> သကြားခဲအတုံးကြီး တစ်တုံးကို ရေထဲထည့်ဖျော်တာနဲ့ သကြားမှုန့်လေးတွေကို ရေထဲထည့်ဖျော်တာ ဘယ်ဟာက အရင်ပျော်မလဲ? အမှုန့်လေးတွေကျတော့ ရေစက်လေးတွေက အဘက်ဘက်ကနေ ဝိုင်းဖက်နိုင်လို့ အမြန်ဆုံး ပျော်သွားသလိုပဲ မျက်နှာပြင်ကျယ်လေ ဓာတ်ပြုမှု မြန်လေပါ။
-                                </p>
-                            </div>
-
-                            <!-- Analogy 3 -->
-                            <div class="p-4 rounded-2xl bg-rose-50/70 border border-rose-200 space-y-1.5">
-                                <div class="font-bold text-rose-900 text-sm">၃။ Temperature (အပူချိန်)</div>
-                                <p class="text-slate-700">
-                                    🏃 <strong>ကလေးဥပမာ:</strong> ဆောင်းတွင်းအေးနေတဲ့အချိန် ကလေးတွေ ငြိမ်ငြိမ်လေး ထိုင်နေတာနဲ့ မုန့်စားပြီး အားအင်ပြည့်လို့ အရှိန်နဲ့ ပြေးလွှားခုန်ပေါက်နေတာလိုပါပဲ။ အပူချိန်မြင့်လာရင် အမှုန်လေးတွေ အားအင် (Kinetic Energy) ပြည့်လာပြီး အပြေးမြန်လာတော့ ပြင်းပြင်းထန်ထန် ဝင်တိုက်မိကြတာပါ။
-                                </p>
-                            </div>
-
-                            <!-- Analogy 4 -->
-                            <div class="p-4 rounded-2xl bg-amber-50/70 border border-amber-200 space-y-1.5">
-                                <div class="font-bold text-amber-900 text-sm">၄။ Presence of a catalyst (ဓာတ်ကူပစ္စည်း)</div>
-                                <p class="text-slate-700">
-                                    🚇 <strong>ကလေးဥပမာ:</strong> တောင်အမြင့်ကြီးပေါ်ကို ပင်ပင်ပန်းပန်း ကျော်တက်ရမယ့်အစား တောင်အောက်ကနေ ဖြတ်ဖောက်ထားတဲ့ <strong>ဥမင်လိုဏ်ခေါင်း (ဖြတ်လမ်း)</strong> ကနေ လမ်းလျှောက်သွားလိုက်သလိုပါပဲ။ ပင်ပန်းမှု (Activation Energy) နည်းသွားတော့ ခဏလေးနဲ့ ဟိုဘက်ရောက်သွားတာပေါ့!
-                                </p>
-                            </div>
-
-                            <!-- Analogy 5 -->
-                            <div class="p-4 rounded-2xl bg-indigo-50/70 border border-indigo-200 space-y-1.5 md:col-span-2">
-                                <div class="font-bold text-indigo-900 text-sm">၅။ Pressure of gaseous reactants (ဖိအား - ဓာတ်ငွေ့များအတွက်)</div>
-                                <p class="text-slate-700">
-                                    🎈 <strong>ကလေးဥပမာ:</strong> ပူဖောင်းအကြီးကြီးထဲမှာ ဘောလုံးလေး ၁၀ လုံး ထည့်ထားတာကို လက်နှစ်ဖက်နဲ့ ညှစ်ပြီး ပူဖောင်းကို သေးအောင် လုပ်လိုက်သလိုပါပဲ။ နေရာကျဉ်းသွားတော့ ဘောလုံးလေးတွေ အချင်းချင်း ခဏခဏ တိုက်မိကုန်ပြီး ဓာတ်ပြုမှု မြန်သွားပါတယ်။
-                                </p>
-                            </div>
-                        </div>
-
-                        <!-- Exam Answer Box for 7(a) -->
-                        <div class="p-4 rounded-2xl bg-slate-900 text-white space-y-1.5">
-                            <div class="text-xs font-bold text-amber-300 uppercase">✍️ စာမေးပွဲတွင် ရေးဖြေရန် အဖြေ (Exam-Ready Answer for 7a)</div>
-                            <p class="text-xs sm:text-sm font-mono text-slate-100 leading-relaxed">
-                                Any five factors that affect the rate of reactions are:<br>
-                                (1) Concentration of reactants &nbsp; (2) Surface area of solid reactants &nbsp; (3) Temperature &nbsp; (4) Pressure (for gases) &nbsp; (5) Presence of a catalyst (or Nature of reactants).
+                    <div class="bg-gradient-to-r from-purple-700 to-indigo-800 rounded-3xl p-6 sm:p-8 text-white shadow-lg space-y-4">
+                        <span class="inline-block px-3 py-1 rounded-full bg-white/15 text-xs font-bold tracking-wide">Grade 12 Chemistry — Chapter 3 Exercises (No. 7)</span>
+                        <div class="space-y-2 text-sm sm:text-base leading-relaxed">
+                            <p class="font-bold">
+                                7. The following two reactions occur simultaneously in separate reaction vessels.<br>
+                                <span class="font-mono text-amber-200 block my-2 text-xs sm:text-sm bg-black/25 p-3 rounded-xl">
+                                    Mg (s) + Cl₂ (g) ⟶ MgCl₂ (s) &nbsp;&nbsp;;&nbsp;&nbsp; 2Na (s) + Cl₂ (g) ⟶ 2NaCl (s)
+                                </span>
+                                After 1 min, 2 g of MgCl₂ has been produced in the first reaction.
                             </p>
+                            <ul class="space-y-1.5 text-purple-100 text-xs sm:text-sm pl-1">
+                                <li><strong>(i)</strong> How many moles of MgCl₂ are produced after one minute?</li>
+                                <li><strong>(ii)</strong> Calculate the rate of the reaction using the amount of product that is produced.</li>
+                                <li><strong>(iii)</strong> Assume that the second reaction also proceeds at the same rate. Calculate the number of moles of NaCl produced after 1 min and the mass (in g) of sodium that is needed for this reaction to take place. <span class="text-amber-200 font-semibold">(Mg = 24, Na = 23, Cl = 35.5)</span></li>
+                            </ul>
+                        </div>
+
+                        <!-- Myanmar Translation -->
+                        <div class="pt-3 border-t border-white/15 text-xs sm:text-sm text-purple-100 myanmar-text space-y-1">
+                            <div class="font-bold text-amber-300">မေးခွန်း မြန်မာပြန် အနှစ်ချုပ်-</div>
+                            <p>အထက်ပါ ဓာတ်ပြုမှု (၂) ခုသည် သီးခြားဓာတ်ပြုအိုး (၂) လုံးထဲတွင် တစ်ပြိုင်နက်တည်း ဖြစ်ပွားနေသည်။ ၁ မိနစ် (1 min) အကြာတွင် ပထမဓာတ်ပြုမှုမှ <strong>MgCl₂ 2 g</strong> ထွက်ရှိလာသည်။</p>
+                            <p><strong>(i)</strong> ၁ မိနစ်အကြာတွင် ထွက်ရှိလာသော MgCl₂ မိုးလ် (moles) မည်မျှရှိသနည်း?<br>
+                            <strong>(ii)</strong> ထွက်ရှိလာသော Product ပမာဏကို အသုံးပြု၍ ဓာတ်ပြုမှုနှုန်း (Rate of reaction) ကို တွက်ချက်ပါ။<br>
+                            <strong>(iii)</strong> ဒုတိယဓာတ်ပြုမှုသည်လည်း တူညီသောနှုန်း (Same rate) ဖြင့် ဆက်လက်ဖြစ်ပွားသည်ဟု ယူဆပါ။ ၁ မိနစ်အကြာတွင် ထွက်ရှိလာသော <strong>NaCl မိုးလ်အရေအတွက်</strong> နှင့် ထိုဓာတ်ပြုမှုဖြစ်ပေါ်ရန် လိုအပ်သော <strong>ဆိုဒီယမ် (Na) ဒြပ်ထု (g)</strong> ကို တွက်ချက်ပါ။</p>
                         </div>
                     </div>
 
-                    <!-- PART 7(b): Kid-Friendly Story + Visual SVG Comparison + Exam Answer -->
-                    <div class="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 shadow-sm space-y-6">
-                        <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2.5">
-                            <span class="w-8 h-8 rounded-xl bg-rose-100 text-rose-700 flex items-center justify-center text-sm font-bold">7(b)</span>
-                            သာမန်လေထု (Air) ထက် အောက်စီဂျင်စစ်စစ် (Pure O₂) ထဲမှာ ဘာကြောင့် ပိုမြန်မြန် မီးလောင်သလဲ?
-                        </h3>
+                    <!-- Visual SVG Diagram of the 2 Reaction Vessels -->
+                    <div class="bg-white rounded-3xl border border-slate-200 p-5 sm:p-7 shadow-sm space-y-3">
+                        <div class="text-xs font-bold text-slate-600 uppercase tracking-wider">ပုံပြကားချပ် — သီးခြားဓာတ်ပြုအိုး (၂) လုံး ချိတ်ဆက်တွက်ချက်ပုံ မြင်ကွင်း</div>
+                        <div class="bg-slate-50 rounded-2xl p-3 sm:p-4 border border-slate-200 overflow-x-auto">
+                            <svg viewBox="0 0 740 235" class="w-full min-w-[620px] h-auto">
+                                <!-- Vessel 1 -->
+                                <rect x="15" y="12" width="315" height="210" rx="16" fill="#ffffff" stroke="#3b82f6" stroke-width="2.5"/>
+                                <text x="172" y="36" text-anchor="middle" font-size="13" font-weight="bold" fill="#1d4ed8">ပထမဓာတ်ပြုအိုး (Vessel 1)</text>
+                                <text x="172" y="57" text-anchor="middle" font-size="12" font-weight="bold" fill="#1e293b">Mg(s) + Cl₂(g) ⟶ MgCl₂(s)</text>
 
-                        <!-- Kid-Friendly Story Explanation -->
-                        <div class="p-5 rounded-2xl bg-amber-50 border border-amber-200 space-y-3 myanmar-text text-sm sm:text-base">
-                            <div class="font-bold text-amber-950 flex items-center gap-2">
-                                <span class="text-xl">🔥</span> ကလေးအရွယ်ကို ပုံပြင်လေးလို ရှင်းပြရမယ်ဆိုရင်...
-                            </div>
-                            <p class="text-slate-800">
-                                မီးတောက်လေးတစ်ခု လောင်ကျွမ်းဖို့ဆိုတာ မီးစာလေး (Fuel) က <strong>"အောက်စီဂျင် (O₂)" ဆိုတဲ့ သူငယ်ချင်းလေး</strong> နဲ့ လက်ချင်းချိတ် (တိုက်မိ) မှ မီးတောက်နိုင်တာပါ။
-                            </p>
-                            <div class="grid sm:grid-cols-2 gap-4 pt-1">
-                                <div class="p-4 rounded-xl bg-white border border-slate-200">
-                                    <div class="font-bold text-slate-800 mb-1">🌫️ ၁။ သာမန်လေထု (Air) ထဲမှာဆိုရင်...</div>
-                                    <p class="text-xs sm:text-sm text-slate-600">
-                                        လူ ၁၀၀ ရှိတဲ့ အခန်းထဲမှာ အောက်စီဂျင်သူငယ်ချင်းက <strong>၂၁ ယောက် (21%)</strong> ပဲ ပါပါတယ်။ ကျန်တဲ့ <strong>၇၈ ယောက် (78%)</strong> က မီးလောင်တာကို အားမပေးဘဲ ကြားထဲကနေ ဝင်ပိတ်နေတဲ့ <strong>နိုက်ထရိုဂျင် (N₂)</strong> တွေ ဖြစ်နေပါတယ်။ ဒါကြောင့် မီးစာလေးက အောက်စီဂျင်သူငယ်ချင်းကို ရှာတွေ့ဖို့ ခက်ခဲပြီး ဖြည်းဖြည်းချင်းပဲ လောင်နိုင်ပါတယ်။
-                                    </p>
-                                </div>
-                                <div class="p-4 rounded-xl bg-rose-50 border border-rose-200">
-                                    <div class="font-bold text-rose-900 mb-1">🔥 ၂။ အောက်စီဂျင်စစ်စစ် (Pure Oxygen) ထဲမှာဆိုရင်...</div>
-                                    <p class="text-xs sm:text-sm text-rose-950/85">
-                                        ကြားထဲက ဝင်ပိတ်နေတဲ့ နိုက်ထရိုဂျင်တွေ တစ်ယောက်မှ မရှိဘဲ အခန်းပြည့် <strong>၁၀၀ ရာခိုင်နှုန်း (100%)</strong> လုံး အောက်စီဂျင်သူငယ်ချင်းတွေချည်းပဲ ဖြစ်နေပါတယ်။ အောက်စီဂျင် ပြင်းအား (Concentration) <strong>၅ ဆနီးပါး ပိုများ</strong> နေတော့ မီးစာလေးနဲ့ အောက်စီဂျင်တွေ တစ်စက္ကန့်အတွင်း အကြိမ်ရေ အများကြီး ပိုတိုက်မိ (Collision frequency မြင့်တက်) ပြီး ဝုန်းခနဲ အရှိန်ပြင်းပြင်း လောင်ကျွမ်းသွားတာပါ!
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
+                                <rect x="35" y="72" width="275" height="42" rx="10" fill="#eff6ff" stroke="#93c5fd"/>
+                                <text x="172" y="90" text-anchor="middle" font-size="11.5" font-weight="bold" fill="#1e3a8a">ပေးချက်: 1 min အတွင်း MgCl₂ = 2 g ထွက်</text>
+                                <text x="172" y="106" text-anchor="middle" font-size="11" fill="#2563eb">(i) Moles = 2 ÷ 95 = 0.02105 mol</text>
 
-                        <!-- Visual SVG Illustration: Air (21% O2) vs Pure Oxygen (100% O2) -->
-                        <div class="bg-slate-50 rounded-2xl p-4 sm:p-5 border border-slate-200 space-y-2">
-                            <div class="text-xs font-bold text-slate-600 uppercase tracking-wider">ပုံပြကားချပ် — Air (21% O₂) နှင့် Pure Oxygen (100% O₂) မော်လီကျူး တိုက်မိပုံ နှိုင်းယှဉ်ချက်</div>
-                            <svg viewBox="0 0 720 210" class="w-full h-auto">
-                                <!-- LEFT BOX: AIR -->
-                                <rect x="15" y="10" width="330" height="190" rx="16" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/>
-                                <text x="180" y="34" text-anchor="middle" font-size="13" font-weight="bold" fill="#334155">သာမန်လေထု (Air): ~21% O₂ + ~78% N₂</text>
+                                <rect x="35" y="124" width="275" height="42" rx="10" fill="#ecfdf5" stroke="#6ee7b7"/>
+                                <text x="172" y="142" text-anchor="middle" font-size="11.5" font-weight="bold" fill="#065f46">(ii) Rate = 0.02105 mol ÷ 1 min</text>
+                                <text x="172" y="158" text-anchor="middle" font-size="11.5" font-weight="bold" fill="#047857">= 0.02105 mol min⁻¹</text>
 
-                                <!-- Fuel Particle -->
-                                <circle cx="95" cy="110" r="24" fill="#f59e0b"/>
-                                <text x="95" y="114" text-anchor="middle" font-size="11" font-weight="bold" fill="#ffffff">Fuel</text>
+                                <text x="172" y="195" text-anchor="middle" font-size="10.5" fill="#64748b">အချိန် = 1 min | Mr(MgCl₂) = 24 + 2(35.5) = 95</text>
 
-                                <!-- Blocking N2 particles (Grey) -->
-                                <circle cx="155" cy="80" r="14" fill="#94a3b8"/><text x="155" y="84" text-anchor="middle" font-size="9" fill="#fff" font-weight="bold">N₂</text>
-                                <circle cx="160" cy="135" r="14" fill="#94a3b8"/><text x="160" y="139" text-anchor="middle" font-size="9" fill="#fff" font-weight="bold">N₂</text>
-                                <circle cx="215" cy="105" r="14" fill="#94a3b8"/><text x="215" y="109" text-anchor="middle" font-size="9" fill="#fff" font-weight="bold">N₂</text>
-                                <circle cx="220" cy="155" r="14" fill="#94a3b8"/><text x="220" y="159" text-anchor="middle" font-size="9" fill="#fff" font-weight="bold">N₂</text>
-                                <circle cx="275" cy="75" r="14" fill="#94a3b8"/><text x="275" y="79" text-anchor="middle" font-size="9" fill="#fff" font-weight="bold">N₂</text>
+                                <!-- Connecting Arrow (Same Rate!) -->
+                                <path d="M 336 145 L 404 145" stroke="#d97706" stroke-width="3"/>
+                                <polygon points="402,139 412,145 402,151" fill="#d97706"/>
+                                <rect x="334" y="102" width="72" height="34" rx="8" fill="#fef3c7" stroke="#f59e0b"/>
+                                <text x="370" y="117" text-anchor="middle" font-size="10" font-weight="bold" fill="#92400e">Same Rate</text>
+                                <text x="370" y="130" text-anchor="middle" font-size="9.5" font-weight="bold" fill="#b45309">နှုန်းတူညီ!</text>
 
-                                <!-- Few O2 particles (Red) -->
-                                <circle cx="275" cy="135" r="14" fill="#ef4444"/><text x="275" y="139" text-anchor="middle" font-size="9" fill="#fff" font-weight="bold">O₂</text>
-                                <circle cx="145" cy="168" r="14" fill="#ef4444"/><text x="145" y="172" text-anchor="middle" font-size="9" fill="#fff" font-weight="bold">O₂</text>
+                                <!-- Vessel 2 -->
+                                <rect x="415" y="12" width="310" height="210" rx="16" fill="#ffffff" stroke="#9333ea" stroke-width="2.5"/>
+                                <text x="570" y="36" text-anchor="middle" font-size="13" font-weight="bold" fill="#7e22ce">ဒုတိယဓာတ်ပြုအိုး (Vessel 2)</text>
+                                <text x="570" y="57" text-anchor="middle" font-size="12" font-weight="bold" fill="#1e293b">2Na(s) + Cl₂(g) ⟶ 2NaCl(s)</text>
 
-                                <text x="180" y="190" text-anchor="middle" font-size="11" font-weight="bold" fill="#64748b">N₂ တွေ ကြားခံပိတ်နေ၍ O₂ တိုက်မိနှုန်း နည်း (လောင်ကျွမ်းမှု နှေး)</text>
+                                <rect x="432" y="72" width="276" height="42" rx="10" fill="#faf5ff" stroke="#d8b4fe"/>
+                                <text x="570" y="90" text-anchor="middle" font-size="11.5" font-weight="bold" fill="#581c87">(iii-a) Rate တူညီ၍ 1 min အတွင်းထွက်သော</text>
+                                <text x="570" y="106" text-anchor="middle" font-size="11.5" font-weight="bold" fill="#7e22ce">NaCl = 0.02105 mol</text>
 
-                                <!-- RIGHT BOX: PURE OXYGEN -->
-                                <rect x="375" y="10" width="330" height="190" rx="16" fill="#fff1f2" stroke="#fda4af" stroke-width="2"/>
-                                <text x="540" y="34" text-anchor="middle" font-size="13" font-weight="bold" fill="#be123c">အောက်စီဂျင်စစ်စစ် (Pure O₂): 100% O₂</text>
+                                <rect x="432" y="124" width="276" height="52" rx="10" fill="#fff1f2" stroke="#fda4af"/>
+                                <text x="570" y="142" text-anchor="middle" font-size="11" font-weight="bold" fill="#9f1239">(iii-b) 2 mol NaCl ⇄ 2 mol Na (1 : 1)</text>
+                                <text x="570" y="158" text-anchor="middle" font-size="11" fill="#881337">mol of Na = 0.02105 mol</text>
+                                <text x="570" y="172" text-anchor="middle" font-size="11.5" font-weight="bold" fill="#be123c">Mass of Na = 0.02105 × 23 = 0.4842 g</text>
 
-                                <!-- Fuel Particle -->
-                                <circle cx="455" cy="110" r="24" fill="#f59e0b"/>
-                                <text x="455" y="114" text-anchor="middle" font-size="11" font-weight="bold" fill="#ffffff">Fuel</text>
-
-                                <!-- Crowded O2 particles (All Red!) -->
-                                <circle cx="515" cy="75" r="14" fill="#ef4444"/><text x="515" y="79" text-anchor="middle" font-size="9" fill="#fff" font-weight="bold">O₂</text>
-                                <circle cx="515" cy="142" r="14" fill="#ef4444"/><text x="515" y="146" text-anchor="middle" font-size="9" fill="#fff" font-weight="bold">O₂</text>
-                                <circle cx="565" cy="108" r="14" fill="#ef4444"/><text x="565" y="112" text-anchor="middle" font-size="9" fill="#fff" font-weight="bold">O₂</text>
-                                <circle cx="615" cy="75" r="14" fill="#ef4444"/><text x="615" y="79" text-anchor="middle" font-size="9" fill="#fff" font-weight="bold">O₂</text>
-                                <circle cx="615" cy="145" r="14" fill="#ef4444"/><text x="615" y="149" text-anchor="middle" font-size="9" fill="#fff" font-weight="bold">O₂</text>
-                                <circle cx="665" cy="110" r="14" fill="#ef4444"/><text x="665" y="114" text-anchor="middle" font-size="9" fill="#fff" font-weight="bold">O₂</text>
-                                <circle cx="565" cy="162" r="14" fill="#ef4444"/><text x="565" y="166" text-anchor="middle" font-size="9" fill="#fff" font-weight="bold">O₂</text>
-
-                                <!-- Collision Arrows -->
-                                <line x1="500" y1="82" x2="478" y2="96" stroke="#be123c" stroke-width="2.5"/>
-                                <line x1="500" y1="136" x2="478" y2="122" stroke="#be123c" stroke-width="2.5"/>
-                                <line x1="550" y1="108" x2="483" y2="108" stroke="#be123c" stroke-width="2.5"/>
-
-                                <text x="540" y="190" text-anchor="middle" font-size="11" font-weight="bold" fill="#be123c">O₂ ပြင်းအား ၅ ဆခန့်များ၍ တိုက်မိနှုန်း အလွန်မြင့် (အမြန်လောင်ကျွမ်း)</text>
+                                <text x="570" y="202" text-anchor="middle" font-size="10.5" fill="#64748b">Ar(Na) = 23 g mol⁻¹</text>
                             </svg>
                         </div>
+                    </div>
 
-                        <!-- Exam-Ready Answer for 7(b) -->
-                        <div class="p-5 rounded-2xl bg-slate-900 text-white space-y-2">
-                            <div class="text-xs font-bold text-emerald-300 uppercase">✍️ စာမေးပွဲတွင် အမှတ်ပြည့်ရအောင် ရေးဖြေရန် အဖြေ (Exam-Ready Answer for 7b)</div>
-                            <p class="text-xs sm:text-sm font-mono text-slate-100 leading-relaxed">
-                                Air contains only about 21% oxygen (and 78% nitrogen), whereas pure oxygen is 100% oxygen. Therefore, the concentration of oxygen in pure oxygen is much higher (nearly five times greater) than in air. According to the collision theory, a higher concentration of oxygen molecules increases the frequency of effective collisions between the burning substance and oxygen molecules. As a result, substances burn much more rapidly in pure oxygen than in air.
-                            </p>
+                    <!-- Intuitive Step-by-Step Explanation -->
+                    <div class="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 shadow-sm space-y-6">
+                        <div class="border-b border-slate-100 pb-3">
+                            <span class="text-xs font-bold uppercase tracking-wider text-purple-600">Step-by-Step Concept Guide</span>
+                            <h3 class="text-xl font-bold text-slate-900 mt-1">အဆင့်တစ်ခုချင်းစီ ဘာကြောင့် ဒီလိုတွက်ရသလဲ? (ရှင်းလင်းချက်)</h3>
                         </div>
 
-                        <!-- Bonus Calculation part if teacher's worksheet includes 7(b) calculation -->
-                        <div class="p-4 rounded-2xl bg-indigo-50/70 border border-indigo-200 space-y-1.5 text-xs">
-                            <div class="font-bold text-indigo-900">📌 အပိုဆောင်း တွက်စာ (အချို့ Practice Sheet များတွင် 7(b) အဖြစ် ပါတတ်သော ပုစ္ဆာ)</div>
-                            <p class="text-slate-700">
-                                <strong>ပုစ္ဆာ:</strong> H₂(g) + 2ICl(g) → I₂(g) + 2HCl(g) တွင် t₁ = 1 s ၌ [H₂] = 0.674 mol dm⁻³ ရှိပြီး t₂ = 2 s ၌ 0.526 mol dm⁻³ ရှိလျှင် Rate ကို တွက်ပါ။
-                            </p>
-                            <div class="bg-white p-3 rounded-xl font-mono text-slate-800">
-                                <span class="mx">Rate = −<span class="fr"><span>Δ[H<sub>2</sub>]</span><span>Δ<i>t</i></span></span> = −<span class="fr"><span>0.526 − 0.674</span><span>2 − 1</span></span> = −<span class="fr"><span>−0.148</span><span>1</span></span> = <strong>0.148 mol dm<sup>−3</sup> s<sup>−1</sup></strong></span>
+                        <div class="space-y-4 text-xs sm:text-sm myanmar-text">
+                            <!-- Step (i) -->
+                            <div class="p-5 rounded-2xl bg-blue-50/70 border border-blue-200 space-y-2">
+                                <div class="font-bold text-blue-950 text-base">အဆင့် (i) — ဂရမ် (g) မှ မိုးလ် (mol) သို့ အရင်ပြောင်းခြင်း</div>
+                                <p class="text-slate-700">
+                                    ဓာတုဗေဒညီမျှခြင်းများတွင် ပစ္စည်းတစ်ခုနှင့်တစ်ခု နှိုင်းယှဉ်တွက်ချက်သည့်အခါ အလေးချိန် (g) ဖြင့် တိုက်ရိုက်နှိုင်းယှဉ်၍ မရပါ။ ပစ္စည်းတစ်မျိုးစီ၏ အမှုန်အလေးချိန် (Molar Mass) မတူညီသောကြောင့် <strong>မိုးလ် (mol)</strong> ဖြင့် အရင်ပြောင်းပေးရသည်။
+                                </p>
+                                <p class="text-slate-700">
+                                    • ဦးစွာ $\text{MgCl}_2$ ၁ မိုးလ်၏ အလေးချိန် ($M_r$) ကို ရှာပါမည်- $\text{Mg} = 24$ နှင့် $\text{Cl} = 35.5$ ဖြစ်၍ <strong>$24 + (2 \times 35.5) = 95\text{ g mol}^{-1}$</strong> ရပါသည်။<br>
+                                    • ထို့ကြောင့် ထွက်လာသော $2\text{ g}$ ကို $95\text{ g mol}^{-1}$ ဖြင့် စားလိုက်သောအခါ <strong>$0.02105\text{ mol}$</strong> ရရှိပါသည်။
+                                </p>
+                            </div>
+
+                            <!-- Step (ii) -->
+                            <div class="p-5 rounded-2xl bg-emerald-50/70 border border-emerald-200 space-y-2">
+                                <div class="font-bold text-emerald-950 text-base">အဆင့် (ii) — ဓာတ်ပြုမှုနှုန်း (Rate of Reaction) တွက်ခြင်း</div>
+                                <p class="text-slate-700">
+                                    <strong>Rate (နှုန်း)</strong> ဆိုသည်မှာ "သတ်မှတ်အချိန် ၁ ယူနစ်အတွင်း ပစ္စည်းမည်မျှ ထွက်လာသနည်း" ကို ပြောခြင်းဖြစ်သည်။ ဥပမာ- စက်ရုံတစ်ရုံက ၁ မိနစ်အတွင်း မုန့်အထုပ် ၅၀ ထုတ်နိုင်လျှင် ထုတ်လုပ်နှုန်းမှာ တစ်မိနစ်လျှင် ၅၀ ထုပ် (50 packs/min) ဖြစ်သကဲ့သို့ပင် ဖြစ်သည်။
+                                </p>
+                                <p class="text-slate-700">
+                                    • ယခုပုစ္ဆာတွင် $1\text{ min}$ အတွင်း $\text{MgCl}_2$ ပမာဏ <strong>$0.02105\text{ mol}$</strong> ထွက်လာသဖြင့် ထွက်လာသောမိုးလ်ကို အချိန် ($1\text{ min}$) ဖြင့် စားလိုက်လျှင် <strong>$0.02105\text{ mol min}^{-1}$</strong> ရပါသည်။
+                                </p>
+                            </div>
+
+                            <!-- Step (iii) -->
+                            <div class="p-5 rounded-2xl bg-purple-50/70 border border-purple-200 space-y-2">
+                                <div class="font-bold text-purple-950 text-base">အဆင့် (iii) — ဒုတိယဓာတ်ပြုအိုးမှ NaCl မိုးလ်နှင့် လိုအပ်သော Na ဒြပ်ထု ရှာခြင်း</div>
+                                <p class="text-slate-700">
+                                    <strong>၁။ NaCl မိုးလ်ရှာခြင်း:</strong> ပုစ္ဆာက ဒုတိယဓာတ်ပြုမှုသည်လည်း ပထမဓာတ်ပြုမှုနှင့် <strong>နှုန်းတူညီ (Same rate = $0.02105\text{ mol min}^{-1}$)</strong> သည်ဟု ပေးထားပါသည်။ ထို့ကြောင့် အချိန် $1\text{ min}$ တူညီသောအခါ ဒုတိယအိုးထဲမှ ထွက်လာမည့် $\text{NaCl}$ ပမာဏသည်လည်း <strong>$0.02105\text{ mol}$</strong> ပင် ဖြစ်ပါသည်။
+                                </p>
+                                <p class="text-slate-700">
+                                    <strong>၂။ လိုအပ်သော Na ဒြပ်ထုရှာခြင်း:</strong> ညီမျှခြင်း $2\text{Na (s)} + \text{Cl}_2\text{ (g)} \longrightarrow 2\text{NaCl (s)}$ ကို ကြည့်လျှင် $\text{NaCl}$ ၂ မိုးလ် ထွက်ရန် $\text{Na}$ ၂ မိုးလ် လိုအပ်ပါသည်။ အချိုးချလျှင် <strong>$2 : 2 = 1 : 1$</strong> (အရေအတွက် အတူတူ) ဖြစ်နေပါသည်။ ထို့ကြောင့် $\text{NaCl}$ $0.02105\text{ mol}$ ထွက်ရန် <strong>$\text{Na}$ သည်လည်း $0.02105\text{ mol}$</strong> လိုအပ်ပါသည်။ နောက်ဆုံးတွင် $\text{Na}$ ၏ Atomic mass ($23\text{ g mol}^{-1}$) ဖြင့် မြှောက်လိုက်လျှင် လိုအပ်သော ဆိုဒီယမ်အလေးချိန် <strong>$0.4842\text{ g}$</strong> ကို ရရှိပါသည်။
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Exam-Ready Full Solution Box -->
+                        <div class="p-5 sm:p-6 rounded-2xl bg-slate-900 text-white space-y-4">
+                            <div class="flex items-center justify-between flex-wrap gap-2 border-b border-white/15 pb-3">
+                                <span class="text-xs font-bold text-amber-300 uppercase tracking-wider">✍️ စာမေးပွဲတွင် ရေးဖြေရန် အပြည့်အစုံ အဖြေ (Exam-Ready Solution)</span>
+                                <span class="text-xs text-slate-400">Grade 12 Textbook Standard Format</span>
+                            </div>
+
+                            <div class="space-y-3 text-xs sm:text-sm font-mono text-slate-100 leading-relaxed">
+                                <div class="text-emerald-300 font-bold">
+                                    Mg (s) + Cl₂ (g) ⟶ MgCl₂ (s) &nbsp;&nbsp;;&nbsp;&nbsp; 2Na (s) + Cl₂ (g) ⟶ 2NaCl (s)
+                                </div>
+
+                                <!-- (i) -->
+                                <div class="p-3.5 rounded-xl bg-white/5 border border-white/10 space-y-1.5">
+                                    <div class="font-bold text-sky-300">(i) Moles of MgCl₂ produced after 1 minute:</div>
+                                    <div><i>M</i><sub>r</sub> of MgCl₂ = 24 + 2 × 35.5 = 95 g mol⁻¹</div>
+                                    <div class="mx">Mole of MgCl<sub>2</sub> = 2 g of MgCl<sub>2</sub> × <span class="fr"><span>1 mol</span><span>95 g of MgCl<sub>2</sub></span></span> = <strong class="text-amber-300">0.02105 mol</strong></div>
+                                </div>
+
+                                <!-- (ii) -->
+                                <div class="p-3.5 rounded-xl bg-white/5 border border-white/10 space-y-1.5">
+                                    <div class="font-bold text-emerald-300">(ii) Rate of reaction using the amount of product produced:</div>
+                                    <div class="mx">Rate of reaction (MgCl<sub>2</sub>) = <span class="fr"><span>mol of MgCl<sub>2</sub></span><span>time</span></span> = <span class="fr"><span>0.02105 mol</span><span>1 min</span></span> = <strong class="text-amber-300">0.02105 mol min⁻¹</strong></div>
+                                    <div class="text-xs text-slate-400">(မှတ်ချက် - စက္ကန့်ဖြင့် ပြောင်းလိုပါက 0.02105 ÷ 60 s = 3.51 × 10⁻⁴ mol s⁻¹ ဖြစ်သည်)</div>
+                                </div>
+
+                                <!-- (iii) -->
+                                <div class="p-3.5 rounded-xl bg-white/5 border border-white/10 space-y-1.5">
+                                    <div class="font-bold text-purple-300">(iii) Moles of NaCl produced and mass of Na needed:</div>
+                                    <div>Number of mol of NaCl = <strong class="text-amber-300">0.02105 mol</strong></div>
+                                    <div class="text-xs text-slate-300">(Due to the equal rate of reaction, the same amount of NaCl will be produced during the same 1 min period.)</div>
+                                    <div class="pt-1">By equation, 2 mol of NaCl is produced from 2 mol of Na.</div>
+                                    <div>∴ 1 mol of NaCl ≡ 1 mol of Na</div>
+                                    <div>∴ 0.02105 mol of NaCl ≡ <strong>0.02105 mol of Na</strong></div>
+                                    <div class="mx pt-1">Mass of Na = 0.02105 mol of Na × <span class="fr"><span>23 g of Na</span><span>1 mol of Na</span></span> = <strong class="text-rose-300">0.4842 g of Na</strong></div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                `
+
+                    <!-- Interactive Simulator for Exercise 7 -->
+                    <div class="formula-card rounded-3xl p-6 sm:p-8 text-white shadow-xl space-y-4">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                            <h3 class="text-lg sm:text-xl font-bold text-amber-300">🧮 Exercise No. 7 လက်တွေ့စမ်းသပ် တွက်ချက်စက်</h3>
+                            <span class="text-xs text-slate-300">မူရင်းပုစ္ဆာတန်ဖိုး (2 g, 1 min) ထည့်ထားပါသည် — ဂဏန်းပြောင်း၍ လေ့ကျင့်နိုင်သည်</span>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4 text-xs max-w-md">
+                            <div>
+                                <label class="block text-slate-300 mb-1">Mass of MgCl₂ produced (g)</label>
+                                <input id="ex7-mass" type="number" step="0.1" value="2" oninput="runEx7Calc()" class="w-full px-3 py-2 rounded-xl bg-white/10 border border-white/20 text-white font-bold focus:outline-none focus:border-amber-400">
+                            </div>
+                            <div>
+                                <label class="block text-slate-300 mb-1">Time taken (min)</label>
+                                <input id="ex7-time" type="number" step="0.5" value="1" oninput="runEx7Calc()" class="w-full px-3 py-2 rounded-xl bg-white/10 border border-white/20 text-white font-bold focus:outline-none focus:border-amber-400">
+                            </div>
+                        </div>
+                        <div id="ex7-output" class="pt-2"></div>
+                    </div>
+                `,
+                onMount: () => runEx7Calc()
             }
         };
 
