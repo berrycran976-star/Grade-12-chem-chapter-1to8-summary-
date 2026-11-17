@@ -1,1 +1,1 @@
-# Grade-12-chem-chapter-1-summary-
+# Grade-12-chem-summary-
