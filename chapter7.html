@@ -34,6 +34,981 @@
         }
         ::-webkit-scrollbar {
             width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        .canvas-container {
+            position: relative;
+            width: 100%;
+            height: 380px;
+            border-radius: 1rem;
+            overflow: hidden;
+            background: radial-gradient(circle at center, #064e3b 0%, #0f172a 100%);
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.45);
+            touch-action: none;
+        }
+        @media (min-width: 768px) {
+            .canvas-container {
+                height: 430px;
+            }
+        }
+        .myanmar-text {
+            line-height: 1.98;
+        }
+        .formula-card {
+            background: linear-gradient(135deg, #0f172a 0%, #065f46 100%);
+        }
+        .math-box {
+            font-family: 'Inter', monospace;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.16);
+        }
+        .v3d-ui { position: absolute; inset: 0; pointer-events: none; font-family: 'Inter','Noto Sans Myanmar',sans-serif; }
+        .v3d-btn { position: absolute; top: 8px; right: 10px; pointer-events: auto; font-size: 11px; font-weight: 600; color: #d1fae5; background: rgba(15,23,42,.72); border: 1px solid rgba(52,211,153,.45); padding: 3px 10px; border-radius: 9999px; cursor: pointer; }
+        .v3d-hint { position: absolute; top: 10px; left: 10px; font-size: 10.5px; color: #cbd5e1; transition: opacity .4s; }
+        .v3d-zoom { position: absolute; right: 10px; top: 38px; display: flex; flex-direction: column; gap: 6px; }
+        .v3d-zoom button { pointer-events: auto; width: 30px; height: 30px; border-radius: 9999px; font-size: 16px; font-weight: 700; line-height: 1; color: #d1fae5; background: rgba(15,23,42,.75); border: 1px solid rgba(52,211,153,.45); cursor: pointer; }
+        .v3d-labels { position: absolute; inset: 0; }
+        .v3d-label { position: absolute; left: 0; top: 0; white-space: nowrap; text-align: center; font-size: 11px; line-height: 1.35; font-weight: 600; color: #f8fafc; background: rgba(15,23,42,.82); border: 1px solid #6ee7b7; border-radius: .6rem; padding: 2px 8px; will-change: transform; }
+        .v3d-info { position: absolute; left: 8px; right: 8px; bottom: 8px; font-size: 11.5px; line-height: 1.6; color: #e2e8f0; background: rgba(15,23,42,.88); border: 1px solid rgba(255,255,255,.14); border-radius: .8rem; padding: 7px 11px; }
+        .v3d-info b { color: #6ee7b7; }
+        .mx { font-family: 'Cambria Math','STIX Two Math','Times New Roman',Georgia,serif; font-size: 1.1em; font-weight: 500; letter-spacing: .01em; }
+        .mx i { font-style: italic; }
+        .mx .nb { display: inline-block; white-space: nowrap; margin-right: .2em; }
+        .mx .fr { display: inline-flex; flex-direction: column; vertical-align: middle; text-align: center; margin: 0 .25em; line-height: 1.3; }
+        .mx .fr > span:first-child { border-bottom: 1.5px solid currentColor; padding: 0 .3em .08em; }
+        .mx .fr > span:last-child { padding: .08em .3em 0; }
+    </style>
+</head>
+<body class="antialiased selection:bg-emerald-100 selection:text-emerald-900">
+
+    <!-- Mobile Top Header -->
+    <header class="lg:hidden sticky top-0 z-40 bg-white/95 backdrop-blur border-b border-slate-200 px-4 py-3 flex items-center justify-between shadow-sm">
+        <div class="flex items-center gap-2.5">
+            <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-emerald-600 to-teal-700 flex items-center justify-center text-white font-bold shadow">
+                Ch7
+            </div>
+            <div>
+                <h1 class="text-sm font-bold text-slate-900 leading-tight">Grade 12 Chemistry</h1>
+                <p class="text-xs text-slate-500">Chemistry & Green Environment</p>
+            </div>
+        </div>
+        <button id="mobile-menu-btn" class="p-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 transition" aria-label="Open Navigation">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+            </svg>
+        </button>
+    </header>
+
+    <!-- Mobile Backdrop -->
+    <div id="sidebar-backdrop" class="fixed inset-0 bg-slate-900/50 backdrop-blur-xs z-40 hidden lg:hidden transition-opacity"></div>
+
+    <div class="flex min-h-screen">
+        <!-- Left Sidebar Taskbar -->
+        <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-80 bg-white border-r border-slate-200 transform -translate-x-full lg:translate-x-0 lg:static lg:inset-auto transition-transform duration-300 ease-in-out flex flex-col shadow-xl lg:shadow-none">
+            <!-- Brand Header + Chapter Switcher -->
+            <div class="p-6 border-b border-slate-100 bg-gradient-to-br from-slate-900 via-emerald-950 to-teal-950 text-white">
+                <div class="flex items-center justify-between">
+                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-500/25 text-emerald-200 border border-emerald-400/30">
+                        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                        Grade 12 Chemistry
+                    </span>
+                    <button id="close-sidebar-btn" class="lg:hidden p-1.5 rounded-lg text-slate-300 hover:text-white hover:bg-white/10">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                    </button>
+                </div>
+                <h2 class="mt-3 text-lg font-bold tracking-tight leading-snug">Chapter 7: Chemistry and Green Environment</h2>
+                <p class="mt-1 text-xs text-emerald-200/85">Cycles, Heavy Metals, Radiation Half-life & Green Chemistry</p>
+
+                <!-- Cross-Chapter Page Navigation Bar -->
+                <div class="mt-4 pt-3 border-t border-white/15 grid grid-cols-5 gap-1.5">
+                    <a href="index.html" class="text-center py-1.5 px-1 rounded-lg bg-white/15 hover:bg-white/25 text-xs font-semibold text-white transition">🏠</a>
+                    <a href="chapter1.html" class="text-center py-1.5 px-1 rounded-lg bg-white/10 hover:bg-white/25 text-xs font-semibold text-white transition">Ch 1</a>
+                    <a href="chapter2.html" class="text-center py-1.5 px-1 rounded-lg bg-white/10 hover:bg-white/25 text-xs font-semibold text-white transition">Ch 2</a>
+                    <a href="chapter3.html" class="text-center py-1.5 px-1 rounded-lg bg-white/10 hover:bg-white/25 text-xs font-semibold text-white transition">Ch 3</a>
+                    <a href="chapter4.html" class="text-center py-1.5 px-1 rounded-lg bg-white/10 hover:bg-white/25 text-xs font-semibold text-white transition">Ch 4</a>
+                    <a href="chapter5.html" class="text-center py-1.5 px-1 rounded-lg bg-white/10 hover:bg-white/25 text-xs font-semibold text-white transition">Ch 5</a>
+                    <a href="chapter6.html" class="text-center py-1.5 px-1 rounded-lg bg-white/10 hover:bg-white/25 text-xs font-semibold text-white transition">Ch 6</a>
+                    <a href="chapter7.html" class="text-center py-1.5 px-1 rounded-lg bg-emerald-500 text-xs font-semibold text-white shadow-xs">Ch 7</a>
+                    <a href="chapter8.html" class="col-span-2 text-center py-1.5 px-1 rounded-lg bg-white/10 hover:bg-white/25 text-xs font-semibold text-white transition">Ch 8</a>
+                </div>
+            </div>
+
+            <!-- Navigation List -->
+            <div class="flex-1 overflow-y-auto p-4 space-y-2">
+                <div class="px-3 py-1.5 text-xs font-bold uppercase tracking-wider text-slate-400">
+                    Chapter 7 လေ့လာရန် အပိုင်းများ (6 ခု)
+                </div>
+
+                <button onclick="selectArticle('overview')" id="nav-overview" class="nav-btn w-full text-left p-3.5 rounded-2xl transition-all duration-200 flex items-start gap-3 border border-transparent">
+                    <span class="nav-badge shrink-0 w-9 h-9 rounded-xl flex items-center justify-center text-sm font-bold">🌍</span>
+                    <div>
+                        <div class="font-bold text-sm leading-snug">Master Mind Map & Formulas</div>
+                        <div class="text-xs opacity-80 mt-0.5">အခန်း (၇) ချိတ်ဆက်မှုမြေပုံနှင့် Half-life ပုံသေနည်းများ</div>
+                    </div>
+                </button>
+
+                <button onclick="selectArticle('7.1')" id="nav-7.1" class="nav-btn w-full text-left p-3.5 rounded-2xl transition-all duration-200 flex items-start gap-3 border border-transparent">
+                    <span class="nav-badge shrink-0 w-9 h-9 rounded-xl flex items-center justify-center text-sm font-bold">7.1</span>
+                    <div>
+                        <div class="font-bold text-sm leading-snug">Our Environmental World</div>
+                        <div class="text-xs opacity-80 mt-0.5">4 Spheres & C, N, S, P Cycles (3D Earth Model)</div>
+                    </div>
+                </button>
+
+                <button onclick="selectArticle('7.2')" id="nav-7.2" class="nav-btn w-full text-left p-3.5 rounded-2xl transition-all duration-200 flex items-start gap-3 border border-transparent">
+                    <span class="nav-badge shrink-0 w-9 h-9 rounded-xl flex items-center justify-center text-sm font-bold">7.2</span>
+                    <div>
+                        <div class="font-bold text-sm leading-snug">Pollutants & Environmental Impacts</div>
+                        <div class="text-xs opacity-80 mt-0.5">Heavy Metals (As, Cd, Pb, Hg), Pesticides, Acid Rain & O₃</div>
+                    </div>
+                </button>
+
+                <button onclick="selectArticle('7.3')" id="nav-7.3" class="nav-btn w-full text-left p-3.5 rounded-2xl transition-all duration-200 flex items-start gap-3 border border-transparent">
+                    <span class="nav-badge shrink-0 w-9 h-9 rounded-xl flex items-center justify-center text-sm font-bold">7.3</span>
+                    <div>
+                        <div class="font-bold text-sm leading-snug">Radioactive Substances</div>
+                        <div class="text-xs opacity-80 mt-0.5">α, β, γ Radiations (3D), Fission/Fusion & Half-life</div>
+                    </div>
+                </button>
+
+                <button onclick="selectArticle('7.4')" id="nav-7.4" class="nav-btn w-full text-left p-3.5 rounded-2xl transition-all duration-200 flex items-start gap-3 border border-transparent">
+                    <span class="nav-badge shrink-0 w-9 h-9 rounded-xl flex items-center justify-center text-sm font-bold">7.4</span>
+                    <div>
+                        <div class="font-bold text-sm leading-snug">Green Chemistry & Sustainability</div>
+                        <div class="text-xs opacity-80 mt-0.5">Green Chemistry Principles, 3Rs, Bioplastics & Clean Energy</div>
+                    </div>
+                </button>
+
+                <button onclick="selectArticle('worked')" id="nav-worked" class="nav-btn w-full text-left p-3.5 rounded-2xl transition-all duration-200 flex items-start gap-3 border border-transparent">
+                    <span class="nav-badge shrink-0 w-9 h-9 rounded-xl flex items-center justify-center text-sm font-bold">🧮</span>
+                    <div>
+                        <div class="font-bold text-sm leading-snug">Half-Life Calculator & Exam Q&A</div>
+                        <div class="text-xs opacity-80 mt-0.5">Radioactive Decay တွက်စက်နှင့် စာမေးပွဲမေးခွန်းအဖြေများ</div>
+                    </div>
+                </button>
+            </div>
+
+            <!-- Footer Tip -->
+            <div class="p-4 border-t border-slate-100 bg-slate-50">
+                <div class="p-3 rounded-xl bg-emerald-50 border border-emerald-200/80 text-xs text-emerald-950 flex items-start gap-2.5">
+                    <span class="text-base">🌱</span>
+                    <span><strong>Phosphorus Cycle</strong> တစ်ခုတည်းသာ လေထုအတွင်း ဓာတ်ငွေ့အဆင့် (Gas phase) မပါဝင်ဘဲ ကျောက်လွှာနှင့် ရေထုတွင်သာ လည်ပတ်သည်ကို မှတ်ထားပါ။</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="flex-1 min-w-0">
+            <div id="content-container" class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-10 py-6 lg:py-10 space-y-8">
+                <!-- Dynamic Content Rendered Here -->
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // ==========================================
+        // 1. GLOBAL STATE & THREE.JS ENGINE MANAGER
+        // ==========================================
+        let currentArticleId = 'overview';
+        let activeScenes = [];
+
+        function clearActiveScenes() {
+            activeScenes.forEach(item => {
+                if (item.animId) cancelAnimationFrame(item.animId);
+                if (item.renderer) item.renderer.dispose();
+            });
+            activeScenes = [];
+        }
+
+        function init3DViewer(containerId, buildSceneCallback) {
+            const container = document.getElementById(containerId);
+            if (!container || typeof THREE === 'undefined') return null;
+            container.querySelectorAll('canvas,.v3d-ui').forEach(n => n.remove());
+            activeScenes = activeScenes.filter(r => {
+                if (r.cid === containerId) {
+                    cancelAnimationFrame(r.animId);
+                    r.renderer.dispose();
+                    return false;
+                }
+                return true;
+            });
+
+            const width = container.clientWidth || 600;
+            const height = container.clientHeight || 360;
+
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
+            camera.position.set(0, 1.4, 7.6);
+
+            const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            renderer.setSize(width, height);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            container.appendChild(renderer.domElement);
+
+            const ui = document.createElement('div');
+            ui.className = 'v3d-ui';
+            ui.innerHTML = `
+                <button type="button" class="v3d-btn">🏷️ ရှင်းလင်းချက်: ON</button>
+                <div class="v3d-zoom"><button type="button" data-z="in">+</button><button type="button" data-z="out">−</button><button type="button" data-z="reset">⟲</button></div>
+                <div class="v3d-labels"></div>
+                <div class="v3d-hint">👆 ဆွဲ၍လှည့်ပါ · + − ဖြင့် ချုံ့ချဲ့ပါ</div>
+                <div class="v3d-info"></div>`;
+            container.appendChild(ui);
+
+            const labelBox = ui.querySelector('.v3d-labels');
+            const labels = [];
+            const api = {
+                label(text, pos, color = '#6ee7b7', obj) {
+                    const el = document.createElement('div');
+                    el.className = 'v3d-label';
+                    el.style.borderColor = color;
+                    el.innerHTML = text;
+                    labelBox.appendChild(el);
+                    labels.push({ el, obj, pos: pos.clone ? pos.clone() : new THREE.Vector3(...pos) });
+                },
+                info(html) { ui.querySelector('.v3d-info').innerHTML = html; }
+            };
+
+            const btn = ui.querySelector('.v3d-btn');
+            btn.addEventListener('click', () => {
+                const on = labelBox.style.display === 'none';
+                labelBox.style.display = on ? '' : 'none';
+                btn.textContent = '🏷️ ရှင်းလင်းချက်: ' + (on ? 'ON' : 'OFF');
+            });
+
+            scene.add(new THREE.AmbientLight(0xffffff, 0.72));
+            const dirLight1 = new THREE.DirectionalLight(0xffffff, 0.9);
+            dirLight1.position.set(6, 9, 7);
+            scene.add(dirLight1);
+            const dirLight2 = new THREE.DirectionalLight(0x6ee7b7, 0.55);
+            dirLight2.position.set(-6, -4, -5);
+            scene.add(dirLight2);
+
+            const rootGroup = new THREE.Group();
+            scene.add(rootGroup);
+
+            const customUpdate = buildSceneCallback(rootGroup, camera, scene, api);
+            camera.lookAt(0, 0, 0);
+            const camPos0 = camera.position.clone();
+            let zoom = 1;
+            const setZoom = z => { zoom = Math.max(0.55, Math.min(2.3, z)); };
+
+            ui.querySelector('.v3d-zoom').addEventListener('click', e => {
+                const k = e.target.dataset.z;
+                if (k === 'in') setZoom(zoom * 1.25);
+                else if (k === 'out') setZoom(zoom / 1.25);
+                else if (k === 'reset') { zoom = 1; rootGroup.rotation.set(0, 0, 0); autoRotate = true; }
+            });
+
+            let isDragging = false, prevX = 0, prevY = 0, autoRotate = true;
+            const onDown = (x, y) => { isDragging = true; autoRotate = false; prevX = x; prevY = y; ui.querySelector('.v3d-hint').style.opacity = 0; };
+            const onMove = (x, y) => {
+                if (!isDragging) return;
+                rootGroup.rotation.y += (x - prevX) * 0.01;
+                rootGroup.rotation.x = Math.max(-1.2, Math.min(1.2, rootGroup.rotation.x + (y - prevY) * 0.01));
+                prevX = x; prevY = y;
+            };
+            const onUp = () => { isDragging = false; };
+
+            const domElem = renderer.domElement;
+            domElem.addEventListener('mousedown', e => onDown(e.clientX, e.clientY));
+            domElem.addEventListener('wheel', e => { e.preventDefault(); setZoom(zoom * (e.deltaY < 0 ? 1.1 : 1 / 1.1)); }, { passive: false });
+            window.addEventListener('mousemove', e => onMove(e.clientX, e.clientY));
+            window.addEventListener('mouseup', onUp);
+            domElem.addEventListener('touchstart', e => { if (e.touches.length === 1) onDown(e.touches[0].clientX, e.touches[0].clientY); }, { passive: true });
+            domElem.addEventListener('touchmove', e => { if (e.touches.length === 1) onMove(e.touches[0].clientX, e.touches[0].clientY); }, { passive: true });
+            domElem.addEventListener('touchend', onUp);
+
+            window.addEventListener('resize', () => {
+                if (!container.isConnected || !container.clientWidth) return;
+                camera.aspect = container.clientWidth / container.clientHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(container.clientWidth, container.clientHeight);
+            });
+
+            const sceneRecord = { renderer, animId: null, cid: containerId };
+            activeScenes.push(sceneRecord);
+
+            const clock = new THREE.Clock();
+            const v = new THREE.Vector3();
+            function animate() {
+                sceneRecord.animId = requestAnimationFrame(animate);
+                const elapsed = clock.getElapsedTime();
+                if (autoRotate) rootGroup.rotation.y += 0.0035;
+                if (typeof customUpdate === 'function') customUpdate(elapsed, rootGroup);
+                camera.position.copy(camPos0).multiplyScalar(1 / zoom);
+                renderer.render(scene, camera);
+
+                const W = container.clientWidth, H = container.clientHeight;
+                scene.updateMatrixWorld();
+                labels.forEach(l => {
+                    v.copy(l.pos);
+                    (l.obj || rootGroup).localToWorld(v).project(camera);
+                    l.el.style.opacity = l.obj && !l.obj.visible ? 0 : 1;
+                    const hw = l.el.offsetWidth / 2 + 4;
+                    const x = Math.max(hw, Math.min(W - hw, (v.x * 0.5 + 0.5) * W));
+                    const y = Math.max(14, Math.min(H - 96, (-v.y * 0.5 + 0.5) * H));
+                    l.el.style.transform = `translate(-50%,-50%) translate(${x}px,${y}px)`;
+                });
+            }
+            animate();
+        }
+
+        function createAtom(radius, colorHex, x = 0, y = 0, z = 0) {
+            const geo = new THREE.SphereGeometry(radius, 28, 28);
+            const mat = new THREE.MeshStandardMaterial({ color: colorHex, roughness: 0.25, metalness: 0.15 });
+            const mesh = new THREE.Mesh(geo, mat);
+            mesh.position.set(x, y, z);
+            return mesh;
+        }
+
+        function createBond(p1, p2, radius = 0.07, colorHex = 0xe2e8f0) {
+            const dir = new THREE.Vector3().subVectors(p2, p1);
+            const geo = new THREE.CylinderGeometry(radius, radius, dir.length(), 16);
+            const mat = new THREE.MeshStandardMaterial({ color: colorHex, roughness: 0.35 });
+            const mesh = new THREE.Mesh(geo, mat);
+            mesh.position.copy(p1).add(p2).multiplyScalar(0.5);
+            mesh.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), dir.clone().normalize());
+            return mesh;
+        }
+
+        // ==========================================
+        // 2. SPECIFIC 3D VISUALIZATIONS FOR CHAPTER 7
+        // ==========================================
+
+        // 3D Viewer 7.1: Earth's 4 Environmental Spheres & Biogeochemical Exchange
+        function render3D_7_1(mode) {
+            init3DViewer('viewer-7-1', (group, camera, scene, ui) => {
+                camera.position.set(0, 1.4, 7.6);
+
+                // Core Lithosphere (brown/amber)
+                const litho = createAtom(0.95, 0xb45309, 0, 0, 0);
+                // Hydrosphere (translucent blue ocean shell)
+                const hydro = new THREE.Mesh(
+                    new THREE.SphereGeometry(1.22, 32, 32),
+                    new THREE.MeshStandardMaterial({ color: 0x0284c7, transparent: true, opacity: 0.68, roughness: 0.2 })
+                );
+                // Biosphere green patches
+                const bio1 = createAtom(0.38, 0x16a34a, 0.85, 0.65, 0.55);
+                const bio2 = createAtom(0.42, 0x22c55e, -0.82, -0.55, 0.65);
+                const bio3 = createAtom(0.35, 0x15803d, 0.2, 0.85, -0.85);
+                // Atmosphere outer gas ring/shell
+                const atmo = new THREE.Mesh(
+                    new THREE.SphereGeometry(1.75, 32, 32),
+                    new THREE.MeshStandardMaterial({ color: 0x7dd3fc, transparent: true, opacity: 0.22, wireframe: true })
+                );
+                group.add(litho, hydro, bio1, bio2, bio3, atmo);
+
+                // Orbiting cycle molecules
+                const particles = [];
+                const pColor = mode === 'carbon' ? 0xfacc15 : 0xc084fc;
+                for (let i = 0; i < 6; i++) {
+                    const ang = (i / 6) * Math.PI * 2;
+                    const p = createAtom(0.14, pColor, Math.cos(ang) * 2.15, Math.sin(ang) * 1.4, Math.sin(ang * 2) * 0.9);
+                    group.add(p);
+                    particles.push({ mesh: p, baseAng: ang });
+                }
+
+                ui.label('Atmosphere (လေထု)', [0, 1.95, 0], '#7dd3fc');
+                ui.label('Hydrosphere (ရေထု)', [-1.5, -0.8, 0.5], '#38bdf8');
+                ui.label('Biosphere (သက်ရှိလောက)', [1.35, 0.8, 0.5], '#86efac');
+                ui.label('Lithosphere (ကျောက်/မြေထု)', [0, -1.55, 0], '#fcd34d');
+
+                if (mode === 'carbon') {
+                    ui.info('<b>Carbon Cycle (ကာဗွန်စက်ဝန်း)</b> — အဝါရောင်အမှုန်များ (CO₂) သည် လေထုမှ အပင်များ (Photosynthesis)၊ ရေထုနှင့် သက်ရှိများကြား အဆက်မပြတ် လည်ပတ်စီးဆင်းနေပုံဖြစ်သည်။');
+                } else {
+                    ui.info('<b>Nitrogen Cycle (နိုက်ထရိုဂျင်စက်ဝန်း)</b> — ခရမ်းရောင်အမှုန်များ (N₂ ⇌ NH₄⁺ ⇌ NO₃⁻) သည် လေထု (78% N₂) မှ ဘက်တီးရီးယားများမှတစ်ဆင့် မြေဆီလွှာနှင့် သက်ရှိများသို့ ကူးပြောင်းပုံဖြစ်သည်။');
+                }
+
+                return (t) => {
+                    particles.forEach((item, idx) => {
+                        const a = item.baseAng + t * 0.9;
+                        item.mesh.position.set(Math.cos(a) * 2.15, Math.sin(a * 1.3 + idx) * 1.45, Math.sin(a) * 2.15);
+                    });
+                };
+            });
+        }
+
+        // 3D Viewer 7.2: Ozone Depletion by CFC Chlorine Radical (Cl• + O3 -> ClO• + O2)
+        function render3D_7_2() {
+            init3DViewer('viewer-7-2', (group, camera, scene, ui) => {
+                camera.position.set(0, 1.0, 7.6);
+
+                // Ozone (O3 bent triatomic molecule)
+                const oCenter = createAtom(0.42, 0x38bdf8, 0.8, 0.35, 0);
+                const oLeft = createAtom(0.42, 0x38bdf8, 0.05, -0.35, 0);
+                const oRight = createAtom(0.42, 0x38bdf8, 1.55, -0.35, 0);
+                group.add(oCenter, oLeft, oRight);
+                group.add(createBond(new THREE.Vector3(0.8,0.35,0), new THREE.Vector3(0.05,-0.35,0), 0.07, 0xbae6fd));
+                group.add(createBond(new THREE.Vector3(0.8,0.35,0), new THREE.Vector3(1.55,-0.35,0), 0.07, 0xbae6fd));
+
+                // Chlorine free radical (Cl• from CFCs under UV)
+                const clRadical = createAtom(0.46, 0x22c55e, -2.2, 0, 0);
+                group.add(clRadical);
+
+                ui.label('Cl• Radical (from CFC + UV)', [-1.9, 0.85, 0], '#86efac', clRadical);
+                ui.label('Ozone Molecule (O₃)', [1.1, 1.05, 0], '#7dd3fc');
+                ui.info('<b>Ozone Layer Depletion</b> — CFCs များကို UV ရောင်ခြည်ထိသောအခါ ထွက်လာသော <strong>Chlorine free radical (Cl•)</strong> တစ်လုံးတည်းက အိုဇုန်း (O₃) မော်လီကျူးပေါင်း ၁၀၀,၀၀၀ ခန့်ကို ဆက်တိုက် ဖျက်ဆီးပစ်နိုင်သည်။');
+
+                return (t) => {
+                    const p = (Math.sin(t * 2.2) + 1) / 2;
+                    clRadical.position.x = -2.3 + p * 1.65;
+                    oLeft.position.x = 0.05 - p * 0.25;
+                };
+            });
+        }
+
+        // 3D Viewer 7.3: Penetrating Power of Alpha (α), Beta (β), Gamma (γ) Radiations
+        function render3D_7_3() {
+            init3DViewer('viewer-7-3', (group, camera, scene, ui) => {
+                camera.position.set(0, 1.1, 7.8);
+
+                // Source box on left
+                const source = new THREE.Mesh(
+                    new THREE.BoxGeometry(0.6, 2.4, 1.4),
+                    new THREE.MeshStandardMaterial({ color: 0xfacc15, metalness: 0.4, roughness: 0.3 })
+                );
+                source.position.x = -2.8;
+                group.add(source);
+
+                // 3 Shielding Barriers: Paper, Aluminium, Thick Lead
+                const paper = new THREE.Mesh(
+                    new THREE.BoxGeometry(0.06, 2.3, 1.5),
+                    new THREE.MeshStandardMaterial({ color: 0xf8fafc, transparent: true, opacity: 0.85 })
+                );
+                paper.position.x = -1.2;
+
+                const alum = new THREE.Mesh(
+                    new THREE.BoxGeometry(0.16, 2.3, 1.5),
+                    new THREE.MeshStandardMaterial({ color: 0x94a3b8, metalness: 0.75, roughness: 0.25 })
+                );
+                alum.position.x = 0.4;
+
+                const lead = new THREE.Mesh(
+                    new THREE.BoxGeometry(0.45, 2.3, 1.5),
+                    new THREE.MeshStandardMaterial({ color: 0x334155, metalness: 0.6, roughness: 0.4 })
+                );
+                lead.position.x = 2.1;
+
+                group.add(paper, alum, lead);
+
+                // 3 Radiation Beams (Alpha top, Beta middle, Gamma bottom)
+                const alphaP = createAtom(0.18, 0xf43f5e, -2.4, 0.75, 0);
+                const betaP = createAtom(0.14, 0x38bdf8, -2.4, 0, 0);
+                const gammaP = createAtom(0.14, 0xa855f7, -2.4, -0.75, 0);
+                group.add(alphaP, betaP, gammaP);
+
+                ui.label('Source', [-2.8, 1.5, 0], '#fde047');
+                ui.label('Paper (α ရပ်)', [-1.2, 1.5, 0], '#f8fafc');
+                ui.label('Aluminium (β ရပ်)', [0.4, 1.5, 0], '#cbd5e1');
+                ui.label('Thick Lead (γ ရပ်)', [2.1, 1.5, 0], '#94a3b8');
+                ui.info('<b>ရောင်ခြည် (၃) မျိုး ဖောက်ထွင်းနိုင်စွမ်း (Penetrating Power)</b> — <strong>Alpha (α)</strong> သည် စာရွက်တစ်ရွက်ဖြင့် ရပ်တန့်ပြီး၊ <strong>Beta (β)</strong> သည် အလူမီနီယမ်ပြားပါးဖြင့် ရပ်တန့်ကာ၊ <strong>Gamma (γ)</strong> ကိုမူ ထူထဲသော ခဲပြား (Lead) သို့မဟုတ် ကွန်ကရစ်ဖြင့်သာ တားဆီးနိုင်သည်။');
+
+                return (t) => {
+                    const p = (t * 0.65) % 1;
+                    alphaP.position.x = -2.4 + p * 1.12; // Stops at Paper (-1.28)
+                    betaP.position.x = -2.4 + p * 2.68;  // Stops at Aluminium (0.28)
+                    gammaP.position.x = -2.4 + p * 4.25; // Stops at Lead (1.85)
+                };
+            });
+        }
+
+        // ==========================================
+        // 3. INTERACTIVE HALF-LIFE & DECAY CALCULATOR
+        // ==========================================
+        function runHalfLifeCalc() {
+            const n0 = parseFloat(document.getElementById('hl-n0')?.value) || 100;
+            const halfLife = parseFloat(document.getElementById('hl-t12')?.value) || 8;
+            const totalTime = parseFloat(document.getElementById('hl-t')?.value) || 24;
+
+            const nCycles = halfLife > 0 ? totalTime / halfLife : 0;
+            const remaining = n0 * Math.pow(0.5, nCycles);
+            const decayed = n0 - remaining;
+            const pctLeft = n0 > 0 ? (remaining / n0) * 100 : 0;
+
+            const out = document.getElementById('hl-output');
+            if (out) {
+                out.innerHTML = `
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
+                        <div class="p-3 rounded-xl bg-white/10 border border-white/15">
+                            <div class="text-xs text-slate-300">Number of Half-lives (n = t / t½)</div>
+                            <div class="text-lg font-bold text-sky-300">${nCycles.toFixed(2)}</div>
+                        </div>
+                        <div class="p-3 rounded-xl bg-white/10 border border-white/15">
+                            <div class="text-xs text-slate-300">Remaining Amount (N)</div>
+                            <div class="text-lg font-bold text-amber-300">${remaining.toFixed(3)}</div>
+                        </div>
+                        <div class="p-3 rounded-xl bg-white/10 border border-white/15">
+                            <div class="text-xs text-slate-300">Decayed Amount (N₀ - N)</div>
+                            <div class="text-lg font-bold text-rose-300">${decayed.toFixed(3)}</div>
+                        </div>
+                        <div class="p-3 rounded-xl bg-white/10 border border-white/15">
+                            <div class="text-xs text-slate-300">Percentage Remaining</div>
+                            <div class="text-lg font-bold text-emerald-300">${pctLeft.toFixed(2)}%</div>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        // ==========================================
+        // 4. ARTICLE TEMPLATES (OVERVIEW + 7.1 - 7.4 + WORKED)
+        // ==========================================
+        const ARTICLES = {
+            'overview': {
+                badge: 'Chapter 7 Master Mind Map & Formulas',
+                title: 'Chemistry and Green Environment အနှစ်ချုပ်နှင့် တွက်စာပုံသေနည်းများ',
+                subtitle: '4 Environmental Spheres၊ Biogeochemical Cycles၊ ညစ်ညမ်းပစ္စည်းများ၊ ရေဒီယိုသတ္တိကြွမှုနှင့် Green Chemistry',
+                html: `
+                    <!-- Visual Mind Map Card -->
+                    <div class="bg-white rounded-3xl border border-slate-200 p-5 sm:p-7 shadow-sm space-y-4">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                            <div>
+                                <span class="text-xs font-bold uppercase tracking-wider text-emerald-600">Chapter 7 Concept Map</span>
+                                <h3 class="text-lg sm:text-xl font-bold text-slate-900">Chapter 7 အဓိက အပိုင်း (၄) ပိုင်း ချိတ်ဆက်မှုမြေပုံ</h3>
+                            </div>
+                            <span class="text-xs px-3 py-1 rounded-full bg-emerald-100 text-emerald-900 font-semibold self-start">Grade 12 Chemistry</span>
+                        </div>
+
+                        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-3.5 text-xs myanmar-text">
+                            <button onclick="selectArticle('7.1')" class="p-4 rounded-2xl bg-sky-50 border border-sky-200 text-left hover:bg-sky-100 transition space-y-1.5">
+                                <div class="font-bold text-sky-950 text-sm">7.1 Our Environmental World →</div>
+                                <p class="text-slate-700">• 4 Spheres: Atmosphere, Hydrosphere, Lithosphere, Biosphere<br>• Cycles: Carbon, Nitrogen, Sulphur & Phosphorus</p>
+                            </button>
+                            <button onclick="selectArticle('7.2')" class="p-4 rounded-2xl bg-rose-50 border border-rose-200 text-left hover:bg-rose-100 transition space-y-1.5">
+                                <div class="font-bold text-rose-950 text-sm">7.2 Pollutants & Impacts →</div>
+                                <p class="text-slate-700">• Heavy Metals: As, Cd, Pb, Hg<br>• Pesticides, POPs/PCBs, Acid Rain, Global Warming & Ozone</p>
+                            </button>
+                            <button onclick="selectArticle('7.3')" class="p-4 rounded-2xl bg-amber-50 border border-amber-200 text-left hover:bg-amber-100 transition space-y-1.5">
+                                <div class="font-bold text-amber-950 text-sm">7.3 Radioactive Substances →</div>
+                                <p class="text-slate-700">• α, β, γ Radiations, Fission vs Fusion<br>• Half-life (t½) တွက်စာနှင့် Radionuclides</p>
+                            </button>
+                            <button onclick="selectArticle('7.4')" class="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-left hover:bg-emerald-100 transition space-y-1.5">
+                                <div class="font-bold text-emerald-950 text-sm">7.4 Sustainable Chemistry →</div>
+                                <p class="text-slate-700">• Green Chemistry Principles, 3Rs<br>• Bioplastics & Renewable Clean Energy</p>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Radioactive Half-Life & Key Reactions Formula Card -->
+                    <div class="formula-card rounded-3xl p-6 sm:p-8 text-white shadow-xl space-y-5">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-white/15 pb-3">
+                            <h3 class="text-lg sm:text-xl font-bold text-emerald-300">📐 Chapter 7 အရေးကြီး ပုံသေနည်းနှင့် ဓာတုညီမျှခြင်းများ</h3>
+                            <span class="text-xs text-slate-300">Exam Quick Reference</span>
+                        </div>
+
+                        <div class="grid md:grid-cols-2 gap-4 text-xs">
+                            <div class="p-4 rounded-2xl bg-white/5 border border-white/10 space-y-2">
+                                <div class="font-bold text-amber-300 uppercase">၁။ Radioactive Half-life (t₁/₂) တွက်စာပုံသေနည်း</div>
+                                <div class="mx math-box p-3 rounded-xl text-sm font-bold text-amber-200 text-center">
+                                    <i>n</i> = <span class="fr"><span><i>t</i></span><span><i>t</i><sub>1/2</sub></span></span> &nbsp;&nbsp;|&nbsp;&nbsp; <i>N</i> = <i>N</i><sub>0</sub> <span class="nb">(<span class="fr"><span>1</span><span>2</span></span>)<sup><i>n</i></sup></span>
+                                </div>
+                                <p class="myanmar-text text-slate-300">
+                                    <code>N₀</code> = မူလပမာဏ (g, %, Bq)၊ <code>N</code> = t အချိန်အကြာ ကျန်ရှိသောပမာဏ၊ <code>t₁/₂</code> = တစ်ဝက်ပြိုကွဲချိန် (Half-life)။
+                                </p>
+                            </div>
+
+                            <div class="p-4 rounded-2xl bg-white/5 border border-white/10 space-y-2">
+                                <div class="font-bold text-sky-300 uppercase">၂။ Acid Rain & Ozone Depletion ညီမျှခြင်းများ</div>
+                                <div class="math-box p-3 rounded-xl text-xs font-mono text-sky-200 space-y-1">
+                                    <div>• Acid Rain: SO₃ + H₂O → H₂SO₄ &nbsp;|&nbsp; 4NO₂ + 2H₂O + O₂ → 4HNO₃</div>
+                                    <div>• Ozone Loss: CF₂Cl₂ ⟶ CF₂Cl• + Cl• &nbsp;|&nbsp; Cl• + O₃ → ClO• + O₂</div>
+                                </div>
+                                <p class="myanmar-text text-slate-300">
+                                    ပုံမှန်မိုးရေ၏ pH မှာ <strong>5.6</strong> ခန့် (ပျော်ဝင်နေသော CO₂ ကြောင့် အနည်းငယ်အက်ဆစ်) ဖြစ်ပြီး <strong>pH &lt; 5.6</strong> ဖြစ်မှ Acid Rain ဟုခေါ်သည်။
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                `
+            },
+
+            '7.1': {
+                badge: 'Article 7.1',
+                title: 'Our Environmental World & Biogeochemical Cycles',
+                subtitle: 'ပတ်ဝန်းကျင်အလွှာ (၄) ခုနှင့် Carbon, Nitrogen, Sulphur, Phosphorus စက်ဝန်းများ',
+                html: `
+                    <!-- 3D Earth Spheres & Cycle Viewer -->
+                    <div class="bg-white rounded-3xl border border-slate-200 p-5 sm:p-7 shadow-sm space-y-4">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                            <div>
+                                <span class="text-xs font-bold uppercase tracking-wider text-emerald-600">Interactive 3D Environmental Spheres</span>
+                                <h3 class="text-lg font-bold text-slate-900">ကမ္ဘာ့ပတ်ဝန်းကျင် အလွှာ (၄) ခုနှင့် ဒြပ်စင်စက်ဝန်း 3D</h3>
+                            </div>
+                            <div class="flex flex-wrap gap-2">
+                                <button onclick="render3D_7_1('carbon')" class="px-3.5 py-2 rounded-xl text-xs font-semibold bg-amber-600 text-white hover:bg-amber-700 transition">🟡 Carbon Cycle (CO₂)</button>
+                                <button onclick="render3D_7_1('nitrogen')" class="px-3.5 py-2 rounded-xl text-xs font-semibold bg-purple-600 text-white hover:bg-purple-700 transition">🟣 Nitrogen Cycle (N₂)</button>
+                            </div>
+                        </div>
+                        <div id="viewer-7-1" class="canvas-container"></div>
+                    </div>
+
+                    <!-- 4 Biogeochemical Cycles Comparison -->
+                    <div class="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 shadow-sm space-y-5">
+                        <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2.5">
+                            <span class="w-8 h-8 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center text-sm font-bold">7.1</span>
+                            Biogeochemical Cycles (ဇီဝဘူမိဓာတု စက်ဝန်း ၄ မျိုး အနှစ်ချုပ်)
+                        </h3>
+
+                        <div class="grid md:grid-cols-2 gap-4 text-xs sm:text-sm myanmar-text">
+                            <div class="p-5 rounded-2xl bg-amber-50/70 border border-amber-200 space-y-2">
+                                <div class="font-bold text-amber-950 text-base">1. Carbon Cycle (ကာဗွန်စက်ဝန်း)</div>
+                                <p class="text-slate-700">
+                                    • <strong>CO₂ ဖယ်ရှားခြင်း:</strong> အပင်များ အစာချက်လုပ်ခြင်း (<strong>Photosynthesis:</strong> 6CO₂ + 6H₂O → C₆H₁₂O₆ + 6O₂) နှင့် သမုဒ္ဒရာရေထဲ ပျော်ဝင်ခြင်း။<br>
+                                    • <strong>CO₂ ပြန်ထုတ်ခြင်း:</strong> အသက်ရှူခြင်း (Respiration)၊ ဆွေးမြေ့ပျက်စီးခြင်း (Decomposition) နှင့် ရုပ်ကြွင်းလောင်စာ (Fossil fuels) လောင်ကျွမ်းခြင်း။
+                                </p>
+                            </div>
+
+                            <div class="p-5 rounded-2xl bg-purple-50/70 border border-purple-200 space-y-2">
+                                <div class="font-bold text-purple-950 text-base">2. Nitrogen Cycle (နိုက်ထရိုဂျင်စက်ဝန်း — အဆင့် ၅ ဆင့်)</div>
+                                <p class="text-slate-700">
+                                    1) <strong>Nitrogen Fixation:</strong> လေထု N₂ → NH₃/NH₄⁺ (မိုးကြိုးပစ်ခြင်း၊ *Rhizobium* ဘက်တီးရီးယား၊ Haber process)။<br>
+                                    2) <strong>Nitrification:</strong> NH₄⁺ → NO₂⁻ (*Nitrosomonas*) → NO₃⁻ (*Nitrobacter*)။<br>
+                                    3) <strong>Assimilation:</strong> အပင်များက NO₃⁻ ကို စုပ်ယူ၍ ပရိုတင်းတည်ဆောက်ခြင်း။<br>
+                                    4) <strong>Ammonification:</strong> သက်ရှိသေများ ဆွေးမြေ့ပြီး NH₄⁺ ပြန်ဖြစ်ခြင်း။<br>
+                                    5) <strong>Denitrification:</strong> NO₃⁻ → N₂ ဓာတ်ငွေ့အဖြစ် လေထုသို့ ပြန်ရောက်ခြင်း (*Pseudomonas*)။
+                                </p>
+                            </div>
+
+                            <div class="p-5 rounded-2xl bg-yellow-50/70 border border-yellow-200 space-y-2">
+                                <div class="font-bold text-yellow-950 text-base">3. Sulphur Cycle (ဆာလ်ဖာစက်ဝန်း)</div>
+                                <p class="text-slate-700">
+                                    မီးတောင်ပေါက်ကွဲမှုနှင့် ကျောက်မီးသွေး/ရေနံ လောင်ကျွမ်းမှုမှ H₂S နှင့် SO₂ တို့ လေထုထဲရောက်ရှိပြီး မိုးရေနှင့်ပေါင်းကာ H₂SO₄ (Sulphate, SO₄²⁻) အဖြစ် မြေဆီလွှာသို့ ပြန်ကျရောက်သည်။ အပင်များက SO₄²⁻ ကို စုပ်ယူ၍ Amino acids များ တည်ဆောက်သည်။
+                                </p>
+                            </div>
+
+                            <div class="p-5 rounded-2xl bg-sky-50/70 border border-sky-200 space-y-2">
+                                <div class="font-bold text-sky-950 text-base">4. Phosphorus Cycle (ဖော့စဖရပ်စ်စက်ဝန်း)</div>
+                                <p class="text-slate-700">
+                                    <strong>အထူးခြားဆုံးအချက်:</strong> လေထုအတွင်း ဓာတ်ငွေ့အဆင့် <strong>လုံးဝမပါဝင်ပါ (No gas phase)</strong>။ ဖော့စဖိတ်ကျောက်များ တိုက်စားပြိုကွဲခြင်း (Weathering) မှ PO₄³⁻ အိုင်းယွန်းများ မြေဆီလွှာနှင့် ရေထုထဲရောက်ရှိပြီး အပင်နှင့် သတ္တဝါများ၏ <strong>DNA, RNA, ATP နှင့် အရိုး/သွား</strong> တည်ဆောက်ရာတွင် ပါဝင်သည်။
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                `,
+                onMount: () => render3D_7_1('carbon')
+            },
+
+            '7.2': {
+                badge: 'Article 7.2',
+                title: 'Pollutants and Impacts on the Environment',
+                subtitle: 'Heavy Metals (As, Cd, Pb, Hg), Pesticides, POPs/PCBs, Acid Rain, Global Warming & Ozone Depletion',
+                html: `
+                    <!-- 3D Ozone Depletion Viewer -->
+                    <div class="bg-white rounded-3xl border border-slate-200 p-5 sm:p-7 shadow-sm space-y-4">
+                        <div>
+                            <span class="text-xs font-bold uppercase tracking-wider text-sky-600">Interactive 3D Atmospheric Chemistry</span>
+                            <h3 class="text-lg font-bold text-slate-900">CFCs မှ ထွက်လာသော Cl• Radical ကြောင့် အိုဇုန်းလွှာ (O₃) ပျက်စီးပုံ 3D</h3>
+                        </div>
+                        <div id="viewer-7-2" class="canvas-container"></div>
+                    </div>
+
+                    <!-- Heavy Metals Table (Textbook Exact Details) -->
+                    <div class="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 shadow-sm space-y-5">
+                        <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2.5">
+                            <span class="w-8 h-8 rounded-xl bg-rose-100 text-rose-700 flex items-center justify-center text-sm font-bold">(a)</span>
+                            Heavy Metals & Their Compounds (အဆိပ်သင့် သတ္တုလေးများ — ဇယားချုပ်)
+                        </h3>
+                        <p class="myanmar-text text-xs sm:text-sm text-slate-700">
+                            <strong>Heavy Metals:</strong> သိပ်သည်းဆမြင့်မားပြီး ပြင်းအားအလွန်နည်းသော ပမာဏ၌ပင် အဆိပ်သင့်စေနိုင်သော သတ္တုများဖြစ်သည်။ သက်ရှိခန္ဓာကိုယ်ထဲတွင် စုပုံလာခြင်း (<strong>Bioaccumulation</strong>) နှင့် အစာကွင်းဆက်တစ်လျှောက် ပိုမိုများပြားလာခြင်း (<strong>Biomagnification</strong>) တို့ ဖြစ်စေသည်။
+                        </p>
+
+                        <div class="overflow-x-auto rounded-2xl border border-slate-200">
+                            <table class="w-full text-left border-collapse text-xs sm:text-sm">
+                                <thead>
+                                    <tr class="bg-slate-900 text-white">
+                                        <th class="p-3.5">Heavy Metal</th>
+                                        <th class="p-3.5">Oxidation States</th>
+                                        <th class="p-3.5">အဓိက အရင်းအမြစ်နှင့် အသုံးပြုမှု</th>
+                                        <th class="p-3.5">ကျန်းမာရေးနှင့် ပတ်ဝန်းကျင် ဆိုးကျိုး</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-slate-200 bg-white myanmar-text">
+                                    <tr>
+                                        <td class="p-3.5 font-bold text-rose-800">Arsenic (As)</td>
+                                        <td class="p-3.5 font-mono">+3, +5</td>
+                                        <td class="p-3.5">Arsenic-rich ကျောက်လွှာမှ မြေအောက်ရေထဲ ပျော်ဝင်ခြင်း၊ Sodium arsenate (ပိုးသတ်ဆေး)၊ ဖန်/ဆေးသုတ်ဆေး</td>
+                                        <td class="p-3.5">အရေပြားအနာများ (Skin lesions)၊ ကင်ဆာနှင့် ကိုယ်တွင်းအင်္ဂါ ပျက်စီးစေသည်</td>
+                                    </tr>
+                                    <tr class="bg-slate-50/70">
+                                        <td class="p-3.5 font-bold text-amber-800">Cadmium (Cd)</td>
+                                        <td class="p-3.5 font-mono">+2</td>
+                                        <td class="p-3.5">ကျောက်မီးသွေးလောင်ကျွမ်းမှု (CdS)၊ အမှိုက်မီးရှို့မှု (CdCl₂)၊ ဓာတ်ခဲအားသွင်းဆဲလ်များ (Ni-Cd)</td>
+                                        <td class="p-3.5">ကျောက်ကပ်ပျက်စီးခြင်း၊ အရိုးပျော့/ကျိုးလွယ်ခြင်း (Itai-itai disease)</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="p-3.5 font-bold text-indigo-800">Lead (Pb)</td>
+                                        <td class="p-3.5 font-mono">+2, +4</td>
+                                        <td class="p-3.5">ကားအိတ်ဇောမီးခိုး (Leaded petrol)၊ Lead-acid ဘက်ထရီ၊ ခဲပါသော သုတ်ဆေးဟောင်းများ</td>
+                                        <td class="p-3.5">ဦးနှောက်နှင့် အာရုံကြောစနစ် ထိခိုက်ပျက်စီးခြင်း (Neurological damage)</td>
+                                    </tr>
+                                    <tr class="bg-slate-50/70">
+                                        <td class="p-3.5 font-bold text-purple-800">Mercury (Hg)</td>
+                                        <td class="p-3.5 font-mono">0, +1, +2</td>
+                                        <td class="p-3.5">ရွှေကျင်ခြင်း (Gold panning)၊ သွားဖာသတ္တု (Dental amalgam)၊ ငါး/ခရုများထဲရှိ <strong>Methylmercury</strong></td>
+                                        <td class="p-3.5">ဗဟိုအာရုံကြောစနစ် ပျက်စီးခြင်း (Minamata disease)၊ ကိုယ်ဝန်ဆောင်နှင့် ကလေးငယ်များ ထိခိုက်ခြင်း</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Pesticides, VOCs, POPs, Acid Rain, Greenhouse Effect -->
+                        <div class="grid md:grid-cols-2 gap-4 text-xs sm:text-sm myanmar-text pt-2">
+                            <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-1.5">
+                                <div class="font-bold text-slate-900">🧪 Pesticides (ပိုးသတ်ဆေးများ) & POPs / PCBs</div>
+                                <p class="text-slate-700">
+                                    • <strong>Pesticides ၄ မျိုး:</strong> Organophosphates, Organochlorines (ဥပမာ- DDT), Carbamates & Thiocarbamates, Pyrethroids။ ပတ်ဝန်းကျင်တွင် Adsorption, Transfer နှင့် Degradation ဖြစ်စဉ် ၃ ခု ဖြစ်ပေါ်သည်။<br>
+                                    • <strong>POPs & VOCs:</strong> Polychlorinated biphenyls (<strong>PCBs</strong>) နှင့် Dioxins တို့သည် သဘာဝတွင် ပြိုကွဲရန် အလွန်ခက်ခဲပြီး အဆီတစ်ရှူးများထဲ စုပုံတတ်သည်။
+                                </p>
+                            </div>
+                            <div class="p-4 rounded-2xl bg-sky-50/80 border border-sky-200 space-y-1.5">
+                                <div class="font-bold text-sky-950">🌡️ Greenhouse Effect & Acid Rain</div>
+                                <p class="text-slate-700">
+                                    • <strong>Greenhouse Gases:</strong> CO₂, CH₄, N₂O, CFCs နှင့် ရေငွေ့တို့သည် ကမ္ဘာမြေမှ ပြန်ထွက်သော Infrared (IR) အပူလှိုင်းများကို စုပ်ယူထားသဖြင့် ကမ္ဘာကြီး ပူနွေးလာစေသည် (Global Warming)။<br>
+                                    • <strong>Acid Rain (pH &lt; 5.6):</strong> SO₂ နှင့် NOₓ တို့ကြောင့် ဖြစ်ပေါ်ပြီး သစ်တောများ၊ ရေနေသတ္တဝါများနှင့် ထုံးကျောက်/စကျင်ကျောက် အဆောက်အဦများ (CaCO₃ + H₂SO₄ → CaSO₄ + H₂O + CO₂) ကို တိုက်စားပျက်စီးစေသည်။
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                `,
+                onMount: () => render3D_7_2()
+            },
+
+            '7.3': {
+                badge: 'Article 7.3',
+                title: 'Radioactive Substances and the Environment',
+                subtitle: 'Alpha, Beta, Gamma ရောင်ခြည် (၃) မျိုး၊ Nuclear Fission vs Fusion နှင့် Radionuclides',
+                html: `
+                    <!-- 3D Radiation Penetration Viewer -->
+                    <div class="bg-white rounded-3xl border border-slate-200 p-5 sm:p-7 shadow-sm space-y-4">
+                        <div>
+                            <span class="text-xs font-bold uppercase tracking-wider text-amber-600">Interactive 3D Nuclear Physics & Chemistry</span>
+                            <h3 class="text-lg font-bold text-slate-900">Alpha (α), Beta (β) နှင့် Gamma (γ) ရောင်ခြည် ဖောက်ထွင်းနိုင်စွမ်း 3D</h3>
+                        </div>
+                        <div id="viewer-7-3" class="canvas-container"></div>
+                    </div>
+
+                    <!-- Comparison Table of Alpha, Beta, Gamma -->
+                    <div class="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 shadow-sm space-y-5">
+                        <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2.5">
+                            <span class="w-8 h-8 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center text-sm font-bold">7.3</span>
+                            ရေဒီယိုသတ္တိကြွ ရောင်ခြည် (၃) မျိုး နှိုင်းယှဉ်ဇယား
+                        </h3>
+
+                        <div class="overflow-x-auto rounded-2xl border border-slate-200">
+                            <table class="w-full text-left border-collapse text-xs sm:text-sm">
+                                <thead>
+                                    <tr class="bg-slate-900 text-white">
+                                        <th class="p-3.5">ဂုဏ်သတ္တိ (Property)</th>
+                                        <th class="p-3.5">Alpha (α) Radiation</th>
+                                        <th class="p-3.5">Beta (β⁻) Radiation</th>
+                                        <th class="p-3.5">Gamma (γ) Radiation</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-slate-200 bg-white myanmar-text">
+                                    <tr><td class="p-3 font-bold">သဘာဝ (Nature)</td><td class="p-3 font-mono">Helium nucleus (⁴₂He²⁺)</td><td class="p-3 font-mono">High-speed electron (⁰₋₁e)</td><td class="p-3">Electromagnetic wave (လှိုင်း)</td></tr>
+                                    <tr class="bg-slate-50/70"><td class="p-3 font-bold">လျှပ်စစ်ဓာတ် (Charge)</td><td class="p-3 font-bold text-rose-700">+2</td><td class="p-3 font-bold text-sky-700">-1</td><td class="p-3 font-bold text-slate-600">0 (Neutral)</td></tr>
+                                    <tr><td class="p-3 font-bold">Ionising Power</td><td class="p-3 font-bold text-rose-700">အမြင့်ဆုံး (Highest)</td><td class="p-3">အလယ်အလတ် (Moderate)</td><td class="p-3 text-slate-600">အနိမ့်ဆုံး (Lowest)</td></tr>
+                                    <tr class="bg-slate-50/70"><td class="p-3 font-bold">Penetrating Power</td><td class="p-3 text-slate-600">အနိမ့်ဆုံး (စာရွက်ဖြင့် တားနိုင်)</td><td class="p-3">အလယ်အလတ် (Al ပြားဖြင့် တားနိုင်)</td><td class="p-3 font-bold text-purple-700">အမြင့်ဆုံး (Lead / Concrete လို)</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Fission vs Fusion & Important Radioisotopes -->
+                        <div class="grid md:grid-cols-2 gap-4 text-xs sm:text-sm myanmar-text pt-2">
+                            <div class="p-4 rounded-2xl bg-amber-50/80 border border-amber-200 space-y-1.5">
+                                <div class="font-bold text-amber-950 text-base">⚛️ Nuclear Fission vs Nuclear Fusion</div>
+                                <p class="text-slate-700">
+                                    • <strong>Nuclear Fission (နျူကလိယ ကွဲထွက်ခြင်း):</strong> လေးလံသော နျူကလိယပ်စ် (ဥပမာ- ²³⁵U) ကို နျူထရွန်ဖြင့် တိုက်ခွဲရာမှ သေးငယ်သော နျူကလိယပ်စ်များနှင့် စွမ်းအင်အမြောက်အမြား ထွက်လာခြင်း (နျူကလီးယားဓာတ်အားပေးစက်ရုံများတွင် သုံးသည်)။<br>
+                                    • <strong>Nuclear Fusion (နျူကလိယ ပေါင်းစပ်ခြင်း):</strong> ပေါ့ပါးသော နျူကလိယပ်စ်များ (ဥပမာ- ²H + ³H → ⁴He + ¹n) အပူချိန်အလွန်မြင့်မားချိန်တွင် ပေါင်းစပ်ခြင်း (နေနှင့် ကြယ်များတွင် ဖြစ်ပေါ်သည်)။
+                                </p>
+                            </div>
+                            <div class="p-4 rounded-2xl bg-purple-50/80 border border-purple-200 space-y-1.5">
+                                <div class="font-bold text-purple-950 text-base">☢️ အရေးကြီးသော Radionuclides များ</div>
+                                <p class="text-slate-700">
+                                    • <strong>Carbon-14 (¹⁴C, t₁/₂ = 5730 yr):</strong> ရှေးဟောင်းပစ္စည်း သက်တမ်းတွက်ခြင်း (Radiocarbon dating)။<br>
+                                    • <strong>Cobalt-60 (⁶⁰Co):</strong> ကင်ဆာရောဂါ ရောင်ခြည်ကုသခြင်း (Radiotherapy)။<br>
+                                    • <strong>Iodine-131 (¹³¹I, t₁/₂ = 8 days):</strong> သိုင်းရွိုက် (Thyroid) ရောဂါကုသ/စစ်ဆေးခြင်း။<br>
+                                    • <strong>Strontium-90 (⁹⁰Sr) & Caesium-137 (¹³⁷Cs):</strong> အန္တရာယ်ရှိသော နျူကလီးယားစွန့်ပစ်ပစ္စည်းများ (Sr-90 သည် Ca နေရာအစားထိုးပြီး အရိုးကင်ဆာ ဖြစ်စေနိုင်သည်)။
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                `,
+                onMount: () => render3D_7_3()
+            },
+
+            '7.4': {
+                badge: 'Article 7.4',
+                title: 'Chemistry for Sustainable Environmental Development',
+                subtitle: 'Green Chemistry မူဝါဒများ၊ 3Rs စနစ်၊ Bioplastics နှင့် ပြန်လည်ပြည့်ဖြိုးမြဲ စွမ်းအင်များ',
+                html: `
+                    <div class="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 shadow-sm space-y-5">
+                        <div class="p-5 rounded-2xl bg-emerald-50 border border-emerald-200 space-y-2">
+                            <div class="font-bold text-emerald-950 text-sm sm:text-base">🌱 Green Chemistry (အစိမ်းရောင် ဓာတုဗေဒ) ဆိုတာဘာလဲ?</div>
+                            <p class="myanmar-text text-slate-800 text-xs sm:text-sm">
+                                <strong>Green Chemistry (Sustainable Chemistry):</strong> အန္တရာယ်ရှိသော ဓာတုပစ္စည်းများ အသုံးပြုခြင်းနှင့် စွန့်ပစ်ပစ္စည်း ထွက်ရှိခြင်းတို့ကို လျှော့ချနိုင်ရန် သို့မဟုတ် လုံးဝဖယ်ရှားနိုင်ရန် ဓာတုထုတ်ကုန်များနှင့် လုပ်ငန်းစဉ်များကို ဒီဇိုင်းထုတ်ဖန်တီးခြင်း ဖြစ်သည်။
+                            </p>
+                        </div>
+
+                        <div class="grid sm:grid-cols-2 gap-4 text-xs sm:text-sm myanmar-text">
+                            <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
+                                <div class="font-bold text-emerald-900 text-base">1. Key Principles of Green Chemistry</div>
+                                <ul class="space-y-1.5 list-disc pl-4 text-slate-700">
+                                    <li><strong>Prevention:</strong> စွန့်ပစ်ပစ္စည်းထွက်ပြီးမှ ရှင်းလင်းခြင်းထက် အစကတည်းက မထွက်အောင် ကာကွယ်ခြင်း။</li>
+                                    <li><strong>Atom Economy:</strong> ကုန်ကြမ်းအက်တမ်အားလုံး နီးပါးကို လိုချင်သော ထုတ်ကုန်ထဲသို့ အများဆုံးရောက်ရှိစေခြင်း။</li>
+                                    <li><strong>Safer Solvents & Reagents:</strong> အဆိပ်ရှိသော Organic solvents များအစား ရေ (Water) သို့မဟုတ် Supercritical CO₂ ကို အသုံးပြုခြင်း။</li>
+                                    <li><strong>Use of Catalysis:</strong> အပူချိန်နှင့် စွမ်းအင်သက်သာစေရန် ဓာတ်ကူပစ္စည်း (Catalysts) များ အသုံးပြုခြင်း။</li>
+                                    <li><strong>Design for Degradation:</strong> အသုံးပြုပြီးနောက် သဘာဝပတ်ဝန်းကျင်တွင် အန္တရာယ်ကင်းစွာ ဆွေးမြေ့ပြိုကွဲလွယ်စေရန် ထုတ်လုပ်ခြင်း။</li>
+                                </ul>
+                            </div>
+
+                            <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
+                                <div class="font-bold text-sky-900 text-base">2. 3Rs, Bioplastics & Clean Energy</div>
+                                <ul class="space-y-1.5 list-disc pl-4 text-slate-700">
+                                    <li><strong>3Rs စနစ်:</strong> <strong>Reduce</strong> (လျှော့ချသုံးစွဲခြင်း)၊ <strong>Reuse</strong> (ပြန်လည်အသုံးပြုခြင်း)၊ <strong>Recycle</strong> (ပြန်လည်ပြုပြင်ထုတ်လုပ်ခြင်း)။</li>
+                                    <li><strong>Biodegradable Plastics (Bioplastics):</strong> ပြောင်းဖူး၊ ကြံ စသည့် အပင်ထွက်ကုန်ကြမ်းများမှ ထုတ်လုပ်သော <strong>PLA (Polylactic acid)</strong> နှင့် <strong>PHA</strong> တို့သည် ဘက်တီးရီးယားများကြောင့် သဘာဝအတိုင်း ဆွေးမြေ့နိုင်သည်။</li>
+                                    <li><strong>Renewable & Clean Energy:</strong> နေရောင်ခြည် (Solar)၊ လေအား (Wind)၊ ဇီဝလောင်စာ (Bioethanol, Biodiesel) နှင့် <strong>Hydrogen Fuel Cells (2H₂ + O₂ → 2H₂O)</strong> တို့သည် ဖန်လုံအိမ်ဓာတ်ငွေ့ မထုတ်လွှတ်ပါ။</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                `
+            },
+
+            'worked': {
+                badge: 'Interactive Half-Life Calculator & Exam Q&A',
+                title: 'Radioactive Half-Life Calculator နှင့် စာမေးပွဲမေးခွန်းဟောင်း အဖြေများ',
+                subtitle: 'Half-life တွက်စာများ လက်တွေ့တွက်ချက်စစ်ဆေးပြီး စာမေးပွဲမေးခွန်းများကို လေ့ကျင့်ပါ',
+                html: `
+                    <!-- Interactive Half-Life Calculator -->
+                    <div class="formula-card rounded-3xl p-6 sm:p-8 text-white shadow-xl space-y-4">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                            <h3 class="text-lg sm:text-xl font-bold text-amber-300">🧮 Interactive Radioactive Half-Life Calculator (<span class="mx"><i>N</i> = <i>N</i><sub>0</sub>(½)<sup><i>t</i>/<i>t</i><sub>½</sub></sup></span>)</h3>
+                            <span class="text-xs text-slate-300">ဥပမာ: Iodine-131 (N₀ = 100 g, t½ = 8 days, t = 24 days) ထည့်ထားပါသည်</span>
+                        </div>
+                        <div class="grid sm:grid-cols-3 gap-3 text-xs">
+                            <div>
+                                <label class="block text-slate-300 mb-1">Initial Amount N₀ (g သို့ %)</label>
+                                <input id="hl-n0" type="number" step="any" value="100" oninput="runHalfLifeCalc()" class="w-full px-3 py-2 rounded-xl bg-white/10 border border-white/20 text-white font-bold">
+                            </div>
+                            <div>
+                                <label class="block text-slate-300 mb-1">Half-life (t₁/₂)</label>
+                                <input id="hl-t12" type="number" step="any" value="8" oninput="runHalfLifeCalc()" class="w-full px-3 py-2 rounded-xl bg-white/10 border border-white/20 text-white font-bold">
+                            </div>
+                            <div>
+                                <label class="block text-slate-300 mb-1">Total Time Elapsed (t) (ယူနစ်တူရမည်)</label>
+                                <input id="hl-t" type="number" step="any" value="24" oninput="runHalfLifeCalc()" class="w-full px-3 py-2 rounded-xl bg-white/10 border border-white/20 text-white font-bold">
+                            </div>
+                        </div>
+                        <div id="hl-output" class="pt-1"></div>
+                    </div>
+
+                    <!-- Exam Q&A -->
+                    <div class="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 shadow-sm space-y-4 text-xs sm:text-sm myanmar-text">
+                        <h3 class="text-xl font-bold text-slate-900">✍️ စာမေးပွဲတွင် မေးလေ့ရှိသော မေးခွန်းနှင့် အဖြေများ</h3>
+
+                        <div class="p-4 rounded-2xl bg-amber-50/70 border border-amber-200 space-y-1.5">
+                            <div class="font-bold text-amber-950">Q1. The half-life of Iodine-131 is 8 days. How much of a 64 g sample will remain after 32 days?</div>
+                            <div class="bg-slate-900 text-amber-200 p-3.5 rounded-xl font-mono text-xs space-y-1">
+                                <div>Number of half-lives (n) = Total time ÷ Half-life = 32 days ÷ 8 days = 4</div>
+                                <div>64 g → (8 d) → 32 g → (16 d) → 16 g → (24 d) → 8 g → (32 d) → <strong>4 g</strong></div>
+                                <div class="text-emerald-300 font-bold">Remaining mass = 64 × (1/2)⁴ = 64 ÷ 16 = 4 g</div>
+                            </div>
+                        </div>
+
+                        <div class="p-4 rounded-2xl bg-emerald-50/70 border border-emerald-200 space-y-1.5">
+                            <div class="font-bold text-emerald-950">Q2. Why is the phosphorus cycle different from the carbon, nitrogen, and sulphur cycles?</div>
+                            <p class="text-slate-800">
+                                <strong>Ans:</strong> Unlike carbon, nitrogen, and sulphur cycles, the <strong>phosphorus cycle does not have a significant gaseous phase</strong> in the atmosphere. Phosphorus circulates mainly through rocks (lithosphere), soil, water (hydrosphere), and living organisms (biosphere) as phosphate ions (PO₄³⁻).
+                            </p>
+                        </div>
+
+                        <div class="p-4 rounded-2xl bg-rose-50/70 border border-rose-200 space-y-1.5">
+                            <div class="font-bold text-rose-950">Q3. How does mercury enter the human body and which compound bioaccumulates in fish?</div>
+                            <p class="text-slate-800">
+                                <strong>Ans:</strong> Elemental mercury enters the body mainly through inhalation of <strong>mercury vapour</strong> (from gold panning or dental amalgam), while <strong>methylmercury (CH₃Hg⁺)</strong> bioaccumulates in fish and shellfish and enters humans through the food chain, causing severe neurological damage.
+                            </p>
+                        </div>
+                    </div>
+                `,
+                onMount: () => runHalfLifeCalc()
+            }
+        };
+
+        // ==========================================
+        // 5. NAVIGATION & UI CONTROLLER
+        // ==========================================
+        function selectArticle(id) {
+            currentArticleId = id;
+            const article = ARTICLES[id];
+            if (!article) return;
+
+            clearActiveScenes();
+
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('bg-emerald-50', 'text-emerald-950', 'border-emerald-200', 'shadow-xs');
+                btn.classList.add('text-slate-600', 'hover:bg-slate-50');
+                const badge = btn.querySelector('.nav-badge');
+                if (badge) {
+                    badge.classList.remove('bg-emerald-600', 'text-white');
+                    badge.classList.add('bg-slate-100', 'text-slate-600');
+                }
+            });
+
+            const activeBtn = document.getElementById(`nav-${id}`);
+            if (activeBtn) {
+                activeBtn.classList.remove('text-slate-600', 'hover:bg-slate-50');
+                activeBtn.classList.add('bg-emerald-50', 'text-emerald-950', 'border-emerald-200', 'shadow-xs');
+                const badge = activeBtn.querySelector('.nav-badge');
+                if (badge) {
+                    badge.classList.remove('bg-slate-100', 'text-slate-600');
+                    badge.classList.add('bg-emerald-600', 'text-white');
+                }
+            }
+
+            const container = document.getElementById('content-container');
+            const ids = ['overview', '7.1', '7.2', '7.3', '7.4', 'worked'];
+            const idx = ids.indexOf(id);
+            const prevId = idx > 0 ? ids[idx - 1] : null;
+            const nextId = idx < ids.length - 1 ? ids[idx + 1] : null;
+
+            container.innerHTML = `
+                <div class="border-b border-slate-200 pb-5">
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800 mb-2">
+                        ${article.badge}
+                    </span>
+                    <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">${article.title}</h1>
+                    <p class="mt-1 text-sm sm:text-base text-slate-600 font-medium">${article.subtitle}</p>
+                </div>
+
+                ${article.html}
+
+                <div class="pt-4 pb-8 flex items-center justify-between gap-4 border-t border-slate-200">
+                    ${prevId ? `
+                        <button onclick="selectArticle('${prevId}')" class="px-4 py-3 rounded-2xl bg-white border border-slate-200 hover:border-emerald-300 hover:bg-emerald-50 text-slate-700 text-xs sm:text-sm font-semibold transition flex items-center gap-2 shadow-xs">
+                            <span>←</span> ယခင်အပိုင်း (${prevId === 'overview' ? 'Mind Map' : prevId})
+                        </button>
+                    ` : '<div></div>'}
+
+                    ${nextId ? `
+                        <button onclick="selectArticle('${nextId}')" class="px-5 py-3 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs sm:text-sm font-semibold transition flex items-center gap-2 shadow-sm">
+                            နောက်တစ်ပိုင်း (${nextId === 'worked' ? 'Calculator & Q&A' : nextId}) <span>→</span>
+                        </button>
+                    ` : `
+                        <a href="chapter8.html" class="px-5 py-3 rounded-2xl bg-teal-600 hover:bg-teal-700 text-white text-xs sm:text-sm font-semibold transition flex items-center gap-2 shadow-sm">
+                            Chapter 8 သို့ ဆက်သွားရန် <span>→</span>
+                        </a>
                     `}
                 </div>
             `;
