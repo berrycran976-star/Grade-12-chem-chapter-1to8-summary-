@@ -1,0 +1,1653 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Chapter 8: Organic Compounds and Macromolecules - Grade 12 Chemistry</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Three.js for 3D Organic Molecules & Polymer Repeat Units -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <!-- Google Fonts: Inter & Noto Sans Myanmar -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Myanmar:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'Noto Sans Myanmar', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', 'Noto Sans Myanmar', sans-serif;
+            line-height: 1.85;
+            background-color: #f8fafc;
+            color: #1e293b;
+            overflow-x: hidden;
+        }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 9999px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        .canvas-container {
+            position: relative;
+            width: 100%;
+            height: 360px;
+            border-radius: 1rem;
+            overflow: hidden;
+            background: radial-gradient(circle at center, #3b0722 0%, #0f172a 100%);
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.45);
+            touch-action: none;
+        }
+        @media (min-width: 768px) {
+            .canvas-container { height: 410px; }
+        }
+        .myanmar-text { line-height: 1.98; }
+        .formula-card { background: linear-gradient(135deg, #0f172a 0%, #881337 100%); }
+        .v3d-ui { position: absolute; inset: 0; pointer-events: none; font-family: 'Inter','Noto Sans Myanmar',sans-serif; }
+        .v3d-btn { position: absolute; top: 8px; right: 10px; pointer-events: auto; font-size: 11px; font-weight: 600; color: #ffe4e6; background: rgba(15,23,42,.72); border: 1px solid rgba(251,113,133,.45); padding: 3px 10px; border-radius: 9999px; cursor: pointer; }
+        .v3d-hint { position: absolute; top: 34px; left: 10px; font-size: 10.5px; color: #cbd5e1; transition: opacity .4s; }
+        .v3d-zoom { position: absolute; right: 10px; top: 38px; display: flex; flex-direction: column; gap: 6px; }
+        .v3d-zoom button { pointer-events: auto; width: 30px; height: 30px; border-radius: 9999px; font-size: 16px; font-weight: 700; line-height: 1; color: #ffe4e6; background: rgba(15,23,42,.75); border: 1px solid rgba(251,113,133,.45); cursor: pointer; }
+        .v3d-labels { position: absolute; inset: 0; }
+        .v3d-label { position: absolute; left: 0; top: 0; white-space: nowrap; text-align: center; font-size: 11px; line-height: 1.35; font-weight: 600; color: #f8fafc; background: rgba(15,23,42,.82); border: 1px solid #fda4af; border-radius: .6rem; padding: 2px 8px; will-change: transform; }
+        .v3d-info { position: absolute; left: 8px; right: 8px; bottom: 8px; font-size: 11.5px; line-height: 1.6; color: #e2e8f0; background: rgba(15,23,42,.88); border: 1px solid rgba(255,255,255,.14); border-radius: .8rem; padding: 7px 11px; }
+        .v3d-info b { color: #fda4af; }
+        .eq-box {
+            font-family: 'Inter', monospace;
+            background: #0f172a;
+            color: #fef08a;
+            border-radius: 0.85rem;
+            padding: 0.85rem 1rem;
+            overflow-x: auto;
+            font-size: 0.84rem;
+            line-height: 1.75;
+            border: 1px solid #334155;
+        }
+        .eq-box .reagent { color: #67e8f9; font-weight: 700; }
+        .eq-box .product { color: #86efac; font-weight: 700; }
+        .eq-box .note-tag { color: #fda4af; font-size: 0.76rem; }
+        .sub-section-card {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 1.5rem;
+            padding: 1.4rem 1.5rem;
+            box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+        }
+        @media (min-width: 640px) {
+            .sub-section-card { padding: 1.75rem 2rem; }
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-rose-100 selection:text-rose-900">
+
+    <!-- Mobile Top Header -->
+    <header class="lg:hidden sticky top-0 z-40 bg-white/95 backdrop-blur border-b border-slate-200 px-4 py-3 flex items-center justify-between shadow-sm">
+        <div class="flex items-center gap-2.5">
+            <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-rose-600 to-pink-700 flex items-center justify-center text-white font-bold shadow">
+                Ch8
+            </div>
+            <div>
+                <h1 class="text-sm font-bold text-slate-900 leading-tight">Chapter 8: Organic Chemistry</h1>
+                <p class="text-xs text-slate-500">Grade 12 Textbook • Complete Guide</p>
+            </div>
+        </div>
+        <button id="mobile-menu-btn" class="p-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 transition" aria-label="Open Navigation">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+            </svg>
+        </button>
+    </header>
+
+    <!-- Mobile Backdrop -->
+    <div id="sidebar-backdrop" class="fixed inset-0 bg-slate-900/50 backdrop-blur-xs z-40 hidden lg:hidden transition-opacity"></div>
+
+    <div class="flex min-h-screen">
+        <!-- Left Sidebar Hierarchical Menu -->
+        <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-80 bg-white border-r border-slate-200 transform -translate-x-full lg:translate-x-0 lg:static lg:inset-auto transition-transform duration-300 ease-in-out flex flex-col shadow-xl lg:shadow-none">
+            <!-- Brand Header + Chapter Switcher -->
+            <div class="p-5 border-b border-slate-100 bg-gradient-to-br from-slate-900 via-rose-950 to-pink-950 text-white">
+                <div class="flex items-center justify-between">
+                    <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-rose-500/25 text-rose-200 border border-rose-400/30">
+                        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                        Grade 12 Chemistry TB
+                    </span>
+                    <button id="close-sidebar-btn" class="lg:hidden p-1.5 rounded-lg text-slate-300 hover:text-white hover:bg-white/10">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                    </button>
+                </div>
+                <h2 class="mt-2.5 text-base font-bold tracking-tight leading-snug">Chapter 8: Organic Compounds and Macromolecules</h2>
+                <p class="mt-0.5 text-[11px] text-rose-200/85">Sections 8.1 – 8.3 အသေးစိတ် ရှင်းလင်းချက်</p>
+
+                <!-- Cross-Chapter Page Navigation Bar -->
+                <div class="mt-3.5 pt-2.5 border-t border-white/15 grid grid-cols-5 gap-1">
+                    <a href="index.html" class="text-center py-1 px-1 rounded-md bg-white/15 hover:bg-white/25 text-[11px] font-semibold text-white transition">🏠</a>
+                    <a href="chapter1.html" class="text-center py-1 px-1 rounded-md bg-white/10 hover:bg-white/25 text-[11px] font-semibold text-white transition">Ch 1</a>
+                    <a href="chapter2.html" class="text-center py-1 px-1 rounded-md bg-white/10 hover:bg-white/25 text-[11px] font-semibold text-white transition">Ch 2</a>
+                    <a href="chapter3.html" class="text-center py-1 px-1 rounded-md bg-white/10 hover:bg-white/25 text-[11px] font-semibold text-white transition">Ch 3</a>
+                    <a href="chapter4.html" class="text-center py-1 px-1 rounded-md bg-white/10 hover:bg-white/25 text-[11px] font-semibold text-white transition">Ch 4</a>
+                    <a href="chapter5.html" class="text-center py-1 px-1 rounded-md bg-white/10 hover:bg-white/25 text-[11px] font-semibold text-white transition">Ch 5</a>
+                    <a href="chapter6.html" class="text-center py-1 px-1 rounded-md bg-white/10 hover:bg-white/25 text-[11px] font-semibold text-white transition">Ch 6</a>
+                    <a href="chapter7.html" class="text-center py-1 px-1 rounded-md bg-white/10 hover:bg-white/25 text-[11px] font-semibold text-white transition">Ch 7</a>
+                    <a href="chapter8.html" class="col-span-2 text-center py-1 px-1 rounded-md bg-rose-500 text-[11px] font-semibold text-white shadow-xs">Ch 8</a>
+                </div>
+            </div>
+
+            <!-- Hierarchical Textbook Navigation List -->
+            <div class="flex-1 overflow-y-auto p-3.5 space-y-3">
+                <!-- Intro / Overview -->
+                <button onclick="selectArticle('intro')" id="nav-intro" class="nav-btn w-full text-left px-3 py-2.5 rounded-xl transition-all flex items-center gap-2.5 border border-transparent">
+                    <span class="nav-badge shrink-0 w-7 h-7 rounded-lg flex items-center justify-center text-xs font-bold">📖</span>
+                    <div class="min-w-0">
+                        <div class="font-bold text-xs leading-snug truncate">Chapter 8 Overview & Summary</div>
+                        <div class="text-[11px] opacity-75 truncate">မိတ်ဆက် (p.127) နှင့် ဇယားချုပ်</div>
+                    </div>
+                </button>
+
+                <!-- SECTION 8.1 -->
+                <div class="space-y-1">
+                    <div class="px-2.5 py-1.5 rounded-lg bg-slate-900 text-white text-[11px] font-bold tracking-wide flex items-center justify-between">
+                        <span>8.1 ORGANIC COMPOUNDS</span>
+                        <span class="text-rose-300 font-normal">p. 128–139</span>
+                    </div>
+                    <div class="pl-2 border-l-2 border-rose-200 ml-2 space-y-1">
+                        <button onclick="selectArticle('8_1_a')" id="nav-8_1_a" class="nav-btn w-full text-left px-2.5 py-2 rounded-xl transition-all flex items-start gap-2 border border-transparent">
+                            <span class="nav-badge shrink-0 px-1.5 py-0.5 rounded text-[11px] font-bold mt-0.5">(a)</span>
+                            <div class="min-w-0">
+                                <div class="font-bold text-xs">Ethers (R–O–R')</div>
+                                <div class="text-[10.5px] opacity-75 truncate">(i) Nomenclature (ii) Prep (iii) Uses</div>
+                            </div>
+                        </button>
+                        <button onclick="selectArticle('8_1_b')" id="nav-8_1_b" class="nav-btn w-full text-left px-2.5 py-2 rounded-xl transition-all flex items-start gap-2 border border-transparent">
+                            <span class="nav-badge shrink-0 px-1.5 py-0.5 rounded text-[11px] font-bold mt-0.5">(b)</span>
+                            <div class="min-w-0">
+                                <div class="font-bold text-xs">Aldehydes and Ketones</div>
+                                <div class="text-[10.5px] opacity-75 truncate">(i) Nomenclature (ii) Prep (iii) Props</div>
+                            </div>
+                        </button>
+                        <button onclick="selectArticle('8_1_c')" id="nav-8_1_c" class="nav-btn w-full text-left px-2.5 py-2 rounded-xl transition-all flex items-start gap-2 border border-transparent">
+                            <span class="nav-badge shrink-0 px-1.5 py-0.5 rounded text-[11px] font-bold mt-0.5">(c)</span>
+                            <div class="min-w-0">
+                                <div class="font-bold text-xs">Carboxylic Acids (–COOH)</div>
+                                <div class="text-[10.5px] opacity-75 truncate">(i) Nomenclature (ii) Prep (iii) Props</div>
+                            </div>
+                        </button>
+                        <button onclick="selectArticle('8_1_d')" id="nav-8_1_d" class="nav-btn w-full text-left px-2.5 py-2 rounded-xl transition-all flex items-start gap-2 border border-transparent">
+                            <span class="nav-badge shrink-0 px-1.5 py-0.5 rounded text-[11px] font-bold mt-0.5">(d)</span>
+                            <div class="min-w-0">
+                                <div class="font-bold text-xs">Esters (R–COOR')</div>
+                                <div class="text-[10.5px] opacity-75 truncate">(i) Nomenclature (ii) Prep (iii) Hydrolysis</div>
+                            </div>
+                        </button>
+                        <button onclick="selectArticle('8_1_e')" id="nav-8_1_e" class="nav-btn w-full text-left px-2.5 py-2 rounded-xl transition-all flex items-start gap-2 border border-transparent">
+                            <span class="nav-badge shrink-0 px-1.5 py-0.5 rounded text-[11px] font-bold mt-0.5">(e)</span>
+                            <div class="min-w-0">
+                                <div class="font-bold text-xs">Amines (–NH₂)</div>
+                                <div class="text-[10.5px] opacity-75 truncate">(i) Nomenclature (ii) Prep (iii) Carbylamine</div>
+                            </div>
+                        </button>
+                        <button onclick="selectArticle('8_1_f')" id="nav-8_1_f" class="nav-btn w-full text-left px-2.5 py-2 rounded-xl transition-all flex items-start gap-2 border border-transparent">
+                            <span class="nav-badge shrink-0 px-1.5 py-0.5 rounded text-[11px] font-bold mt-0.5">(f)</span>
+                            <div class="min-w-0">
+                                <div class="font-bold text-xs">Amides (–CONH₂)</div>
+                                <div class="text-[10.5px] opacity-75 truncate">(i) Nomenclature (ii) Prep (iii) Hydrolysis</div>
+                            </div>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- SECTION 8.2 -->
+                <div class="space-y-1">
+                    <div class="px-2.5 py-1.5 rounded-lg bg-slate-900 text-white text-[11px] font-bold tracking-wide flex items-center justify-between">
+                        <span>8.2 DETERMINING FUNCTIONAL GROUPS</span>
+                        <span class="text-amber-300 font-normal">p. 139–145</span>
+                    </div>
+                    <div class="pl-2 border-l-2 border-amber-300 ml-2 space-y-1">
+                        <button onclick="selectArticle('8_2_a')" id="nav-8_2_a" class="nav-btn w-full text-left px-2.5 py-2 rounded-xl transition-all flex items-start gap-2 border border-transparent">
+                            <span class="nav-badge shrink-0 px-1.5 py-0.5 rounded text-[11px] font-bold mt-0.5">(a)</span>
+                            <div class="min-w-0">
+                                <div class="font-bold text-xs">Chemical Tests</div>
+                                <div class="text-[10.5px] opacity-75 truncate">Table 8.1, 2,4-DNP & Fehling's Test</div>
+                            </div>
+                        </button>
+                        <button onclick="selectArticle('8_2_b')" id="nav-8_2_b" class="nav-btn w-full text-left px-2.5 py-2 rounded-xl transition-all flex items-start gap-2 border border-transparent">
+                            <span class="nav-badge shrink-0 px-1.5 py-0.5 rounded text-[11px] font-bold mt-0.5">(b)</span>
+                            <div class="min-w-0">
+                                <div class="font-bold text-xs">Infrared (IR) Spectroscopy</div>
+                                <div class="text-[10.5px] opacity-75 truncate">(i) EM Radiation (ii) Vibration (iii) Bands</div>
+                            </div>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- SECTION 8.3 -->
+                <div class="space-y-1">
+                    <div class="px-2.5 py-1.5 rounded-lg bg-slate-900 text-white text-[11px] font-bold tracking-wide flex items-center justify-between">
+                        <span>8.3 MACROMOLECULES</span>
+                        <span class="text-emerald-300 font-normal">p. 145–152</span>
+                    </div>
+                    <div class="pl-2 border-l-2 border-emerald-300 ml-2 space-y-1">
+                        <button onclick="selectArticle('8_3_a')" id="nav-8_3_a" class="nav-btn w-full text-left px-2.5 py-2 rounded-xl transition-all flex items-start gap-2 border border-transparent">
+                            <span class="nav-badge shrink-0 px-1.5 py-0.5 rounded text-[11px] font-bold mt-0.5">(a)</span>
+                            <div class="min-w-0">
+                                <div class="font-bold text-xs">Introducing Polymers</div>
+                                <div class="text-[10.5px] opacity-75 truncate">Homopolymer, Copolymer & Table 8.3</div>
+                            </div>
+                        </button>
+                        <button onclick="selectArticle('8_3_b')" id="nav-8_3_b" class="nav-btn w-full text-left px-2.5 py-2 rounded-xl transition-all flex items-start gap-2 border border-transparent">
+                            <span class="nav-badge shrink-0 px-1.5 py-0.5 rounded text-[11px] font-bold mt-0.5">(b)</span>
+                            <div class="min-w-0">
+                                <div class="font-bold text-xs">Addition Polymers</div>
+                                <div class="text-[10.5px] opacity-75 truncate">(i) Polyethene (ii) PVC (iii) Properties</div>
+                            </div>
+                        </button>
+                        <button onclick="selectArticle('8_3_c')" id="nav-8_3_c" class="nav-btn w-full text-left px-2.5 py-2 rounded-xl transition-all flex items-start gap-2 border border-transparent">
+                            <span class="nav-badge shrink-0 px-1.5 py-0.5 rounded text-[11px] font-bold mt-0.5">(c)</span>
+                            <div class="min-w-0">
+                                <div class="font-bold text-xs">Condensation Polymers</div>
+                                <div class="text-[10.5px] opacity-75 truncate">(i) Polyesters (ii) Polyamides (iii) Uses</div>
+                            </div>
+                        </button>
+                        <button onclick="selectArticle('8_3_d')" id="nav-8_3_d" class="nav-btn w-full text-left px-2.5 py-2 rounded-xl transition-all flex items-start gap-2 border border-transparent">
+                            <span class="nav-badge shrink-0 px-1.5 py-0.5 rounded text-[11px] font-bold mt-0.5">(d)</span>
+                            <div class="min-w-0">
+                                <div class="font-bold text-xs">Plastics and Environment</div>
+                                <div class="text-[10.5px] opacity-75 truncate">(i) Pollution (ii) Recycling Symbols</div>
+                            </div>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- REVIEW & EXERCISES -->
+                <div class="space-y-1 pt-1">
+                    <div class="px-2.5 py-1.5 rounded-lg bg-indigo-950 text-white text-[11px] font-bold tracking-wide">
+                        REVIEW QUESTIONS & EXERCISES
+                    </div>
+                    <button onclick="selectArticle('exercises')" id="nav-exercises" class="nav-btn w-full text-left px-3 py-2.5 rounded-xl transition-all flex items-center gap-2.5 border border-transparent">
+                        <span class="nav-badge shrink-0 w-7 h-7 rounded-lg flex items-center justify-center text-xs font-bold">✍️</span>
+                        <div class="min-w-0">
+                            <div class="font-bold text-xs leading-snug">All Review Questions & Solutions</div>
+                            <div class="text-[10.5px] opacity-75 truncate">8.1, 8.2, 8.3 Review Questions & Answers</div>
+                        </div>
+                    </button>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="flex-1 min-w-0">
+            <div id="content-container" class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-10 py-6 lg:py-10 space-y-6">
+                <!-- Dynamic Content Rendered Here -->
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // ==========================================
+        // 1. GLOBAL STATE & THREE.JS ENGINE MANAGER
+        // ==========================================
+        let currentArticleId = 'intro';
+        let activeScenes = [];
+
+        function clearActiveScenes() {
+            activeScenes.forEach(item => {
+                if (item.animId) cancelAnimationFrame(item.animId);
+                if (item.renderer) item.renderer.dispose();
+            });
+            activeScenes = [];
+        }
+
+        function init3DViewer(containerId, buildSceneCallback) {
+            const container = document.getElementById(containerId);
+            if (!container || typeof THREE === 'undefined') return null;
+            container.querySelectorAll('canvas,.v3d-ui').forEach(n => n.remove());
+            activeScenes = activeScenes.filter(r => {
+                if (r.cid === containerId) {
+                    cancelAnimationFrame(r.animId);
+                    r.renderer.dispose();
+                    return false;
+                }
+                return true;
+            });
+
+            const width = container.clientWidth || 600;
+            const height = container.clientHeight || 360;
+
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
+            camera.position.set(0, 1.2, 7.2);
+
+            const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            renderer.setSize(width, height);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            container.appendChild(renderer.domElement);
+
+            const ui = document.createElement('div');
+            ui.className = 'v3d-ui';
+            ui.innerHTML = `
+                <div class="v3d-legend" style="position:absolute;top:8px;left:10px;display:flex;gap:8px;font-size:11px;font-weight:700;color:#e2e8f0;background:rgba(15,23,42,.68);padding:3px 9px;border-radius:9999px;border:1px solid rgba(255,255,255,.15);">
+                    <span><i style="display:inline-block;width:9px;height:9px;border-radius:50%;background:#334155;margin-right:4px;"></i>C</span>
+                    <span><i style="display:inline-block;width:9px;height:9px;border-radius:50%;background:#f8fafc;margin-right:4px;"></i>H</span>
+                    <span><i style="display:inline-block;width:9px;height:9px;border-radius:50%;background:#ef4444;margin-right:4px;"></i>O</span>
+                    <span><i style="display:inline-block;width:9px;height:9px;border-radius:50%;background:#3b82f6;margin-right:4px;"></i>N</span>
+                    <span><i style="display:inline-block;width:9px;height:9px;border-radius:50%;background:#22c55e;margin-right:4px;"></i>Cl</span>
+                </div>
+                <button type="button" class="v3d-btn">🏷️ ရှင်းလင်းချက်: ON</button>
+                <div class="v3d-zoom"><button type="button" data-z="in">+</button><button type="button" data-z="out">−</button><button type="button" data-z="reset">⟲</button></div>
+                <div class="v3d-labels"></div>
+                <div class="v3d-hint">👆 လက်ဖြင့်ဆွဲလှည့်ပါ · + − ဖြင့် ချုံ့ချဲ့ပါ</div>
+                <div class="v3d-info"></div>`;
+            container.appendChild(ui);
+
+            const labelBox = ui.querySelector('.v3d-labels');
+            const labels = [];
+            const api = {
+                label(text, pos, color = '#fda4af', obj) {
+                    const el = document.createElement('div');
+                    el.className = 'v3d-label';
+                    el.style.borderColor = color;
+                    el.innerHTML = text;
+                    labelBox.appendChild(el);
+                    labels.push({ el, obj, pos: pos.clone ? pos.clone() : new THREE.Vector3(...pos) });
+                },
+                info(html) { ui.querySelector('.v3d-info').innerHTML = html; }
+            };
+
+            const btn = ui.querySelector('.v3d-btn');
+            btn.addEventListener('click', () => {
+                const on = labelBox.style.display === 'none';
+                labelBox.style.display = on ? '' : 'none';
+                btn.textContent = '🏷️ ရှင်းလင်းချက်: ' + (on ? 'ON' : 'OFF');
+            });
+
+            scene.add(new THREE.AmbientLight(0xffffff, 0.72));
+            const dirLight1 = new THREE.DirectionalLight(0xffffff, 0.9);
+            dirLight1.position.set(6, 9, 7);
+            scene.add(dirLight1);
+            const dirLight2 = new THREE.DirectionalLight(0xfda4af, 0.55);
+            dirLight2.position.set(-6, -4, -5);
+            scene.add(dirLight2);
+
+            const rootGroup = new THREE.Group();
+            scene.add(rootGroup);
+
+            const customUpdate = buildSceneCallback(rootGroup, camera, scene, api);
+            camera.lookAt(0, 0, 0);
+            const camPos0 = camera.position.clone();
+            let zoom = 1;
+            const setZoom = z => { zoom = Math.max(0.55, Math.min(2.3, z)); };
+
+            ui.querySelector('.v3d-zoom').addEventListener('click', e => {
+                const k = e.target.dataset.z;
+                if (k === 'in') setZoom(zoom * 1.25);
+                else if (k === 'out') setZoom(zoom / 1.25);
+                else if (k === 'reset') { zoom = 1; rootGroup.rotation.set(0, 0, 0); autoRotate = true; }
+            });
+
+            let isDragging = false, prevX = 0, prevY = 0, autoRotate = true;
+            const onDown = (x, y) => { isDragging = true; autoRotate = false; prevX = x; prevY = y; ui.querySelector('.v3d-hint').style.opacity = 0; };
+            const onMove = (x, y) => {
+                if (!isDragging) return;
+                rootGroup.rotation.y += (x - prevX) * 0.01;
+                rootGroup.rotation.x = Math.max(-1.2, Math.min(1.2, rootGroup.rotation.x + (y - prevY) * 0.01));
+                prevX = x; prevY = y;
+            };
+            const onUp = () => { isDragging = false; };
+
+            const domElem = renderer.domElement;
+            domElem.addEventListener('mousedown', e => onDown(e.clientX, e.clientY));
+            domElem.addEventListener('wheel', e => { e.preventDefault(); setZoom(zoom * (e.deltaY < 0 ? 1.1 : 1 / 1.1)); }, { passive: false });
+            window.addEventListener('mousemove', e => onMove(e.clientX, e.clientY));
+            window.addEventListener('mouseup', onUp);
+            domElem.addEventListener('touchstart', e => { if (e.touches.length === 1) onDown(e.touches[0].clientX, e.touches[0].clientY); }, { passive: true });
+            domElem.addEventListener('touchmove', e => { if (e.touches.length === 1) onMove(e.touches[0].clientX, e.touches[0].clientY); }, { passive: true });
+            domElem.addEventListener('touchend', onUp);
+
+            window.addEventListener('resize', () => {
+                if (!container.isConnected || !container.clientWidth) return;
+                camera.aspect = container.clientWidth / container.clientHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(container.clientWidth, container.clientHeight);
+            });
+
+            const sceneRecord = { renderer, animId: null, cid: containerId };
+            activeScenes.push(sceneRecord);
+
+            const clock = new THREE.Clock();
+            const v = new THREE.Vector3();
+            function animate() {
+                sceneRecord.animId = requestAnimationFrame(animate);
+                const elapsed = clock.getElapsedTime();
+                if (autoRotate) rootGroup.rotation.y += 0.004;
+                if (typeof customUpdate === 'function') customUpdate(elapsed, rootGroup);
+                camera.position.copy(camPos0).multiplyScalar(1 / zoom);
+                renderer.render(scene, camera);
+
+                const W = container.clientWidth, H = container.clientHeight;
+                scene.updateMatrixWorld();
+                labels.forEach(l => {
+                    v.copy(l.pos);
+                    (l.obj || rootGroup).localToWorld(v).project(camera);
+                    l.el.style.opacity = l.obj && !l.obj.visible ? 0 : 1;
+                    const hw = l.el.offsetWidth / 2 + 4;
+                    const x = Math.max(hw, Math.min(W - hw, (v.x * 0.5 + 0.5) * W));
+                    const y = Math.max(14, Math.min(H - 96, (-v.y * 0.5 + 0.5) * H));
+                    l.el.style.transform = `translate(-50%,-50%) translate(${x}px,${y}px)`;
+                });
+            }
+            animate();
+        }
+
+        function createAtom(radius, colorHex, x = 0, y = 0, z = 0) {
+            const geo = new THREE.SphereGeometry(radius, 28, 28);
+            const mat = new THREE.MeshStandardMaterial({ color: colorHex, roughness: 0.25, metalness: 0.15 });
+            const mesh = new THREE.Mesh(geo, mat);
+            mesh.position.set(x, y, z);
+            return mesh;
+        }
+
+        function createBond(p1, p2, radius = 0.075, colorHex = 0xe2e8f0) {
+            const dir = new THREE.Vector3().subVectors(p2, p1);
+            const geo = new THREE.CylinderGeometry(radius, radius, dir.length(), 16);
+            const mat = new THREE.MeshStandardMaterial({ color: colorHex, roughness: 0.35 });
+            const mesh = new THREE.Mesh(geo, mat);
+            mesh.position.copy(p1).add(p2).multiplyScalar(0.5);
+            mesh.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), dir.clone().normalize());
+            return mesh;
+        }
+
+        function createDoubleBond(p1, p2, colorHex = 0xe2e8f0) {
+            const grp = new THREE.Group();
+            const dir = new THREE.Vector3().subVectors(p2, p1).normalize();
+            let up = new THREE.Vector3(0, 0, 1);
+            if (Math.abs(dir.z) > 0.9) up = new THREE.Vector3(0, 1, 0);
+            const perp = new THREE.Vector3().crossVectors(dir, up).normalize().multiplyScalar(0.11);
+            grp.add(createBond(p1.clone().add(perp), p2.clone().add(perp), 0.055, colorHex));
+            grp.add(createBond(p1.clone().sub(perp), p2.clone().sub(perp), 0.055, colorHex));
+            return grp;
+        }
+
+        // ==========================================
+        // 2. SPECIFIC 3D VISUALIZATIONS
+        // ==========================================
+        function render3D_Molecule(type, targetId = 'viewer-molecule') {
+            init3DViewer(targetId, (group, camera, scene, ui) => {
+                camera.position.set(0, 1.0, 6.8);
+
+                if (type === 'ether') {
+                    // Dimethyl ether (CH3 - O - CH3) - Textbook p. 128
+                    const oPos = new THREE.Vector3(0, 0.45, 0);
+                    const cLeft = new THREE.Vector3(-1.35, -0.35, 0);
+                    const cRight = new THREE.Vector3(1.35, -0.35, 0);
+                    group.add(
+                        createAtom(0.42, 0xef4444, oPos.x, oPos.y, 0),
+                        createAtom(0.45, 0x334155, cLeft.x, cLeft.y, 0),
+                        createAtom(0.45, 0x334155, cRight.x, cRight.y, 0),
+                        createBond(oPos, cLeft, 0.08, 0xfacc15),
+                        createBond(oPos, cRight, 0.08, 0xfacc15),
+                        createAtom(0.24, 0xf8fafc, -1.35, -1.35, 0.4),
+                        createAtom(0.24, 0xf8fafc, -2.25, 0.05, -0.3),
+                        createAtom(0.24, 0xf8fafc, -1.35, 0.25, 0.85),
+                        createAtom(0.24, 0xf8fafc, 1.35, -1.35, 0.4),
+                        createAtom(0.24, 0xf8fafc, 2.25, 0.05, -0.3),
+                        createAtom(0.24, 0xf8fafc, 1.35, 0.25, 0.85)
+                    );
+                    ui.label('Methyl (-CH₃)', [-1.45, -1.55, 0], '#fde047');
+                    ui.label('Ether (-O-)', [0, 1.05, 0], '#fca5a5');
+                    ui.label('Methyl (-CH₃)', [1.45, -1.55, 0], '#fde047');
+                    ui.info('<b>Dimethyl ether / Methoxymethane (CH₃OCH₃ — Textbook p. 128)</b> — အရိုးရှင်းဆုံး Symmetrical Ether ဖြစ်ပြီး အခန်းအပူချိန်တွင် အရောင်မဲ့ဓာတ်ငွေ့ ဖြစ်ပါသည်။');
+                } else if (type === 'aldehyde') {
+                    // Methanal (HCHO) - Textbook p. 129
+                    const c = new THREE.Vector3(0, -0.2, 0);
+                    const o = new THREE.Vector3(0, 1.25, 0);
+                    const h1 = new THREE.Vector3(-1.15, -0.85, 0);
+                    const h2 = new THREE.Vector3(1.15, -0.85, 0);
+                    group.add(
+                        createAtom(0.45, 0x334155, 0, -0.2, 0),
+                        createAtom(0.42, 0xef4444, 0, 1.25, 0),
+                        createAtom(0.26, 0xf8fafc, -1.15, -0.85, 0),
+                        createAtom(0.26, 0xf8fafc, 1.15, -0.85, 0),
+                        createDoubleBond(c, o, 0xfacc15),
+                        createBond(c, h1), createBond(c, h2)
+                    );
+                    ui.label('Carbonyl (>C=O)', [0, 1.75, 0], '#fde047');
+                    ui.info('<b>Methanal / Formaldehyde (HCHO — Textbook p. 129)</b> — Carbonyl group (>C=O) သည် Carbon chain ၏ အစွန်းတွင်ရှိပြီး H အနည်းဆုံးတစ်လုံးနှင့် ဆက်နေပါသည်။');
+                } else if (type === 'ketone') {
+                    // Propanone (CH3COCH3) - Textbook p. 129
+                    const cCenter = new THREE.Vector3(0, 0, 0);
+                    const oTop = new THREE.Vector3(0, 1.35, 0);
+                    const cLeft = new THREE.Vector3(-1.25, -0.7, 0);
+                    const cRight = new THREE.Vector3(1.25, -0.7, 0);
+                    group.add(
+                        createAtom(0.44, 0x334155, 0, 0, 0),
+                        createAtom(0.42, 0xef4444, 0, 1.35, 0),
+                        createAtom(0.44, 0x334155, -1.25, -0.7, 0),
+                        createAtom(0.44, 0x334155, 1.25, -0.7, 0),
+                        createDoubleBond(cCenter, oTop, 0xfacc15),
+                        createBond(cCenter, cLeft),
+                        createBond(cCenter, cRight)
+                    );
+                    ui.label('Ketone (-CO-)', [0, 1.85, 0], '#fde047');
+                    ui.info('<b>Propanone / Acetone (CH₃COCH₃ — Textbook p. 129)</b> — Carbonyl group (>C=O) သည် Carbon chain ၏ အလယ်တွင်ရှိပြီး ဘေးနှစ်ဖက်လုံး Alkyl group များနှင့် ဆက်နေပါသည်။');
+                } else if (type === 'acid') {
+                    // Ethanoic acid (CH3COOH) - Textbook p. 132
+                    const c1 = new THREE.Vector3(-1.2, -0.1, 0);
+                    const c2 = new THREE.Vector3(0.2, 0.15, 0);
+                    const oDbl = new THREE.Vector3(0.3, 1.45, 0);
+                    const oH = new THREE.Vector3(1.35, -0.6, 0);
+                    const hAcid = new THREE.Vector3(2.15, -0.1, 0);
+                    group.add(
+                        createAtom(0.44, 0x334155, c1.x, c1.y, 0),
+                        createAtom(0.44, 0x334155, c2.x, c2.y, 0),
+                        createAtom(0.40, 0xef4444, oDbl.x, oDbl.y, 0),
+                        createAtom(0.40, 0xef4444, oH.x, oH.y, 0),
+                        createAtom(0.25, 0xfacc15, hAcid.x, hAcid.y, 0),
+                        createBond(c1, c2), createDoubleBond(c2, oDbl, 0xfacc15), createBond(c2, oH), createBond(oH, hAcid)
+                    );
+                    ui.label('Carboxyl Group (-COOH)', [0.85, 1.75, 0], '#fca5a5');
+                    ui.info('<b>Ethanoic acid / Acetic acid (CH₃COOH — Textbook p. 132)</b> — Carbonyl (>C=O) နှင့် Hydroxyl (–OH) အုပ်စုနှစ်ခု ပေါင်းစပ်ထားသော Carboxyl group (–COOH) ပါဝင်ပါသည်။');
+                } else if (type === 'ester') {
+                    // Methyl ethanoate (CH3COOCH3) - Textbook p. 134
+                    const c1 = new THREE.Vector3(-1.5, -0.2, 0);
+                    const c2 = new THREE.Vector3(-0.2, 0.2, 0);
+                    const oDbl = new THREE.Vector3(-0.1, 1.45, 0);
+                    const oLink = new THREE.Vector3(0.95, -0.5, 0);
+                    const c3 = new THREE.Vector3(2.1, 0.15, 0);
+                    group.add(
+                        createAtom(0.42, 0x334155, c1.x, c1.y, 0),
+                        createAtom(0.42, 0x334155, c2.x, c2.y, 0),
+                        createAtom(0.38, 0xef4444, oDbl.x, oDbl.y, 0),
+                        createAtom(0.38, 0xef4444, oLink.x, oLink.y, 0),
+                        createAtom(0.42, 0x334155, c3.x, c3.y, 0),
+                        createBond(c1, c2), createDoubleBond(c2, oDbl, 0xfacc15), createBond(c2, oLink, 0.08, 0x38bdf8), createBond(oLink, c3)
+                    );
+                    ui.label('Ester Group (-COOR)', [0.35, 1.75, 0], '#86efac');
+                    ui.info('<b>Methyl ethanoate (CH₃COOCH₃ — Textbook p. 134)</b> — Carboxylic acid ၏ –OH နေရာတွင် Alkoxy (–OR) အုပ်စု အစားထိုးဝင်ရောက်ထားသော ဒြပ်ပေါင်း ဖြစ်ပါသည်။');
+                } else if (type === 'amine') {
+                    // Methylamine (CH3NH2) - Textbook p. 136
+                    const c = new THREE.Vector3(-0.85, 0, 0);
+                    const n = new THREE.Vector3(0.65, 0.15, 0);
+                    const h1 = new THREE.Vector3(1.35, 0.95, 0.4);
+                    const h2 = new THREE.Vector3(1.35, -0.65, -0.4);
+                    group.add(
+                        createAtom(0.45, 0x334155, c.x, c.y, 0),
+                        createAtom(0.43, 0x3b82f6, n.x, n.y, 0),
+                        createAtom(0.26, 0xf8fafc, h1.x, h1.y, h1.z),
+                        createAtom(0.26, 0xf8fafc, h2.x, h2.y, h2.z),
+                        createBond(c, n, 0.08, 0x38bdf8), createBond(n, h1), createBond(n, h2)
+                    );
+                    ui.label('Amino Group (-NH₂)', [0.85, 1.45, 0], '#93c5fd');
+                    ui.info('<b>Methylamine / Methanamine (CH₃NH₂ — Textbook p. 136)</b> — Ammonia (NH₃) မှ H တစ်လုံးကို Alkyl group ဖြင့် အစားထိုးထားသော Primary (1°) amine ဖြစ်ပါသည်။');
+                } else if (type === 'amide') {
+                    // Ethanamide (CH3CONH2) - Textbook p. 137
+                    const c1 = new THREE.Vector3(-1.35, -0.2, 0);
+                    const c2 = new THREE.Vector3(0, 0.15, 0);
+                    const oDbl = new THREE.Vector3(0.1, 1.45, 0);
+                    const n = new THREE.Vector3(1.2, -0.5, 0);
+                    group.add(
+                        createAtom(0.42, 0x334155, c1.x, c1.y, 0),
+                        createAtom(0.42, 0x334155, c2.x, c2.y, 0),
+                        createAtom(0.38, 0xef4444, oDbl.x, oDbl.y, 0),
+                        createAtom(0.42, 0x3b82f6, n.x, n.y, 0),
+                        createBond(c1, c2), createDoubleBond(c2, oDbl, 0xfacc15), createBond(c2, n, 0.08, 0x38bdf8)
+                    );
+                    ui.label('Amide Group (-CONH₂)', [0.65, 1.75, 0], '#c4b5fd');
+                    ui.info('<b>Ethanamide / Acetamide (CH₃CONH₂ — Textbook p. 137)</b> — Carboxylic acid ၏ –OH နေရာတွင် –NH₂ အုပ်စု အစားထိုးဝင်ရောက်ထားသော ဒြပ်ပေါင်း ဖြစ်ပါသည်။');
+                } else if (type === 'pvc') {
+                    // PVC Repeat Unit (-CH2-CHCl-) - Textbook p. 146
+                    const c1 = new THREE.Vector3(-0.7, 0, 0);
+                    const c2 = new THREE.Vector3(0.7, 0, 0);
+                    const h1 = new THREE.Vector3(-0.7, 1.15, 0);
+                    const h2 = new THREE.Vector3(-0.7, -1.15, 0);
+                    const h3 = new THREE.Vector3(0.7, 1.15, 0);
+                    const cl = new THREE.Vector3(0.7, -1.25, 0);
+                    group.add(
+                        createAtom(0.44, 0x334155, c1.x, c1.y, 0),
+                        createAtom(0.44, 0x334155, c2.x, c2.y, 0),
+                        createAtom(0.25, 0xf8fafc, h1.x, h1.y, 0),
+                        createAtom(0.25, 0xf8fafc, h2.x, h2.y, 0),
+                        createAtom(0.25, 0xf8fafc, h3.x, h3.y, 0),
+                        createAtom(0.42, 0x22c55e, cl.x, cl.y, 0),
+                        createBond(c1, c2, 0.09, 0xfacc15),
+                        createBond(c1, h1), createBond(c1, h2), createBond(c2, h3), createBond(c2, cl),
+                        createBond(new THREE.Vector3(-1.7, 0, 0), c1, 0.08, 0xf43f5e),
+                        createBond(c2, new THREE.Vector3(1.7, 0, 0), 0.08, 0xf43f5e)
+                    );
+                    ui.label('PVC Repeat Unit: -H₂C-CHCl-', [0, 1.65, 0], '#86efac');
+                    ui.info('<b>Polychloroethene / PVC Repeat Unit (Textbook p. 146)</b> — Monomer ဖြစ်သော chloroethene (H₂C=CHCl) ၏ C=C double bond မှ C–C single bond သို့ ပြောင်းလဲသွားပါသည်။');
+                }
+            });
+        }
+
+        // ==========================================
+        // 3. ARTICLE CONTENT (TEXTBOOK PAGE BY PAGE)
+        // ==========================================
+        const ARTICLES = {
+            'intro': {
+                badge: 'Chapter 8 Introduction • Textbook Page 127',
+                title: 'CHAPTER 8: ORGANIC COMPOUNDS AND MACROMOLECULES',
+                subtitle: 'သက်ရှိများတွင် တွေ့ရသော Organic ဒြပ်ပေါင်းများနှင့် ဧရာမမော်လီကျူးကြီးများ (Macromolecules) မိတ်ဆက်',
+                html: `
+                    <div class="sub-section-card space-y-4 myanmar-text">
+                        <h3 class="text-lg sm:text-xl font-bold text-slate-900">📖 Chapter 8 မိတ်ဆက် (Textbook Page 127)</h3>
+                        <p class="text-xs sm:text-sm text-slate-700">
+                            သက်ရှိများတွင် တွေ့ရှိရသော ဓာတုဒြပ်ပေါင်းများကို သက်ရှိဇီဝရုပ်များ (organisms) နှင့် ဆက်စပ်နေသောကြောင့် <strong>Organic compounds (ဩဂဲနစ်ဒြပ်ပေါင်းများ)</strong> ဟု ခေါ်ဆိုကြသည်။ ၎င်းတို့သည် ကျွန်ုပ်တို့ ခန္ဓာကိုယ်၏ အဓိက အစိတ်အပိုင်းဖြစ်သလို စားသုံးသော အစားအစာ၊ ဝတ်ဆင်သော အဝတ်အထည်၊ ဆေးဝါးများ၊ ဆပ်ပြာမှုန့်၊ ဆိုးဆေး၊ ရုပ်ကြွင်းလောင်စာ (fossil fuels)၊ ပလတ်စတစ်နှင့် လူသုံးကုန်ပစ္စည်း အများစုတွင် ပါဝင်နေပါသည်။
+                        </p>
+                        <p class="text-xs sm:text-sm text-slate-700">
+                            ဇီဝဓာတုဒြပ်ပေါင်း အများစုသည် မော်လီကျူးအသေးလေးများ တစ်ခုနှင့်တစ်ခု လက်ချင်းချိတ်ဆက်သကဲ့သို့ စုပေါင်းဖွဲ့စည်းထားသော အလွန်ကြီးမားသည့် မော်လီကျူးကြီးများ ဖြစ်ကြပြီး ၎င်းတို့ကို <strong>Macromolecules (မက်ခရိုမော်လီကျူးများ)</strong> ဟု ခေါ်သည်။
+                            <br>• <strong>Natural polymers (သဘာဝပေါ်လီမာများ):</strong> Carbohydrates (ကာဗိုဟိုက်ဒရိတ်), Proteins (ပရိုတင်း), Nucleic acids (နျူကလိယစ်အက်ဆစ်)။
+                            <br>• <strong>Synthetic macromolecules (လူလုပ်ပေါ်လီမာများ):</strong> Plastics (ပလတ်စတစ်), Fibres (အမျှင်တု), Elastomers (ရော်ဘာတု)။
+                        </p>
+                    </div>
+
+                    <!-- Interactive 3D Molecular Explorer -->
+                    <div class="sub-section-card space-y-4">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                            <div>
+                                <span class="text-xs font-bold uppercase tracking-wider text-rose-600">Interactive 3D Ball-and-Stick Models</span>
+                                <h3 class="text-lg font-bold text-slate-900">ဖတ်စာအုပ်ပါ Functional Group မော်လီကျူးပုံစံများကို 3D လှည့်ကြည့်ပါ</h3>
+                            </div>
+                            <div class="flex flex-wrap gap-1.5">
+                                <button onclick="render3D_Molecule('ether')" class="px-2.5 py-1.5 rounded-xl text-xs font-semibold bg-rose-600 text-white hover:bg-rose-700 transition">Ether</button>
+                                <button onclick="render3D_Molecule('aldehyde')" class="px-2.5 py-1.5 rounded-xl text-xs font-semibold bg-amber-600 text-white hover:bg-amber-700 transition">Aldehyde</button>
+                                <button onclick="render3D_Molecule('ketone')" class="px-2.5 py-1.5 rounded-xl text-xs font-semibold bg-orange-600 text-white hover:bg-orange-700 transition">Ketone</button>
+                                <button onclick="render3D_Molecule('acid')" class="px-2.5 py-1.5 rounded-xl text-xs font-semibold bg-red-600 text-white hover:bg-red-700 transition">Carboxylic Acid</button>
+                                <button onclick="render3D_Molecule('ester')" class="px-2.5 py-1.5 rounded-xl text-xs font-semibold bg-emerald-600 text-white hover:bg-emerald-700 transition">Ester</button>
+                                <button onclick="render3D_Molecule('amine')" class="px-2.5 py-1.5 rounded-xl text-xs font-semibold bg-blue-600 text-white hover:bg-blue-700 transition">Amine</button>
+                                <button onclick="render3D_Molecule('amide')" class="px-2.5 py-1.5 rounded-xl text-xs font-semibold bg-purple-600 text-white hover:bg-purple-700 transition">Amide</button>
+                                <button onclick="render3D_Molecule('pvc')" class="px-2.5 py-1.5 rounded-xl text-xs font-semibold bg-slate-700 text-white hover:bg-slate-800 transition">PVC Unit</button>
+                            </div>
+                        </div>
+                        <div id="viewer-molecule" class="canvas-container"></div>
+                    </div>
+
+                    <!-- Summary Table of Section 8.1 Classes -->
+                    <div class="sub-section-card space-y-4">
+                        <h3 class="text-lg font-bold text-slate-900">📋 Section 8.1 တွင် လေ့လာရမည့် Aliphatic Organic Compounds အုပ်စုများ</h3>
+                        <div class="overflow-x-auto rounded-2xl border border-slate-200">
+                            <table class="w-full text-left border-collapse text-xs sm:text-sm">
+                                <thead>
+                                    <tr class="bg-slate-900 text-white">
+                                        <th class="p-3">Section</th>
+                                        <th class="p-3">Class</th>
+                                        <th class="p-3">Functional Group</th>
+                                        <th class="p-3">General Formula</th>
+                                        <th class="p-3">Simplest Member</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-slate-200 bg-white">
+                                    <tr class="cursor-pointer hover:bg-rose-50" onclick="selectArticle('8_1_a')"><td class="p-3 font-bold text-rose-700">8.1 (a)</td><td class="p-3 font-bold">Ethers</td><td class="p-3 font-mono">–O– (Ether)</td><td class="p-3 font-mono">CₙH₂ₙ₊₂O</td><td class="p-3">CH₃OCH₃ (methoxymethane)</td></tr>
+                                    <tr class="bg-slate-50/70 cursor-pointer hover:bg-rose-50" onclick="selectArticle('8_1_b')"><td class="p-3 font-bold text-rose-700">8.1 (b)</td><td class="p-3 font-bold">Aldehydes</td><td class="p-3 font-mono">–CHO (Carbonyl)</td><td class="p-3 font-mono">CₙH₂ₙO</td><td class="p-3">HCHO (methanal)</td></tr>
+                                    <tr class="cursor-pointer hover:bg-rose-50" onclick="selectArticle('8_1_b')"><td class="p-3 font-bold text-rose-700">8.1 (b)</td><td class="p-3 font-bold">Ketones</td><td class="p-3 font-mono">–CO– (Carbonyl)</td><td class="p-3 font-mono">CₙH₂ₙO</td><td class="p-3">CH₃COCH₃ (propanone)</td></tr>
+                                    <tr class="bg-slate-50/70 cursor-pointer hover:bg-rose-50" onclick="selectArticle('8_1_c')"><td class="p-3 font-bold text-rose-700">8.1 (c)</td><td class="p-3 font-bold">Carboxylic Acids</td><td class="p-3 font-mono">–COOH (Carboxyl)</td><td class="p-3 font-mono">CₙH₂ₙO₂</td><td class="p-3">HCOOH (methanoic acid)</td></tr>
+                                    <tr class="cursor-pointer hover:bg-rose-50" onclick="selectArticle('8_1_d')"><td class="p-3 font-bold text-rose-700">8.1 (d)</td><td class="p-3 font-bold">Esters</td><td class="p-3 font-mono">–COOR (Ester)</td><td class="p-3 font-mono">CₙH₂ₙO₂</td><td class="p-3">HCOOCH₃ (methyl methanoate)</td></tr>
+                                    <tr class="bg-slate-50/70 cursor-pointer hover:bg-rose-50" onclick="selectArticle('8_1_e')"><td class="p-3 font-bold text-rose-700">8.1 (e)</td><td class="p-3 font-bold">Amines</td><td class="p-3 font-mono">–NH₂ (Amino)</td><td class="p-3 font-mono">CₙH₂ₙ₊₃N</td><td class="p-3">CH₃NH₂ (methanamine)</td></tr>
+                                    <tr class="cursor-pointer hover:bg-rose-50" onclick="selectArticle('8_1_f')"><td class="p-3 font-bold text-rose-700">8.1 (f)</td><td class="p-3 font-bold">Amides</td><td class="p-3 font-mono">–CONH₂ (Amide)</td><td class="p-3 font-mono">CₙH₂ₙ₊₁NO</td><td class="p-3">HCONH₂ (methanamide)</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                `,
+                onMount: () => render3D_Molecule('ether')
+            },
+
+            // ==========================================
+            // 8.1 (a) ETHERS
+            // ==========================================
+            '8_1_a': {
+                badge: '8.1 Organic Compounds • (a) Ethers (Textbook Page 128–129)',
+                title: '8.1 (a) Ethers (အီသာများ)',
+                subtitle: 'General Formula: CₙH₂ₙ₊₂O | Symmetrical Ether (R–O–R) & Unsymmetrical Ether (R–O–R\')',
+                html: `
+                    <!-- Intro to 8.1 & Ethers -->
+                    <div class="sub-section-card space-y-4 myanmar-text">
+                        <h3 class="text-lg font-bold text-slate-900">📌 8.1 Organic Compounds မိတ်ဆက်နှင့် Ether ဖွဲ့စည်းပုံ (Page 128)</h3>
+                        <p class="text-xs sm:text-sm text-slate-700">
+                            Carbon နှင့် Hydrogen နှစ်မျိုးတည်းသာ ပါဝင်သော အရိုးရှင်းဆုံး ဒြပ်ပေါင်းများကို <strong>Hydrocarbons</strong> (Aliphatic: alkanes, alkenes, alkynes နှင့် Aromatic) ဟု ခေါ်သည်။ Carbon အက်တမ်သည် Oxygen အက်တမ်နှင့် Covalent bond ဖြင့် ဆက်ထားသော ဒြပ်ပေါင်းများမှာ Alcohols, Ethers, Aldehydes, Ketones, Carboxylic acids နှင့် Esters တို့ ဖြစ်ကြပြီး Nitrogen ပါဝင်သော ဒြပ်ပေါင်းများမှာ Amines နှင့် Amides တို့ ဖြစ်ကြသည်။
+                        </p>
+                        <div class="p-4 rounded-2xl bg-rose-50 border border-rose-200 text-xs sm:text-sm space-y-1.5">
+                            <div class="font-bold text-rose-950">Ether ဆိုတာ ဘာလဲ?</div>
+                            <p class="text-slate-800">
+                                <strong>Ether</strong> ဆိုသည်မှာ Oxygen (O) အက်တမ်တစ်လုံးသည် Alkyl group နှစ်ခုနှင့် ချိတ်ဆက်ထားသော Organic compound ဖြစ်သည်။ General formula မှာ <strong>CₙH₂ₙ₊₂O</strong> ဖြစ်ပြီး Alcohol နှင့် General formula တူညီသည်။
+                                <br>• <strong>Symmetrical ether (R–O–R):</strong> Oxygen ဘေးနှစ်ဖက်ရှိ Alkyl group နှစ်ခု တူညီသည် (ဥပမာ- CH₃OCH₃)။
+                                <br>• <strong>Unsymmetrical ether (R–O–R'):</strong> Oxygen ဘေးနှစ်ဖက်ရှိ Alkyl group နှစ်ခု မတူညီပါ (ဥပမာ- C₂H₅OCH₃)။
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- (i) Nomenclature -->
+                    <div class="sub-section-card space-y-4 myanmar-text">
+                        <div class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-slate-900 text-white">(i) Nomenclature (နာမည်ပေးနည်း)</div>
+                        <p class="text-xs sm:text-sm text-slate-700">
+                            • <strong>Common Name (သာမန်အမည်):</strong> Oxygen အက်တမ်နှင့် ဆက်နေသော Alkyl group နှစ်ခုကို အင်္ဂလိပ်အက္ခရာစဉ် (Alphabetical order) အတိုင်း သီးခြားစီ အရင်ရေးပြီး နောက်ဆုံးတွင် <strong>"ether"</strong> ဟု ထည့်ရေးရသည် (နှစ်ခုတူပါက <code>di-</code> သုံးသည်)။
+                            <br>• <strong>IUPAC System (စနစ်တကျအမည်):</strong> Oxygen အက်တမ်နှင့် <strong>ပိုသေးသော (Carbon အရေအတွက် နည်းသော) Alkyl group</strong> ကို ပေါင်းစပ်၍ <strong>alkoxy substituent</strong> (ဥပမာ- methoxy, ethoxy) အဖြစ် အရင်ရေးပြီး ကျန်သော ပိုကြီးသည့် အပိုင်းကို <strong>alkane</strong> အဖြစ် နောက်မှ ရေးရသည်။
+                        </p>
+                        <div class="overflow-x-auto rounded-2xl border border-slate-200">
+                            <table class="w-full text-left border-collapse text-xs sm:text-sm">
+                                <thead>
+                                    <tr class="bg-slate-900 text-white">
+                                        <th class="p-3">Structural Formula</th>
+                                        <th class="p-3">Common Name</th>
+                                        <th class="p-3">IUPAC Name</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-slate-200">
+                                    <tr><td class="p-3 font-mono">H₃C–O–CH₃</td><td class="p-3">dimethyl ether</td><td class="p-3 font-bold text-rose-700">methoxymethane</td></tr>
+                                    <tr class="bg-slate-50"><td class="p-3 font-mono">C₂H₅–O–CH₃</td><td class="p-3">ethyl methyl ether</td><td class="p-3 font-bold text-rose-700">methoxyethane</td></tr>
+                                    <tr><td class="p-3 font-mono">C₂H₅–O–C₂H₅</td><td class="p-3">diethyl ether</td><td class="p-3 font-bold text-rose-700">ethoxyethane</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- (ii) Methods of preparation -->
+                    <div class="sub-section-card space-y-4 myanmar-text">
+                        <div class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-rose-700 text-white">(ii) Methods of Preparation (ဖော်စပ်နည်း)</div>
+                        <h4 class="font-bold text-slate-900 text-sm sm:text-base">Dehydration of alcohols (အယ်လ်ကိုဟောမှ ရေထုတ်နုတ်ခြင်း — Page 129)</h4>
+                        <p class="text-xs sm:text-sm text-slate-700">
+                            Alcohol မော်လီကျူး နှစ်ခုမှ ရေ (H₂O) တစ်မော်လီကျူး ဖယ်ထုတ်ခြင်း (Elimination of water) ဖြင့် Ether ကို ရရှိသည်။ ဥပမာ- Ethanol ကို ပမာဏကန့်သတ်ထားသော Sulphuric acid (limited amount of conc. H₂SO₄) နှင့် ရော၍ <strong>140°C</strong> အထိ အပူပေးလျှင် Ethoxyethane (diethyl ether) နှင့် ရေ ရရှိသည်။ (သတိပြုရန်- 170°C အထိ အပူပေးပါက Alkene ထွက်သွားမည် ဖြစ်သည်)။
+                        </p>
+                        <pre class="eq-box">C₂H₅OH + C₂H₅OH  ──<span class="reagent">(H₂SO₄, 140°C)</span>──►  <span class="product">C₂H₅OC₂H₅ + H₂O</span>
+ethanol   ethanol                        ethoxyethane   water</pre>
+                    </div>
+
+                    <!-- (iii) Properties and uses -->
+                    <div class="sub-section-card space-y-4 myanmar-text">
+                        <div class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-emerald-700 text-white">(iii) Properties and Uses (ဂုဏ်သတ္တိများနှင့် အသုံးဝင်ပုံများ)</div>
+                        <div class="space-y-2 text-xs sm:text-sm text-slate-700">
+                            <p>• <strong>Physical Properties:</strong> Methoxymethane နှင့် Methoxyethane တို့သည် အခန်းအပူချိန်တွင် အရောင်မဲ့ဓာတ်ငွေ့များ ဖြစ်ကြပြီး အခြားနိမ့်သော Homologues များမှာ Ether အနံ့ရှိသော အရောင်မဲ့ အငွေ့ပျံလွယ်သည့် အရည်များ (volatile liquids) ဖြစ်ကြသည်။</p>
+                            <p>• <strong>Boiling Point & Solubility:</strong> Ether မော်လီကျူးများ အချင်းချင်းကြားတွင် <strong>Intermolecular hydrogen bonding မရှိသောကြောင့်</strong> မော်လီကျူးအလေးချိန် တူညီသော Alcohol များထက် Boiling point များစွာ ပိုနိမ့်သည်။ Carbon အက်တမ် ၃ လုံးအထိ ပါဝင်သော Ether များသည် ရေတွင် ပျော်ဝင်ပြီး Carbon အရေအတွက် များလာသည်နှင့်အမျှ ပျော်ဝင်နိုင်စွမ်း လျော့နည်းသွားသည်။</p>
+                        </div>
+
+                        <div class="space-y-2">
+                            <h4 class="font-bold text-slate-900 text-sm">Reaction with hydrogen iodide (Conc. HI နှင့် ဓာတ်ပြုခြင်း)</h4>
+                            <p class="text-xs sm:text-sm text-slate-700">
+                                Ether ကို Concentrated hydrogen iodide (HI) နှင့် အပူပေး (Δ) လျှင် Ether အတွင်းရှိ C–O bond ပြတ်တောက်သွားပြီး <strong>Alkyl iodide နှင့် Alcohol</strong> ကို ဖြစ်ပေါ်စေသည်။ Unsymmetrical ether ဖြစ်ပါက ပိုသေးသော (Lower) alkyl group သည် Iodine ကို ယူ၍ Alkyl iodide ဖြစ်သွားသည်။
+                            </p>
+                            <pre class="eq-box">CH₃–O–CH₃ + HI  ──<span class="reagent">(Δ)</span>──►  <span class="product">CH₃I + CH₃OH</span>
+methoxymethane               methyl iodide   methanol</pre>
+                        </div>
+
+                        <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 text-xs sm:text-sm">
+                            <div class="font-bold text-slate-900">Uses of ethers (အသုံးဝင်ပုံများ):</div>
+                            <p class="text-slate-700 mt-1">
+                                Ether များသည် ဓာတ်ပြုမှု နည်းပါး (fairly inert) သောကြောင့် ဓာတ်စမ်းခန်းနှင့် စက်မှုလုပ်ငန်းများတွင် <strong>Reaction solvents (ပျော်ရည်များ)</strong> အဖြစ် အသုံးပြုကြသည်။ Ethoxyethane (diethyl ether) ကို နှစ်ပေါင်းများစွာကြာအောင် ခွဲစိတ်ခန်းသုံး မေ့ဆေး (surgical anaesthetic agent) အဖြစ် အသုံးပြုခဲ့သော်လည်း ယခုအခါ မီးလောင်လွယ်မှုမရှိသော ပိုမိုဘေးကင်းသည့် ဆေးဝါးများဖြင့် အစားထိုး အသုံးပြုနေပြီ ဖြစ်သည်။
+                            </p>
+                        </div>
+                    </div>
+                `
+            },
+
+            // ==========================================
+            // 8.1 (b) ALDEHYDES AND KETONES
+            // ==========================================
+            '8_1_b': {
+                badge: '8.1 Organic Compounds • (b) Aldehydes and Ketones (Textbook Page 129–132)',
+                title: '8.1 (b) Aldehydes (–CHO) and Ketones (–CO–)',
+                subtitle: 'Carbonyl Group (>C=O) | General Formula: CₙH₂ₙO | Methanal (HCHO) & Propanone (CH₃COCH₃)',
+                html: `
+                    <div class="sub-section-card space-y-4 myanmar-text">
+                        <h3 class="text-lg font-bold text-slate-900">📌 Carbonyl Group ပါဝင်သော Aldehydes နှင့် Ketones (Page 129)</h3>
+                        <p class="text-xs sm:text-sm text-slate-700">
+                            Aldehydes နှင့် Ketones နှစ်မျိုးလုံးတွင် <strong>Carbonyl group ($>C=O$)</strong> ပါဝင်ပြီး General formula <strong>CₙH₂ₙO</strong> ရှိသော Homologous series တစ်ခုစီ ဖြစ်ကြသည်။
+                            <br>• <strong>Aldehydes:</strong> Carbonyl group သည် Carbon chain ၏ <strong>အစွန်း (end)</strong> တွင် တည်ရှိပြီး Hydrogen အက်တမ် အနည်းဆုံး တစ်လုံးနှင့် ဆက်နေသည် (–CHO)။ အရိုးရှင်းဆုံး Aldehyde မှာ <strong>methanal / formaldehyde (HCHO)</strong> ဖြစ်သည်။
+                            <br>• <strong>Ketones:</strong> Carbonyl group သည် Carbon chain ၏ <strong>အတွင်းပိုင်း (within a carbon chain)</strong> တွင် တည်ရှိပြီး ဘေးနှစ်ဖက်လုံး၌ Carbon (Alkyl group) များနှင့်သာ ဆက်နေသည် (R–CO–R')။ အရိုးရှင်းဆုံး Ketone မှာ <strong>propanone / acetone (CH₃COCH₃)</strong> ဖြစ်သည်။
+                        </p>
+                    </div>
+
+                    <!-- (i) Nomenclature -->
+                    <div class="sub-section-card space-y-4 myanmar-text">
+                        <div class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-slate-900 text-white">(i) Nomenclature (နာမည်ပေးနည်း — Page 129–130)</div>
+                        <div class="grid md:grid-cols-2 gap-4 text-xs sm:text-sm">
+                            <div class="p-4 rounded-2xl bg-amber-50 border border-amber-200 space-y-1.5">
+                                <div class="font-bold text-amber-950">1. Aldehydes နာမည်ပေးနည်း</div>
+                                <p class="text-slate-700">
+                                    • <strong>Common Name:</strong> သက်ဆိုင်ရာ Carboxylic acid အမည် (formic, acetic, propionic, butyric) မှ <code>-ic acid</code> ကိုဖြုတ်၍ <code>-aldehyde</code> ထည့်သည် (formaldehyde, acetaldehyde, propionaldehyde)။ Substituent နေရာကို Functional group ဘေးက Carbon မှစ၍ ဂရိအက္ခရာ <strong>α (alpha), β (beta), γ (gamma), δ (delta)</strong> တို့ဖြင့် ပြသည် (ဥပမာ- α-methylpropionaldehyde)။
+                                    <br>• <strong>IUPAC Name:</strong> Parent alkane အမည်၏ နောက်ဆုံး <code>-e</code> ကို ဖြုတ်၍ <strong><code>-al</code></strong> ထည့်ရသည် (methanal, ethanal, propanal)။ Carbonyl carbon (–CHO) ကို နံပါတ် ၁ အမြဲပေး၍ ရေတွက်ရသည်။
+                                </p>
+                            </div>
+                            <div class="p-4 rounded-2xl bg-orange-50 border border-orange-200 space-y-1.5">
+                                <div class="font-bold text-orange-950">2. Ketones နာမည်ပေးနည်း</div>
+                                <p class="text-slate-700">
+                                    • <strong>Common Name:</strong> Carbonyl group (>C=O) ဘေးနှစ်ဖက်တွင် ဆက်နေသော Alkyl group နှစ်ခု၏ အမည်ကို ရေးပြီး နောက်ဆုံးတွင် <strong><code>ketone</code></strong> ထည့်ရသည် (ဥပမာ- acetone, ethyl methyl ketone, methyl iso-propyl ketone)။
+                                    <br>• <strong>IUPAC Name:</strong> Parent alkane အမည်၏ နောက်ဆုံး <code>-e</code> ကို ဖြုတ်၍ <strong><code>-one</code></strong> ထည့်ရသည် (propanone, 2-butanone, 3-methyl-2-butanone)။ C=O နှင့် အနီးဆုံး အစွန်းဘက်မှ နံပါတ်စတင် ရေတွက်ရသည်။
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- (ii) Methods of preparation -->
+                    <div class="sub-section-card space-y-4 myanmar-text">
+                        <div class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-rose-700 text-white">(ii) Methods of Preparation (ဖော်စပ်နည်း ၂ နည်း — Page 130–131)</div>
+
+                        <div class="space-y-2">
+                            <h4 class="font-bold text-slate-900 text-sm sm:text-base">1. Oxidation of alcohols (အယ်လ်ကိုဟောများကို ဓာတ်တိုးခြင်း)</h4>
+                            <p class="text-xs sm:text-sm text-slate-700">
+                                Alcohol များကို Oxidising agent ဖြစ်သော <strong>Acidified potassium dichromate solution (K₂Cr₂O₇, H⁺)</strong> နှင့် ညင်သာစွာ အပူပေး (Δ) လျှင် Primary alcohol မှ Aldehyde ကိုလည်းကောင်း၊ Secondary alcohol မှ Ketone ကိုလည်းကောင်း အသီးသီး ရရှိသည်။ (<code>[O]</code> သည် Oxidising agent မှ ထွက်လာသော Nascent oxygen ဖြစ်သည်)။
+                            </p>
+                            <pre class="eq-box"><span class="note-tag">// Primary alcohol → Aldehyde + Water</span>
+CH₃CH₂OH + [O]  ──<span class="reagent">(K₂Cr₂O₇, H⁺, Δ)</span>──►  <span class="product">CH₃CHO + H₂O</span>
+ethanol                                  ethanal
+
+<span class="note-tag">// Secondary alcohol → Ketone + Water</span>
+CH₃CH(OH)CH₃ + [O]  ──<span class="reagent">(K₂Cr₂O₇, H⁺, Δ)</span>──►  <span class="product">CH₃COCH₃ + H₂O</span>
+2-propanol                                  propanone</pre>
+                            <div class="p-3.5 rounded-xl bg-amber-50 border border-amber-200 text-xs text-amber-950 space-y-1">
+                                <div><strong>Note (Aldehyde):</strong> Aldehyde သည် သက်ဆိုင်ရာ Alcohol ထက် <strong>Boiling point ပိုနိမ့်သောကြောင့်</strong> ဖြစ်ပေါ်လာသည်နှင့် တစ်ပြိုင်နက် ပေါင်းခံ (distillation) ၍ ချက်ချင်း ဖယ်ထုတ်ယူရသည်။ မဖယ်ထုတ်ဘဲ ဆက်အပူပေးပါက Carboxylic acid အဖြစ် ထပ်မံ Oxidised ဖြစ်သွားမည်။</div>
+                                <div><strong>Note (Ketone):</strong> Ketone များသည် ဆက်လက်၍ Oxidised မဖြစ်နိုင်သောကြောင့် (cannot be further oxidised) ချက်ချင်း Distill off လုပ်ရန် မလိုအပ်ပါ။</div>
+                            </div>
+                        </div>
+
+                        <div class="space-y-2 pt-2">
+                            <h4 class="font-bold text-slate-900 text-sm sm:text-base">2. Hydration of alkynes (အယ်လ်ကိုင်းများသို့ ရေပေါင်းထည့်ခြင်း — Page 131)</h4>
+                            <p class="text-xs sm:text-sm text-slate-700">
+                                <strong>dil. H₂SO₄</strong> နှင့် <strong>HgSO₄</strong> ရှေ့မှောက် (60°C) တွင် <strong>Ethyne</strong> သို့ ရေပေါင်းထည့်လျှင် <strong>Ethanal (aldehyde)</strong> ကို ရရှိပြီး၊ အခြားသော <strong>Alkynes (ဥပမာ- Propyne)</strong> အားလုံးက <strong>Ketones</strong> ကိုသာ ပေးသည်။
+                            </p>
+                            <pre class="eq-box">HC≡CH + H₂O      ──<span class="reagent">(dil. H₂SO₄, HgSO₄, 60°C)</span>──►  <span class="product">CH₃CHO</span>  (ethanal)
+CH₃C≡CH + H₂O   ──<span class="reagent">(dil. H₂SO₄, HgSO₄, 60°C)</span>──►  <span class="product">CH₃COCH₃</span> (propanone)</pre>
+                        </div>
+                    </div>
+
+                    <!-- (iii) Properties and uses -->
+                    <div class="sub-section-card space-y-4 myanmar-text">
+                        <div class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-emerald-700 text-white">(iii) Properties and Uses (ဂုဏ်သတ္တိများနှင့် အသုံးဝင်ပုံများ — Page 131–132)</div>
+                        <p class="text-xs sm:text-sm text-slate-700">
+                            အခန်းအပူချိန်တွင် Methanal သည် ဓာတ်ငွေ့ဖြစ်ပြီး Ethanal မှာ အငွေ့ပျံလွယ်သော အရည်ဖြစ်သည်။ ကျန် Aldehydes နှင့် Ketones များမှာ အရည် သို့မဟုတ် အစိုင်အခဲများ ဖြစ်ကြသည်။ Methanal, ethanal နှင့် propanone တို့သည် ရေတွင် ပျော်ဝင်သော်လည်း Carbon chain ရှည်လာသည်နှင့်အမျှ ပျော်ဝင်နိုင်စွမ်း လျော့နည်းသွားသည်။
+                        </p>
+
+                        <pre class="eq-box"><span class="note-tag">// 1. Oxidation (Aldehydes are easily oxidised; Ketones require vigorous conditions)</span>
+RCHO + [O]  ──<span class="reagent">(oxidising agent)</span>──►  <span class="product">RCOOH</span> (carboxylic acid)
+
+<span class="note-tag">// 2. Reduction (+2[H] using LiAlH₄ in dry ether followed by dil. H₂SO₄)</span>
+CH₃CHO + 2[H]    ──<span class="reagent">(LiAlH₄ in dry ether / dil. H₂SO₄)</span>──►  <span class="product">CH₃CH₂OH</span> (ethanol - 1° alcohol)
+CH₃COCH₃ + 2[H]  ──<span class="reagent">(LiAlH₄ in dry ether / dil. H₂SO₄)</span>──►  <span class="product">CH₃CH(OH)CH₃</span> (2-propanol - 2° alcohol)
+
+<span class="note-tag">// 3. Addition with HCN (generated from NaCN + dil. H₂SO₄ → forms hydroxynitriles)</span>
+CH₃CHO + HCN    ──►  <span class="product">CH₃CH(OH)CN</span> (2-hydroxypropanenitrile)
+CH₃COCH₃ + HCN  ──►  <span class="product">(CH₃)₂C(OH)CN</span> (2-hydroxy-2-methylpropanenitrile)</pre>
+                        <p class="text-xs text-slate-600">
+                            <strong>မှတ်ချက်:</strong> LiAlH₄ သည် ရေနှင့် ပြင်းထန်စွာ ဓာတ်ပြုသောကြောင့် Dry ether ထဲတွင် အသုံးပြုရခြင်း ဖြစ်သည်။
+                        </p>
+
+                        <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 text-xs sm:text-sm space-y-1">
+                            <div class="font-bold text-slate-900">Uses of aldehydes and ketones (Page 132):</div>
+                            <p class="text-slate-700">
+                                • <strong>Aldehydes:</strong> Resins, dyes, organic acids, perfumes, detergents နှင့် ဆပ်ပြာများ ထုတ်လုပ်ရာတွင် သုံးသည်။ <strong>Formalin</strong> (40% aqueous solution of methanal) ကို ပိုးသတ်ဆေး (disinfectant) နှင့် ဇီဝဗေဒနမူနာပစ္စည်းများ မပုပ်မသိုးအောင် ထိန်းသိမ်းရာ (preservative) တွင် သုံးသည်။ Cinnamic aldehyde ကို ရေမွှေးများတွင် သုံးသည်။
+                                <br>• <strong>Ketones:</strong> ဖယောင်း၊ ပလတ်စတစ်၊ သုတ်ဆေး၊ အရောင်တင်ဆီ (varnishes) နှင့် ကော်များအတွက် ပျော်ရည် (solvents) အဖြစ် သုံးသည်။ <strong>Propanone (acetone)</strong> ကို လက်သည်းဖျက်ဆေး (nail polish remover) များတွင် အဓိက အသုံးပြုသည်။
+                            </p>
+                        </div>
+                    </div>
+                `
+            },
+
+            // ==========================================
+            // 8.1 (c) CARBOXYLIC ACIDS
+            // ==========================================
+            '8_1_c': {
+                badge: '8.1 Organic Compounds • (c) Carboxylic Acids (Textbook Page 132–134)',
+                title: '8.1 (c) Carboxylic Acids (ကာဘောက်ဆီလစ်အက်ဆစ်များ)',
+                subtitle: 'Carboxyl Functional Group (–COOH) | General Formula: CₙH₂ₙO₂',
+                html: `
+                    <div class="sub-section-card space-y-4 myanmar-text">
+                        <h3 class="text-lg font-bold text-slate-900">📌 Carboxylic Acids ဖွဲ့စည်းပုံ (Page 132)</h3>
+                        <p class="text-xs sm:text-sm text-slate-700">
+                            Carboxylic acids များသည် <strong>Carboxyl functional group (–COOH)</strong> ပါဝင်သော Organic compounds များ ဖြစ်ကြသည်။ Carboxyl group ကို Carbonyl group ($>C=O$) နှင့် Hydroxyl group (–OH) တို့ ပေါင်းစပ်ဖွဲ့စည်းထားခြင်း ဖြစ်ပြီး General formula မှာ <strong>CₙH₂ₙO₂</strong> ဖြစ်သည်။
+                        </p>
+                    </div>
+
+                    <!-- (i) Nomenclature -->
+                    <div class="sub-section-card space-y-4 myanmar-text">
+                        <div class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-slate-900 text-white">(i) Nomenclature (နာမည်ပေးနည်း — Page 132–133)</div>
+                        <p class="text-xs sm:text-sm text-slate-700">
+                            • <strong>Common Name:</strong> သဘာဝရင်းမြစ်များ၏ လက်တင်အမည်များမှ ဆင်းသက်လာသည် (ဥပမာ- ပုရွက်ဆိတ် <em>formica</em> မှ HCOOH = <strong>formic acid</strong>၊ ရှာလကာရည် <em>acetum</em> မှ CH₃COOH = <strong>acetic acid</strong>)။
+                            <br>• <strong>IUPAC System:</strong> Parent alkane အမည်၏ နောက်ဆုံး <code>-e</code> ကို ဖြုတ်၍ <strong><code>-oic acid</code></strong> ထည့်ရသည် (ဥပမာ- HCOOH = <strong>methanoic acid</strong>၊ CH₃COOH = <strong>ethanoic acid</strong>)။ Carboxyl group (–COOH) သည် Carbon chain ၏ အစွန်းတွင် အမြဲရှိသောကြောင့် ၎င်း၏ Carbon ကို နံပါတ် <strong>"1"</strong> အမြဲပေးရပြီး အခြား Functional group များထက် ဦးစားပေး၍ အမည်ပေးရသည် (ဥပမာ- 2-chloro-3-methylbutanoic acid, 4-hydroxy-2-methylbutanoic acid)။
+                        </p>
+                    </div>
+
+                    <!-- (ii) Methods of preparation -->
+                    <div class="sub-section-card space-y-4 myanmar-text">
+                        <div class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-rose-700 text-white">(ii) Methods of Preparation (ဖော်စပ်နည်း ၂ နည်း — Page 133)</div>
+                        <div class="space-y-2 text-xs sm:text-sm text-slate-700">
+                            <p><strong>1. Oxidation by acidified potassium dichromate:</strong> Ethanol ကို ပြင်းထန်သော Oxidising agent ဖြစ်သည့် Acidified potassium dichromate နှင့် <strong>Reflux condenser</strong> တပ်ဆင်၍ အပူပေးခြင်းဖြင့် ဓာတ်တိုးမှု အပြည့်အဝ ဖြစ်ပေါ်စေပြီး Ethanoic acid ရရှိသည်။ (အငွေ့ပျံလွယ်သော အရာများ မဆုံးရှုံးစေရန် Distillation အစား Reflux condenser ကို သုံးရသည်)။</p>
+                            <p><strong>2. Oxidation by atmospheric oxygen:</strong> <strong>Acetobacter</strong> ဗက်တီးရီးယား ရှေ့မှောက်တွင် Ethanol သည် လေထုအတွင်းရှိ အောက်ဆီဂျင်နှင့် ဓာတ်တိုးပြီး Ethanoic acid (ရှာလကာရည်) ဖြစ်လာသည်။</p>
+                        </div>
+                        <pre class="eq-box"><span class="note-tag">// 1. Chemical Oxidation (Reflux)</span>
+CH₃CH₂OH + 2[O]  ──<span class="reagent">(K₂Cr₂O₇, H⁺, reflux)</span>──►  <span class="product">CH₃COOH + H₂O</span>
+ethanol                                        ethanoic acid
+
+<span class="note-tag">// 2. Bacterial Oxidation</span>
+CH₃CH₂OH + O₂    ──<span class="reagent">(bacteria)</span>──►  <span class="product">CH₃COOH + H₂O</span>
+ethanol                              ethanoic acid</pre>
+                    </div>
+
+                    <!-- (iii) Properties and uses -->
+                    <div class="sub-section-card space-y-4 myanmar-text">
+                        <div class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-emerald-700 text-white">(iii) Properties and Uses (ဂုဏ်သတ္တိများနှင့် အသုံးဝင်ပုံများ — Page 133–134)</div>
+                        <p class="text-xs sm:text-sm text-slate-700">
+                            အခန်းအပူချိန်တွင် Carbon ၉ လုံးအထိ ပါဝင်သော Carboxylic acids များသည် အနံ့ပြင်းသော အရောင်မဲ့အရည်များ ဖြစ်ကြပြီး Carbon ၄ လုံးအထိ ရေတွင် ပျော်ဝင်သည်။ မော်လီကျူးအချင်းချင်းကြား အားကောင်းသော <strong>Intermolecular hydrogen bonds</strong> များ ရှိသောကြောင့် မော်လီကျူးအလေးချိန် တူညီသော အခြားဒြပ်ပေါင်းများထက် Boiling point မြင့်မားသည်။
+                        </p>
+                        <pre class="eq-box"><span class="note-tag">// 1. Reaction with metal (Mg, Na, K → Salt + H₂)</span>
+2CH₃COOH + Mg      ──►  <span class="product">(CH₃COO)₂Mg + H₂</span>
+
+<span class="note-tag">// 2. Reaction with metal carbonate (Na₂CO₃ → Salt + CO₂ + H₂O)</span>
+2CH₃COOH + Na₂CO₃  ──►  <span class="product">2CH₃COONa + CO₂ + H₂O</span>
+
+<span class="note-tag">// 3. Reaction with bases (NaOH → Salt + H₂O)</span>
+CH₃COOH + NaOH     ──►  <span class="product">CH₃COONa + H₂O</span>
+
+<span class="note-tag">// 4. Reduction (+4[H] → Primary alcohol)</span>
+CH₃CH₂COOH + 4[H]  ──<span class="reagent">(LiAlH₄ in dry ether / dil. H₂SO₄)</span>──►  <span class="product">CH₃CH₂CH₂OH + H₂O</span>
+propanoic acid                                                  1-propanol</pre>
+                        <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 text-xs sm:text-sm">
+                            <div class="font-bold text-slate-900">Uses of carboxylic acids (Page 134):</div>
+                            <p class="text-slate-700 mt-1">
+                                Polymers၊ ဆေးဝါးများ (antibiotics, antihistamines, နှင့် salicylic acid မှ ထုတ်လုပ်သော အကိုက်အခဲပျောက်ဆေး <strong>aspirin</strong>) နှင့် အစားအစာ တာရှည်ခံပစ္စည်းများ (food additives) ထုတ်လုပ်ရာတွင် အသုံးပြုသည်။ Methanoic acid ကို အထည်အလိပ်၊ ရော်ဘာနှင့် သားရေလုပ်ငန်းများတွင် သုံးပြီး Ethanoic acid နှင့် Sodium benzoate တို့ကို စားသောက်ကုန်လုပ်ငန်းတွင် အသုံးပြုသည်။
+                            </p>
+                        </div>
+                    </div>
+                `
+            },
+
+            // ==========================================
+            // 8.1 (d) ESTERS
+            // ==========================================
+            '8_1_d': {
+                badge: '8.1 Organic Compounds • (d) Esters (Textbook Page 134–136)',
+                title: '8.1 (d) Esters (အက်စတာများ)',
+                subtitle: 'Carboxylic Acid Derivatives (R–COOR\') | General Formula: CₙH₂ₙO₂',
+                html: `
+                    <div class="sub-section-card space-y-4 myanmar-text">
+                        <h3 class="text-lg font-bold text-slate-900">📌 Esters ဖွဲ့စည်းပုံ (Page 134)</h3>
+                        <p class="text-xs sm:text-sm text-slate-700">
+                            Esters များသည် Carboxylic acid ၏ Hydroxyl group (–OH) နေရာတွင် Alkoxy group (–OR) ဖြင့် အစားထိုးထားသော Carboxylic acid derivatives များ ဖြစ်ကြသည်။
+                        </p>
+                    </div>
+
+                    <!-- (i) Nomenclature -->
+                    <div class="sub-section-card space-y-4 myanmar-text">
+                        <div class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-slate-900 text-white">(i) Nomenclature (နာမည်ပေးနည်း — Page 134–135)</div>
+                        <p class="text-xs sm:text-sm text-slate-700">
+                            Carboxylic acid (RCOOH) နှင့် Alcohol (R'OH) တို့မှ ဖြစ်ပေါ်လာသော Ester (RCOOR') ကို နာမည်ပေးရာတွင် Alcohol ဘက်မှ လာသော <strong>Alkyl group (R')</strong> အမည်ကို အရင်ရေးပြီး၊ နောက်မှ Acid အမည်၏ <code>-ic acid</code> နေရာတွင် <strong><code>-ate</code></strong> အစားထိုး၍ ရေးရသည်။
+                        </p>
+                        <div class="overflow-x-auto rounded-2xl border border-slate-200">
+                            <table class="w-full text-left border-collapse text-xs sm:text-sm">
+                                <thead>
+                                    <tr class="bg-slate-900 text-white">
+                                        <th class="p-3">Formula</th>
+                                        <th class="p-3">Common Name</th>
+                                        <th class="p-3">IUPAC Name</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-slate-200">
+                                    <tr><td class="p-3 font-mono">HCOOCH₃</td><td class="p-3">methyl formate</td><td class="p-3 font-bold text-emerald-700">methyl methanoate</td></tr>
+                                    <tr class="bg-slate-50"><td class="p-3 font-mono">CH₃COOC₂H₅</td><td class="p-3">ethyl acetate</td><td class="p-3 font-bold text-emerald-700">ethyl ethanoate</td></tr>
+                                    <tr><td class="p-3 font-mono">C₂H₅COOCH₃</td><td class="p-3">methyl propionate</td><td class="p-3 font-bold text-emerald-700">methyl propanoate</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- (ii) Methods of preparation -->
+                    <div class="sub-section-card space-y-4 myanmar-text">
+                        <div class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-rose-700 text-white">(ii) Methods of Preparation — Esterification (Page 135)</div>
+                        <p class="text-xs sm:text-sm text-slate-700">
+                            Carboxylic acid နှင့် Alcohol တို့ ဓာတ်ပြု၍ Ester ဖြစ်ပေါ်သော ဖြစ်စဉ်ကို <strong>Esterification</strong> ဟု ခေါ်သည်။ Ethanoic acid နှင့် Ethanol တို့ကို Concentrated H₂SO₄ အနည်းငယ် ထည့်၍ အပူပေးလျှင် Ethyl ethanoate နှင့် ရေ ရရှိသည်။
+                        </p>
+                        <pre class="eq-box">CH₃COOH + C₂H₅OH  ⇌<span class="reagent">(H₂SO₄, Δ)</span>⇌  <span class="product">CH₃COOC₂H₅ + H₂O</span>
+ethanoic acid   ethanol                 ethyl ethanoate   water</pre>
+                    </div>
+
+                    <!-- (iii) Properties and uses -->
+                    <div class="sub-section-card space-y-4 myanmar-text">
+                        <div class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-emerald-700 text-white">(iii) Properties and Uses (ဂုဏ်သတ္တိများနှင့် အသုံးဝင်ပုံများ — Page 135–136)</div>
+                        <p class="text-xs sm:text-sm text-slate-700">
+                            မော်လီကျူးအလေးချိန် နည်းသော Esters များသည် မွှေးကြိုင်သော အနံ့ (pleasant odours) ရှိသည့် အရောင်မဲ့ အငွေ့ပျံလွယ်သော အရည်များ ဖြစ်ကြပြီး ရေတွင် အနည်းငယ်သာ ပျော်ဝင်သည်။ မိခင် Carboxylic acid များထက် Boiling point ပိုနိမ့်သည်။
+                        </p>
+                        <pre class="eq-box"><span class="note-tag">// 1. Acidic hydrolysis (Esterification ၏ ပြောင်းပြန်ဖြစ်စဉ် — Reversible)</span>
+CH₃COOC₂H₅ + H₂O   ⇌<span class="reagent">(H₂SO₄, Δ)</span>⇌  <span class="product">CH₃COOH + C₂H₅OH</span>
+
+<span class="note-tag">// 2. Basic hydrolysis (Reflux with NaOH → Irreversible → Salt + Alcohol)</span>
+CH₃COOC₂H₅ + NaOH  ──<span class="reagent">(reflux)</span>──►  <span class="product">CH₃COONa + C₂H₅OH</span>
+
+<span class="note-tag">// 3. Transesterification (Ester + Alcohol ⇌ New Ester + New Alcohol)</span>
+CH₃COOCH₃ + C₂H₅OH ⇌<span class="reagent">(H₂SO₄)</span>⇌     <span class="product">CH₃COOC₂H₅ + CH₃OH</span></pre>
+                        <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 text-xs sm:text-sm">
+                            <div class="font-bold text-slate-900">Uses of esters (Page 136):</div>
+                            <p class="text-slate-700 mt-1">
+                                သစ်သီးများ၏ အရသာနှင့် ပန်းများ၏ ရနံ့များသည် သဘာဝ Esters များကြောင့် ဖြစ်သည်။ အစားအစာ အနံ့အရသာတုများ (artificial food flavourings)၊ အလှကုန်၊ ရေမွှေးနှင့် ကော်များအတွက် Organic solvent အဖြစ် အသုံးပြုသည်။ သဘာဝ Esters (တိရစ္ဆာန်အဆီ သို့မဟုတ် ဟင်းသီးဟင်းရွက်ဆီ) ကို NaOH နှင့် ရောချက်ခြင်းဖြင့် <strong>ဆပ်ပြာ (Soap)</strong> ထုတ်လုပ်သည်။
+                            </p>
+                        </div>
+                    </div>
+                `
+            },
+
+            // ==========================================
+            // 8.1 (e) AMINES
+            // ==========================================
+            '8_1_e': {
+                badge: '8.1 Organic Compounds • (e) Amines (Textbook Page 136–137)',
+                title: '8.1 (e) Amines (အေမင်းများ)',
+                subtitle: 'Primary (1°), Secondary (2°), and Tertiary (3°) Amines | Amino Group (–NH₂)',
+                html: `
+                    <div class="sub-section-card space-y-4 myanmar-text">
+                        <h3 class="text-lg font-bold text-slate-900">📌 Amines အမျိုးအစား ခွဲခြားခြင်း (Page 136)</h3>
+                        <p class="text-xs sm:text-sm text-slate-700">
+                            Ammonia (NH₃) မော်လီကျူးမှ Hydrogen အက်တမ် တစ်လုံး သို့မဟုတ် တစ်လုံးထက်ပို၍ Alkyl groups များဖြင့် အစားထိုးထားသော ဒြပ်ပေါင်းများကို <strong>Amines</strong> ဟု ခေါ်သည်။ Nitrogen တွင် ကပ်နေသော Alkyl group အရေအတွက်ပေါ် မူတည်၍ <strong>Primary (1° amine: R–NH₂)</strong>, <strong>Secondary (2° amine: R₂NH)</strong> နှင့် <strong>Tertiary (3° amine: R₃N)</strong> ဟူ၍ ၃ မျိုး ခွဲခြားသည်။
+                        </p>
+                    </div>
+
+                    <!-- (i) Nomenclature -->
+                    <div class="sub-section-card space-y-4 myanmar-text">
+                        <div class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-slate-900 text-white">(i) Nomenclature (နာမည်ပေးနည်း — Page 136)</div>
+                        <p class="text-xs sm:text-sm text-slate-700">
+                            • <strong>Common Name:</strong> Nitrogen ပေါ်ရှိ Alkyl groups များကို အင်္ဂလိပ်အက္ခရာစဉ်အတိုင်း စီရေးပြီး နောက်ဆုံးတွင် <strong><code>amine</code></strong> ထည့်ရသည် (ဥပမာ- propylamine, methylpropylamine, dimethylpropylamine)။
+                            <br>• <strong>IUPAC System:</strong> Parent alkane အမည်၏ နောက်ဆုံး <code>-e</code> ကို ဖြုတ်၍ <strong><code>-amine</code></strong> ထည့်ရသည်။ Nitrogen တွင် တိုက်ရိုက်ကပ်နေသော Alkyl substituents များကို ရှေ့မှ စာလုံးကြီး <strong><code>N-</code></strong> တပ်၍ ပြရသည် (ဥပမာ- propanamine, <strong>N-methylpropanamine</strong>, <strong>N,N-dimethylpropanamine</strong>)။
+                        </p>
+                    </div>
+
+                    <!-- (ii) Methods of preparation -->
+                    <div class="sub-section-card space-y-4 myanmar-text">
+                        <div class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-rose-700 text-white">(ii) Methods of Preparation (ဖော်စပ်နည်း — Page 136–137)</div>
+                        <p class="text-xs sm:text-sm text-slate-700">
+                            Bromoethane ကို Ethanol တွင် ပျော်ဝင်ထားသော ပိုလျှံသည့် Ammonia (excess ammonia dissolved in ethanol) နှင့် အလုံပိတ်ပြွန် (sealed tube) ထဲတွင် အပူပေးခြင်းဖြင့် Ethanamine ကို ရရှိသည်။ (Secondary, tertiary amines နှင့် ammonium salts များ ဆက်လက်မဖြစ်ပေါ်စေရန် Excess hot ethanolic ammonia ကို သုံးရခြင်း ဖြစ်သည်)။
+                        </p>
+                        <pre class="eq-box">C₂H₅Br + NH₃ (in ethanol)  ──<span class="reagent">(Δ)</span>──►  <span class="product">C₂H₅NH₂ + HBr</span>
+bromoethane                            ethanamine
+
+<span class="note-tag">// Bromoethane ကို Ethanol နှင့် HBr တို့မှ ကြိုတင်ဖော်စပ်ပုံ</span>
+C₂H₅OH + HBr  ──<span class="reagent">(H₂SO₄)</span>──►  <span class="product">C₂H₅Br + H₂O</span></pre>
+                    </div>
+
+                    <!-- (iii) Properties and uses -->
+                    <div class="sub-section-card space-y-4 myanmar-text">
+                        <div class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-emerald-700 text-white">(iii) Properties and Uses (ဂုဏ်သတ္တိများနှင့် အသုံးဝင်ပုံများ — Page 137)</div>
+                        <p class="text-xs sm:text-sm text-slate-700">
+                            Methyl, dimethyl, trimethyl နှင့် ethyl amines တို့သည် အခန်းအပူချိန်တွင် ဓာတ်ငွေ့များ ဖြစ်ကြပြီး အမိုးနီးယားအနံ့ ရှိသည်။ အရည်ဖြစ်သော Amines များမှာ ညှီစို့စို့အနံ့ (fishy smell) ရှိသည်။ Primary amines များသည် ရေနှင့် Hydrogen bonds ပိုမိုဖွဲ့စည်းနိုင်သောကြောင့် 2° နှင့် 3° amines များထက် ရေတွင် ပိုပျော်ဝင်သည်။ Boiling point မှာ Alkane/Ether ထက် မြင့်သော်လည်း Alcohol ထက် နိမ့်သည် (O သည် N ထက် Electronegativity ပိုကြီးသောကြောင့် ဖြစ်သည်)။
+                        </p>
+                        <div class="space-y-2">
+                            <h4 class="font-bold text-slate-900 text-sm">Carbylamine reaction (Primary amines စမ်းသပ်ခြင်း)</h4>
+                            <p class="text-xs sm:text-sm text-slate-700">
+                                Primary amine (ethanamine) သည် Alkali (KOH in alcohol) ရှေ့မှောက်တွင် Chloroform (CHCl₃) နှင့် ဓာတ်ပြုလျှင် အလွန်အနံ့ဆိုးဝါးသော <strong>Ethyl isocyanide (ethyl carbylamine)</strong> ကို ထုတ်ပေးသည်။ ၎င်းကို Primary amines ခွဲခြားစမ်းသပ်ရာတွင် အသုံးပြုသည်။
+                            </p>
+                            <pre class="eq-box">CH₃CH₂NH₂ + CHCl₃ + 3KOH (in alcohol)  ──<span class="reagent">(Δ)</span>──►  <span class="product">CH₃CH₂NC + 3KCl + 3H₂O</span>
+ethanamine                                          ethyl isocyanide</pre>
+                        </div>
+                        <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 text-xs sm:text-sm">
+                            <div class="font-bold text-slate-900">Uses of amines (Page 137):</div>
+                            <p class="text-slate-700 mt-1">
+                                Azo-dyes (ဆိုးဆေးများ)၊ Nylon၊ ဆေးဝါးများ (medicines and drugs)၊ သီးနှံကာကွယ်ရေး ဓာတုပစ္စည်းများနှင့် ရေသန့်စင်ခြင်း လုပ်ငန်းများတွင် ကျယ်ပြန့်စွာ အသုံးပြုသည်။
+                            </p>
+                        </div>
+                    </div>
+                `
+            },
+
+            // ==========================================
+            // 8.1 (f) AMIDES
+            // ==========================================
+            '8_1_f': {
+                badge: '8.1 Organic Compounds • (f) Amides (Textbook Page 137–139)',
+                title: '8.1 (f) Amides (အေမိုက်ဒ်များ)',
+                subtitle: 'Carboxylic Acid Derivatives (–CONH₂, –CONHR, –CONR₂)',
+                html: `
+                    <div class="sub-section-card space-y-4 myanmar-text">
+                        <h3 class="text-lg font-bold text-slate-900">📌 Amides ဖွဲ့စည်းပုံ (Page 137)</h3>
+                        <p class="text-xs sm:text-sm text-slate-700">
+                            Amides များသည် Carboxylic acid ၏ –OH အုပ်စုနေရာတွင် Amine ၏ –NH₂, –NHR သို့မဟုတ် –NR₂ အုပ်စုဖြင့် အစားထိုးထားသော Carboxylic acid derivatives များ ဖြစ်ကြသည်။
+                        </p>
+                    </div>
+
+                    <!-- (i) Nomenclature -->
+                    <div class="sub-section-card space-y-4 myanmar-text">
+                        <div class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-slate-900 text-white">(i) Nomenclature (နာမည်ပေးနည်း — Page 138)</div>
+                        <p class="text-xs sm:text-sm text-slate-700">
+                            သက်ဆိုင်ရာ Carboxylic acid အမည်၏ နောက်ဆုံး <code>-oic acid</code> (သို့မဟုတ် Common name တွင် <code>-ic acid</code>) နေရာတွင် <strong><code>-amide</code></strong> ကို အစားထိုး၍ အမည်ပေးရသည်။ Nitrogen တွင် ကပ်နေသော Alkyl substituents များကို ရှေ့မှ <strong><code>N-</code></strong> တပ်၍ ပြရသည် (ဥပမာ- propanamide, N-methylpropanamide, N,N-dimethylpropanamide)။
+                        </p>
+                    </div>
+
+                    <!-- (ii) Methods of preparation -->
+                    <div class="sub-section-card space-y-4 myanmar-text">
+                        <div class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-rose-700 text-white">(ii) Methods of Preparation — Condensation Reaction (Page 138)</div>
+                        <p class="text-xs sm:text-sm text-slate-700">
+                            Carboxylic acid သို့ Ammonia (NH₃) ပေါင်းထည့်လျှင် ပထမဦးစွာ Ammonium salt ရရှိပြီး ၎င်းကို အပူပေး (Δ) လိုက်သောအခါ ရေ (H₂O) မော်လီကျူး ဖယ်ထုတ်ခြင်း (Condensation reaction) ဖြင့် Amide ကို ရရှိသည်။
+                        </p>
+                        <pre class="eq-box">CH₃COOH + NH₃  ──►  CH₃COONH₄         ──<span class="reagent">(Δ)</span>──►  <span class="product">CH₃CONH₂ + H₂O</span>
+ethanoic acid       ammonium ethanoate            ethanamide</pre>
+                    </div>
+
+                    <!-- (iii) Properties and uses -->
+                    <div class="sub-section-card space-y-4 myanmar-text">
+                        <div class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-emerald-700 text-white">(iii) Properties and Uses (ဂုဏ်သတ္တိများနှင့် အသုံးဝင်ပုံများ — Page 138–139)</div>
+                        <p class="text-xs sm:text-sm text-slate-700">
+                            Methanamide သည် အရည်ဖြစ်ပြီး အခြားရိုးရှင်းသော Amides အားလုံးမှာ အစိုင်အခဲများ ဖြစ်ကြသည်။ Carbon ၅ လုံးနှင့် အောက် ပါဝင်သော Amides များသည် ရေတွင် ပျော်ဝင်ပြီး ရေပျော်ရည်များမှာ Neutral ဖြစ်သည်။ Amides များသည် Boiling point နှင့် Melting point မြင့်မားကြသည်။
+                        </p>
+                        <pre class="eq-box"><span class="note-tag">// 1. Acidic Hydrolysis (Reflux with HCl → Carboxylic acid + Ammonium salt)</span>
+CH₃CONHCH₃ + H₂O + HCl  ──<span class="reagent">(reflux)</span>──►  <span class="product">CH₃COOH + CH₃NH₃Cl</span>
+N-methylethanamide                     ethanoic acid   methyl ammonium chloride
+
+<span class="note-tag">// 2. Basic Hydrolysis (Reflux with NaOH → Sodium salt + Primary amine/NH₃)</span>
+CH₃CONHCH₃ + NaOH       ──<span class="reagent">(reflux)</span>──►  <span class="product">CH₃COONa + CH₃NH₂</span>
+N-methylethanamide                     sodium ethanoate   methanamine</pre>
+                        <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 text-xs sm:text-sm">
+                            <div class="font-bold text-slate-900">Uses of amides (Page 139):</div>
+                            <p class="text-slate-700 mt-1">
+                                ပလတ်စတစ်၊ ရော်ဘာ၊ စက္ကူ၊ ဖယောင်းတောင့် (crayons)၊ ခဲတံနှင့် မင်များတွင် အရောင်ထည့်ရန်အပြင် ရေနှင့် မိလ္လာသန့်စင်ခြင်း လုပ်ငန်းများတွင် သုံးသည်။ <strong>Nylon</strong> ကဲ့သို့သော Polyamides များကို အထည်အလိပ်၊ ကြိုးများ၊ ကျည်ကာအင်္ကျီ (bulletproof vests) နှင့် တာယာကြိုးများ ထုတ်လုပ်ရာတွင် အသုံးပြုသည်။
+                            </p>
+                        </div>
+                    </div>
+                `
+            },
+
+            // ==========================================
+            // 8.2 (a) CHEMICAL TESTS
+            // ==========================================
+            '8_2_a': {
+                badge: '8.2 Determining Functional Groups • (a) Chemical Tests (Textbook Page 139–141)',
+                title: '8.2 (a) Chemical Tests for Organic Compounds',
+                subtitle: 'Table 8.1 ဓာတုစမ်းသပ်ချက်များ၊ 2,4-DNP Test နှင့် Fehling\'s Test အသေးစိတ်',
+                html: `
+                    <div class="sub-section-card space-y-4 myanmar-text">
+                        <h3 class="text-lg font-bold text-slate-900">📌 8.2 Functional Groups များကို ရှာဖွေဖော်ထုတ်ခြင်း (Page 139–140)</h3>
+                        <p class="text-xs sm:text-sm text-slate-700">
+                            Organic compounds များ၏ ဂုဏ်သတ္တိကို အဆုံးအဖြတ်ပေးသော အက်တမ်အုပ်စုများကို <strong>Functional groups</strong> ဟု ခေါ်သည်။ ၎င်းတို့ကို ခွဲခြားသိရှိရန် ရိုးရှင်းသော <strong>Chemical tests</strong> (အရောင်ပြောင်းလဲခြင်း၊ အနည်ကျခြင်း၊ ဓာတ်ငွေ့ထွက်ခြင်း) နှင့် <strong>Spectroscopic techniques</strong> (IR, UV/Vis, NMR, MS) တို့ကို အသုံးပြုသည်။
+                        </p>
+
+                        <!-- Table 8.1 -->
+                        <div class="overflow-x-auto rounded-2xl border border-slate-200">
+                            <table class="w-full text-left border-collapse text-xs">
+                                <thead>
+                                    <tr class="bg-slate-900 text-white">
+                                        <th class="p-2.5">Organic Compound</th>
+                                        <th class="p-2.5">Functional Group</th>
+                                        <th class="p-2.5">Chemical Test (Reagent & Condition)</th>
+                                        <th class="p-2.5">Observation (မြင်တွေ့ရမည့်ရလဒ်)</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-slate-200 bg-white">
+                                    <tr><td class="p-2.5 font-bold">Alkanes</td><td class="p-2.5 font-mono">C–C</td><td class="p-2.5">Mix with 1% KMnO₄ solution</td><td class="p-2.5 text-slate-500">no decolourisation</td></tr>
+                                    <tr class="bg-slate-50"><td class="p-2.5 font-bold">Alkenes</td><td class="p-2.5 font-mono">C=C</td><td class="p-2.5">Mix with 1% KMnO₄ solution</td><td class="p-2.5 font-bold text-emerald-700">decolourisation (ခရမ်းရောင်ပျောက်)</td></tr>
+                                    <tr><td class="p-2.5 font-bold">Alkynes</td><td class="p-2.5 font-mono">–C≡C–</td><td class="p-2.5">Pass through ammoniacal Cu₂Cl₂ solution</td><td class="p-2.5 font-bold text-red-700">red coloured precipitate</td></tr>
+                                    <tr class="bg-slate-50"><td class="p-2.5 font-bold">Alcohols</td><td class="p-2.5 font-mono">–O–H</td><td class="p-2.5">Warm with acidified K₂Cr₂O₇ solution</td><td class="p-2.5 font-bold text-emerald-700">orange colour changes to green colour</td></tr>
+                                    <tr><td class="p-2.5 font-bold">Ethers</td><td class="p-2.5 font-mono">R–O–R'</td><td class="p-2.5">Boil with HI and then react with AgNO₃</td><td class="p-2.5 font-bold text-amber-700">yellow coloured precipitate (AgI)</td></tr>
+                                    <tr class="bg-slate-50"><td class="p-2.5 font-bold">Aldehydes</td><td class="p-2.5 font-mono">–CHO</td><td class="p-2.5">Mix with 2,4-DNP; Heat gently with Fehling's solution</td><td class="p-2.5 font-bold text-orange-700">orange ppt (2,4-DNP); reddish-brown ppt (Fehling's)</td></tr>
+                                    <tr><td class="p-2.5 font-bold">Ketones</td><td class="p-2.5 font-mono">>C=O</td><td class="p-2.5">Mix with 2,4-DNP; Heat gently with Fehling's solution</td><td class="p-2.5 font-bold text-orange-700">orange ppt (2,4-DNP); no precipitate (Fehling's)</td></tr>
+                                    <tr class="bg-slate-50"><td class="p-2.5 font-bold">Carboxylic acids</td><td class="p-2.5 font-mono">–COOH</td><td class="p-2.5">Mix with saturated NaHCO₃ solution</td><td class="p-2.5 font-bold text-sky-700">evolution of CO₂ (test with limewater)</td></tr>
+                                    <tr><td class="p-2.5 font-bold">Esters</td><td class="p-2.5 font-mono">–COOR</td><td class="p-2.5">Heat gently with EtOH, phenolphthalein & dil. NaOH (pink)</td><td class="p-2.5 font-bold text-pink-700">decolourisation (ပန်းရောင်ပျောက်)</td></tr>
+                                    <tr class="bg-slate-50"><td class="p-2.5 font-bold">Primary amines</td><td class="p-2.5 font-mono">–NH₂</td><td class="p-2.5">React with CHCl₃ in the presence of alkali</td><td class="p-2.5 font-bold text-rose-700">unpleasant smell (carbylamine)</td></tr>
+                                    <tr><td class="p-2.5 font-bold">Primary amides</td><td class="p-2.5 font-mono">–CONH₂</td><td class="p-2.5">Boil with 20% NaOH solution</td><td class="p-2.5 font-bold text-purple-700">evolution of NH₃ (test with HCl)</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- 2,4-DNP & Fehling's Test -->
+                    <div class="sub-section-card space-y-4 myanmar-text">
+                        <h3 class="text-lg font-bold text-slate-900">🧪 2,4-DNP Test နှင့် Fehling's Test အသေးစိတ် (Page 141)</h3>
+                        <div class="grid md:grid-cols-2 gap-4 text-xs sm:text-sm">
+                            <div class="p-4 rounded-2xl bg-orange-50 border border-orange-200 space-y-1.5">
+                                <div class="font-bold text-orange-950">1. 2,4-DNP Test (Carbonyl Group စမ်းသပ်ခြင်း)</div>
+                                <p class="text-slate-700">
+                                    Aldehyde သို့မဟုတ် Ketone ပါဝင်ကြောင်း စမ်းသပ်ရန် <strong>2,4-DNP (2,4-dinitrophenylhydrazine)</strong> ပျော်ရည်ကို သုံးသည်။ Carbonyl group (>C=O) ရှိပါက လိမ္မော်ရင့်ရောင် အနည် (<strong>deep-orange precipitate</strong> of 2,4-dinitrophenylhydrazone) ဖြစ်ပေါ်သည်။
+                                </p>
+                            </div>
+                            <div class="p-4 rounded-2xl bg-red-50 border border-red-200 space-y-1.5">
+                                <div class="font-bold text-red-950">2. Fehling's Test (Aldehyde နှင့် Ketone ခွဲခြားခြင်း)</div>
+                                <p class="text-slate-700">
+                                    <strong>Fehling's solution</strong> သည် Copper(II) ions (Cu²⁺) ပါဝင်သော အပြာရောင် Alkaline ပျော်ရည် ဖြစ်သည်။ Aldehyde နှင့် အပူပေးလျှင် <strong>နီညိုရောင်အနည် (reddish-brown precipitate of Cu₂O)</strong> ကျသော်လည်း Ketone မှာမူ ဓာတ်ပြုမှု မရှိပါ (no precipitate)။
+                                </p>
+                            </div>
+                        </div>
+                        <pre class="eq-box"><span class="note-tag">// Fehling's Test Equations (Page 141)</span>
+RCHO + 2Cu²⁺ + 4OH⁻  ──<span class="reagent">(in alkaline solution, Δ)</span>──►  <span class="product">RCOOH + Cu₂O ↓ (reddish-brown ppt) + 2H₂O</span>
+R₂C=O + Cu²⁺ + OH⁻   ──<span class="reagent">(in alkaline solution, Δ)</span>──►  <span class="product">no reaction</span></pre>
+                    </div>
+                `
+            },
+
+            // ==========================================
+            // 8.2 (b) INFRARED SPECTROSCOPY
+            // ==========================================
+            '8_2_b': {
+                badge: '8.2 Determining Functional Groups • (b) Infrared Spectroscopy (Textbook Page 141–144)',
+                title: '8.2 (b) Infrared (IR) Spectroscopy',
+                subtitle: '(i) Electromagnetic Radiation, (ii) Molecular Vibration, & (iii) Characteristic IR Absorption Bands',
+                html: `
+                    <div class="sub-section-card space-y-4 myanmar-text">
+                        <div class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-slate-900 text-white">(i) Electromagnetic Radiation (Page 141–142)</div>
+                        <p class="text-xs sm:text-sm text-slate-700">
+                            IR spectroscopy သည် ဒြပ်ပေါင်းတစ်ခုမှ လျှပ်စစ်သံလိုက်ရောင်စဉ်၏ အနီအောက်ရောင်ခြည် (Infrared region) အတွင်းရှိ အလင်းစွမ်းအင် စုပ်ယူမှုကို လေ့လာခြင်း ဖြစ်သည်။ Planck's equation အရ $E = h\nu = \frac{hc}{\lambda}$ ဖြစ်ပြီး IR spectroscopy တွင် ကြိမ်နှုန်းကို <strong>Wavenumber ($\text{cm}^{-1}$)</strong> (wavelength ၏ ပြောင်းပြန်ကိန်း) ဖြင့် ဖော်ပြသည်။ <strong>ကြိမ်နှုန်းမြင့်ခြင်း (High frequency)၊ Wavenumber ကြီးခြင်းနှင့် Wavelength တိုခြင်းတို့သည် စွမ်းအင်မြင့်မားမှု (High energy) ကို ဖော်ပြသည်။</strong>
+                        </p>
+                    </div>
+
+                    <div class="sub-section-card space-y-4 myanmar-text">
+                        <div class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-rose-700 text-white">(ii) Molecular Vibration (မော်လီကျူးတုန်ခါမှု — Page 142)</div>
+                        <p class="text-xs sm:text-sm text-slate-700">
+                            • <strong>Stretching:</strong> Bond တစ်လျှောက် ဖြစ်ပေါ်ပြီး Bond length ကို ပြောင်းလဲစေသော တုန်ခါမှု (Bending ထက် စွမ်းအင်ပိုလိုအပ်သည်)။
+                            <br>• <strong>Bending:</strong> Bond နှစ်ခုကြား ဖြစ်ပေါ်ပြီး Bond angle ကို ပြောင်းလဲစေသော တုန်ခါမှု။
+                            <br>• <strong>IR Active vs IR Inactive:</strong> မော်လီကျူး၏ Dipole moment ကို ပြောင်းလဲစေသော တုန်ခါမှုများကသာ IR radiation ကို စုပ်ယူသည်။ ထို့ကြောင့် Dipole moment မရှိသော Homonuclear diatomic molecules (ဥပမာ- N₂, O₂) များသည် <strong>IR inactive</strong> ဖြစ်ပြီး Heteronuclear molecules (ဥပမာ- CO) များမှာ <strong>IR active</strong> ဖြစ်သည်။ ပေါ့ပါးသော အက်တမ်များနှင့် Multiple bonds (C=C, C≡C) များသည် လေးလံသော အက်တမ်များနှင့် Single bonds များထက် ပိုမြင့်သော Frequency တွင် တုန်ခါကြသည်။
+                        </p>
+                    </div>
+
+                    <div class="sub-section-card space-y-4 myanmar-text">
+                        <div class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-emerald-700 text-white">(iii) Characteristic IR Absorption Bands — Table 8.2 (Page 143–144)</div>
+                        <div class="overflow-x-auto rounded-2xl border border-slate-200">
+                            <table class="w-full text-left border-collapse text-xs sm:text-sm">
+                                <thead>
+                                    <tr class="bg-slate-900 text-white">
+                                        <th class="p-3">Functional Group / Compound</th>
+                                        <th class="p-3">Bond</th>
+                                        <th class="p-3">Wavenumber (cm⁻¹)</th>
+                                        <th class="p-3">Intensity & Shape</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-slate-200 bg-white">
+                                    <tr><td class="p-3">Alcohols, ethers, esters, carboxylic acids</td><td class="p-3 font-mono">C–O</td><td class="p-3 font-mono font-bold">1050–1410</td><td class="p-3">strong</td></tr>
+                                    <tr class="bg-slate-50"><td class="p-3">Alkenes, aromatic compounds</td><td class="p-3 font-mono">C=C</td><td class="p-3 font-mono font-bold">1620–1680</td><td class="p-3">medium, weak</td></tr>
+                                    <tr><td class="p-3">Amides, ketones, aldehydes, esters, carboxylic acids</td><td class="p-3 font-mono">C=O</td><td class="p-3 font-mono font-bold text-rose-700">1650–1750</td><td class="p-3">strong, sharp</td></tr>
+                                    <tr class="bg-slate-50"><td class="p-3">Alkynes</td><td class="p-3 font-mono">C≡C</td><td class="p-3 font-mono font-bold">2100–2260</td><td class="p-3">medium, weak</td></tr>
+                                    <tr><td class="p-3">Carboxylic acids</td><td class="p-3 font-mono">O–H</td><td class="p-3 font-mono font-bold text-amber-700">2500–3300</td><td class="p-3">strong, very broad</td></tr>
+                                    <tr class="bg-slate-50"><td class="p-3">Aldehydes</td><td class="p-3 font-mono">C–H</td><td class="p-3 font-mono font-bold">2720–2820</td><td class="p-3">medium, weak</td></tr>
+                                    <tr><td class="p-3">Alkanes, alkenes</td><td class="p-3 font-mono">C–H</td><td class="p-3 font-mono font-bold">2850–3090</td><td class="p-3">strong</td></tr>
+                                    <tr class="bg-slate-50"><td class="p-3">Alcohols</td><td class="p-3 font-mono">O–H</td><td class="p-3 font-mono font-bold text-sky-700">3200–3600</td><td class="p-3">strong, broad</td></tr>
+                                    <tr><td class="p-3">Amines, amides</td><td class="p-3 font-mono">N–H</td><td class="p-3 font-mono font-bold text-purple-700">3300–3500</td><td class="p-3">strong / medium (narrow)</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <p class="text-xs sm:text-sm text-slate-700">
+                            <strong>အရေးကြီးမှတ်ချက် (Page 143):</strong> Alcohol ၏ O–H band (3200–3600 cm⁻¹) သည် Hydrogen bonding ကြောင့် ကျယ်ပြန့် (<strong>broad and strong</strong>) ပြီး၊ Amine နှင့် Amide ၏ N–H band (3300–3500 cm⁻¹) မှာမူ ကျဉ်းမြောင်း (<strong>narrow and weak/medium</strong>) ပါသည်။ Carboxylic acid ၏ O–H band မှာမူ 2500–3300 cm⁻¹ တွင် အလွန်ကျယ်ပြန့်စွာ (<strong>very broad</strong>) ပေါ်လာသည်။
+                        </p>
+                    </div>
+                `
+            },
+
+            // ==========================================
+            // 8.3 (a) INTRODUCING POLYMERS
+            // ==========================================
+            '8_3_a': {
+                badge: '8.3 Macromolecules • (a) Introducing Polymers (Textbook Page 145–146)',
+                title: '8.3 (a) Introducing Polymers (ပေါ်လီမာများ မိတ်ဆက်)',
+                subtitle: 'Monomers, Homopolymers, Copolymers, Addition vs Condensation Polymerisation',
+                html: `
+                    <div class="sub-section-card space-y-4 myanmar-text">
+                        <h3 class="text-lg font-bold text-slate-900">📌 Macromolecules နှင့် Polymers အခြေခံသဘောတရား (Page 145)</h3>
+                        <p class="text-xs sm:text-sm text-slate-700">
+                            <strong>Macromolecule</strong> ဆိုသည်မှာ အက်တမ် ထောင်ပေါင်းများစွာ ပါဝင်သော အလွန်ကြီးမားသည့် မော်လီကျူးကြီး ဖြစ်သည်။ <strong>Polymer</strong> ဆိုသည်မှာ <strong>Monomers</strong> ဟုခေါ်သော ထပ်တလဲလဲ ပါဝင်သည့် ယူနစ်ငယ်လေးများ (repeat units) အများအပြား ဆက်တိုက်ချိတ်ဆက်ထားသော ကြိုးရှည်မော်လီကျူးကြီး (long-chain macromolecule) ဖြစ်သည်။
+                            <br>• <strong>Homopolymer:</strong> Monomer အမျိုးအစား <strong>တစ်မျိုးတည်း</strong> ဖြင့်သာ ဖွဲ့စည်းထားသော Polymer (ဥပမာ- Polyethene)။
+                            <br>• <strong>Copolymer:</strong> Monomer အမျိုးအစား <strong>တစ်မျိုးထက်ပို၍</strong> ပါဝင်ဖွဲ့စည်းထားသော Polymer (ဥပမာ- Nylon, Terylene)။
+                        </p>
+
+                        <!-- Table 8.3 -->
+                        <div class="overflow-x-auto rounded-2xl border border-slate-200">
+                            <table class="w-full text-left border-collapse text-xs sm:text-sm">
+                                <thead>
+                                    <tr class="bg-slate-900 text-white">
+                                        <th class="p-3">Natural Polymers (သဘာဝပေါ်လီမာများ)</th>
+                                        <th class="p-3">Synthetic Polymers (လူလုပ်ပေါ်လီမာများ)</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-slate-200 bg-white">
+                                    <tr><td class="p-3">Proteins, DNA, Starch, Cellulose</td><td class="p-3">Polyethene, Nylon, Terylene, Teflon</td></tr>
+                                    <tr class="bg-slate-50"><td class="p-3">Wool, Natural rubber, Silk, Hair</td><td class="p-3">Polyvinyl acetate (PVA), Polystyrene, Polypropylene</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-xs sm:text-sm space-y-1.5">
+                            <div class="font-bold text-emerald-950">Polymerisation (ပေါ်လီမာပြုလုပ်ခြင်း) အမျိုးအစား (၂) မျိုး:</div>
+                            <p class="text-slate-800">
+                                <strong>1. Addition polymerisation:</strong> မပြည့်ဝသော Monomers (unsaturated monomers) များသည် မည်သည့် မော်လီကျူး သို့မဟုတ် အက်တမ်မျှ ဆုံးရှုံးခြင်း မရှိဘဲ (without losing any molecules or atoms) တိုက်ရိုက်ပေါင်းစည်းခြင်း ဖြစ်သည်။
+                                <br><strong>2. Condensation polymerisation:</strong> Monomers များ ပေါင်းစည်းရာတွင် ရေ (H₂O) ကဲ့သို့သော မော်လီကျူးငယ်လေးတစ်ခု ဖယ်ထုတ်ခြင်း (removal of a small molecule such as water) နှင့်အတူ Polymer ဖြစ်ပေါ်ခြင်း ဖြစ်သည်။
+                            </p>
+                        </div>
+                    </div>
+                `
+            },
+
+            // ==========================================
+            // 8.3 (b) ADDITION POLYMERS
+            // ==========================================
+            '8_3_b': {
+                badge: '8.3 Macromolecules • (b) Addition Polymers (Textbook Page 146–147)',
+                title: '8.3 (b) Addition Polymers (ပေါင်းစည်းပေါ်လီမာများ)',
+                subtitle: '(i) Polyethene, (ii) Polyvinyl chloride (PVC), & (iii) Properties and Uses',
+                html: `
+                    <!-- (i) Polyethene -->
+                    <div class="sub-section-card space-y-4 myanmar-text">
+                        <div class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-slate-900 text-white">(i) Polyethene (PE — Page 146)</div>
+                        <p class="text-xs sm:text-sm text-slate-700">
+                            အရိုးရှင်းဆုံး Addition polymer မှာ <strong>Polyethene / Polyethylene (PE)</strong> ဖြစ်သည်။ Ethene monomers များကို မြင့်မားသော အပူချိန်နှင့် ဖိအား (high temperature and pressure) နှင့် Catalyst ရှေ့မှောက်တွင် ထားရှိပါက C=C double bond များ ပြတ်တောက်ပြီး C–C single bonds များဖြင့် ဆက်တိုက်ချိတ်ဆက်ကာ Polyethene ဖြစ်လာသည်။ (Polyethene တစ်ခုတွင် Ethene မော်လီကျူးပေါင်း 10,000 မှ 30,000 အထိ ပါဝင်သည်)။
+                        </p>
+                        <pre class="eq-box">n H₂C=CH₂  ──<span class="reagent">(high temperature and pressure, catalyst)</span>──►  <span class="product">–[H₂C–CH₂]ₙ–</span>
+ethene                                                            polyethene (repeat unit: –CH₂–CH₂–)</pre>
+                    </div>
+
+                    <!-- (ii) Polyvinyl chloride -->
+                    <div class="sub-section-card space-y-4 myanmar-text">
+                        <div class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-rose-700 text-white">(ii) Polyvinyl Chloride / Polychloroethene (PVC — Page 146)</div>
+                        <p class="text-xs sm:text-sm text-slate-700">
+                            Chloroethene (vinyl chloride) monomers များ ပေါင်းစည်းခြင်းမှ <strong>Polychloroethene / Polyvinyl chloride (PVC)</strong> ကို ရရှိသည်။ Repeat unit မှာ <strong>–H₂C–CHCl–</strong> ဖြစ်သည်။
+                        </p>
+                        <pre class="eq-box">n H₂C=CHCl  ──<span class="reagent">(high temperature and pressure, catalyst)</span>──►  <span class="product">–[H₂C–CHCl]ₙ–</span>
+chloroethene                                                        polychloroethene (PVC)</pre>
+                    </div>
+
+                    <!-- (iii) Properties and uses -->
+                    <div class="sub-section-card space-y-4 myanmar-text">
+                        <div class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-emerald-700 text-white">(iii) Properties and Uses (ဂုဏ်သတ္တိများနှင့် အသုံးဝင်ပုံများ — Page 146–147)</div>
+                        <p class="text-xs sm:text-sm text-slate-700">
+                            Addition polymers များကို <strong>Plastics</strong> ဟုလည်း ခေါ်သည်။ Organic solvents များတွင် ဖောင်းပွခြင်း သို့မဟုတ် ပျော်ဝင်ခြင်း ဖြစ်နိုင်ပြီး ရာသီဥတုဒဏ် ခံနိုင်ရည် နည်းပါးသည်။ အပူချိန်နိမ့်ပါက ကြွပ်ဆတ် (brittle) လာသည်။
+                        </p>
+                        <div class="grid sm:grid-cols-2 gap-3 text-xs sm:text-sm">
+                            <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200">
+                                <strong>• Polyethene (PE):</strong> ပုံသွင်းရလွယ်ကူသဖြင့် ပလတ်စတစ်အရုပ်များ၊ အိတ်များနှင့် ရေပုံးများ ပြုလုပ်ရာတွင် သုံးသည်။
+                            </div>
+                            <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200">
+                                <strong>• Polyvinyl chloride (PVC):</strong> ခိုင်ခံ့ပြီး ပေါ့ပါးတာရှည်ခံသဖြင့် ရေပိုက်များ၊ မိုးကာအင်္ကျီ၊ လက်အိတ်ပါးနှင့် ကြမ်းခင်းဖျာများ ပြုလုပ်ရာတွင် သုံးသည်။
+                            </div>
+                            <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200">
+                                <strong>• Teflon (PTFE, –[F₂C–CF₂]ₙ–):</strong> အပူဒဏ်ခံနိုင်ပြီး မကပ်သော (non-stick) ဂုဏ်သတ္တိရှိသဖြင့် ဒယ်အိုးများတွင် အုပ်ရန် သုံးသည်။
+                            </div>
+                            <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200">
+                                <strong>• Polystyrene (Styrofoam, –[H₂C–CH(C₆H₅)]ₙ–):</strong> မာကျောပေါ့ပါးပြီး ကြွပ်ဆတ်သဖြင့် တစ်ခါသုံး ဖော့ဘူးခွက်များ ပြုလုပ်ရာတွင် သုံးသည်။
+                            </div>
+                        </div>
+                    </div>
+                `
+            },
+
+            // ==========================================
+            // 8.3 (c) CONDENSATION POLYMERS
+            // ==========================================
+            '8_3_c': {
+                badge: '8.3 Macromolecules • (c) Condensation Polymers (Textbook Page 147–149)',
+                title: '8.3 (c) Condensation Polymers (ငွေ့ရည်ဖွဲ့ပေါ်လီမာများ)',
+                subtitle: '(i) Polyesters (Terylene), (ii) Polyamides (Nylon 6,6 & Proteins), & (iii) Properties and Uses',
+                html: `
+                    <div class="sub-section-card space-y-4 myanmar-text">
+                        <p class="text-xs sm:text-sm text-slate-700">
+                            <strong>Condensation polymerisation</strong> တွင် မော်လီကျူးတစ်ခုတည်း၌ဖြစ်စေ၊ မော်လီကျူးနှစ်မျိုး၌ဖြစ်စေ မတူညီသော Functional groups နှစ်မျိုး ပါဝင်သည့် Monomers များ ပေါင်းစည်းကြပြီး ရေ (H₂O) ကဲ့သို့သော မော်လီကျူးငယ်တစ်ခု ထွက်သွားသည်။
+                        </p>
+                    </div>
+
+                    <!-- (i) Polyesters -->
+                    <div class="sub-section-card space-y-4 myanmar-text">
+                        <div class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-slate-900 text-white">(i) Polyesters — Terylene / PET (Page 147)</div>
+                        <p class="text-xs sm:text-sm text-slate-700">
+                            <strong>Terylene</strong> (သို့မဟုတ် Polyethylene terephthalate, PET) ကို Dicarboxylic acid ဖြစ်သော <strong>Terephthalic acid</strong> နှင့် Dialcohol ဖြစ်သော <strong>Ethane-1,2-diol (ethylene glycol)</strong> တို့ ဓာတ်ပြုခြင်းမှ ရရှိသည်။ Alcohol မှ –H နှင့် Acid မှ –OH ပေါင်း၍ H₂O ထွက်သွားပြီး Monomers များသည် <strong>Ester linkages (–COO–)</strong> ဖြင့် ဆက်သွားကြသည်။
+                        </p>
+                        <pre class="eq-box">n HOOC–C₆H₄–COOH + n HO–CH₂–CH₂–OH  ──►  <span class="product">–[OC–C₆H₄–COO–CH₂–CH₂–O]ₙ– + 2n H₂O</span>
+terephthalic acid     ethane-1,2-diol          Terylene (Polyester)</pre>
+                    </div>
+
+                    <!-- (ii) Polyamides -->
+                    <div class="sub-section-card space-y-4 myanmar-text">
+                        <div class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-rose-700 text-white">(ii) Polyamides — Nylon 6,6 & Proteins (Page 148–149)</div>
+                        <p class="text-xs sm:text-sm text-slate-700">
+                            • <strong>Nylon 6,6:</strong> Dicarboxylic acid ဖြစ်သော <strong>Adipic acid</strong> <code>HOOC(CH₂)₄COOH</code> နှင့် Diamine ဖြစ်သော <strong>1,6-diaminohexane</strong> <code>H₂N(CH₂)₆NH₂</code> တို့ ပေါင်းစည်းပြီး H₂O ထွက်သွားကာ <strong>Amide linkages (–CONH–)</strong> ဖြင့် ဆက်သွားသော ပထမဆုံး လူလုပ်ချည်မျှင် (synthetic fibre) ဖြစ်သည်။
+                            <br>• <strong>Proteins (သဘာဝ Polyamides):</strong> Amino acids (အမျိုး ၂၀ ရှိသည်၊ General formula: <code>H₂NCHRCOOH</code>) ထောင်ပေါင်းများစွာ ပေါင်းစည်းထားသော သဘာဝ Polyamides များ ဖြစ်ကြသည်။ Amino acid တစ်ခု၏ –NH₂ နှင့် အခြားတစ်ခု၏ –COOH ပေါင်းစည်း၍ ရေထွက်သွားပြီး <strong>Peptide bond (amide link)</strong> ဖြင့် ဆက်ကာ Dipeptide → Polypeptide (50 to 2000 amino acids) ဖြစ်လာသည်။
+                        </p>
+                        <pre class="eq-box">n HOOC(CH₂)₄COOH + n H₂N(CH₂)₆NH₂  ──►  <span class="product">–[OC(CH₂)₄CONH(CH₂)₆NH]ₙ– + 2n H₂O</span>
+adipic acid        1,6-diaminohexane       Nylon 6,6 (Polyamide)</pre>
+                    </div>
+
+                    <!-- (iii) Properties and uses -->
+                    <div class="sub-section-card space-y-4 myanmar-text">
+                        <div class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-emerald-700 text-white">(iii) Properties and Uses (ဂုဏ်သတ္တိများနှင့် အသုံးဝင်ပုံများ — Page 149)</div>
+                        <p class="text-xs sm:text-sm text-slate-700">
+                            Condensation polymers များသည် Addition polymers များထက် မော်လီကျူးအလေးချိန် ပိုနည်းလေ့ရှိသော်လည်း Polar functional groups များကြား Hydrogen bonding ကြောင့် ဆွဲဆန့်ခံနိုင်အား (tensile strength) မြင့်မားသည်။
+                            <br>• <strong>Terylene:</strong> ဆွဲဆန့်ခြင်းနှင့် ကျုံ့ဝင်ခြင်း ဒဏ်ခံနိုင်ပြီး လျှော်ဖွပ်ရလွယ်ကာ အခြောက်မြန်သဖြင့် အဝတ်အထည်၊ ကော်ဇော၊ ခန်းဆီးလိုက်ကာ၊ အိပ်ရာခင်းနှင့် ခေါင်းအုံးစွပ်များ ပြုလုပ်ရာတွင် သုံးသည်။
+                            <br>• <strong>Nylon:</strong> အလွန်ခိုင်ခံ့သဖြင့် ငါးမျှားကြိုး (fishing line)၊ ဖိနပ်၊ သွားပွတ်တံအမွေး၊ ဂီတာကြိုးနှင့် စက်ပစ္စည်းအစိတ်အပိုင်းများ ပြုလုပ်ရာတွင် သုံးသည်။
+                        </p>
+                    </div>
+                `
+            },
+
+            // ==========================================
+            // 8.3 (d) PLASTICS AND ENVIRONMENT
+            // ==========================================
+            '8_3_d': {
+                badge: '8.3 Macromolecules • (d) Plastics and Environment (Textbook Page 149–151)',
+                title: '8.3 (d) Plastics and Environment (ပလတ်စတစ်နှင့် သဘာဝပတ်ဝန်းကျင်)',
+                subtitle: '(i) Plastics and Pollution (လေထု၊ ရေထု၊ မြေထု ညစ်ညမ်းမှု) & (ii) Recycling Plastics (ပြန်လည်အသုံးချခြင်း)',
+                html: `
+                    <!-- (i) Plastics and pollution -->
+                    <div class="sub-section-card space-y-4 myanmar-text">
+                        <div class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-red-700 text-white">(i) Plastics and Pollution (Page 149–150)</div>
+                        <p class="text-xs sm:text-sm text-slate-700">
+                            ပလတ်စတစ်များသည် ဈေးသက်သာခြင်း၊ ပုံသွင်းလွယ်ခြင်း၊ ပေါ့ပါးခိုင်ခံ့ခြင်းနှင့် ရေစိုခံခြင်းတို့ကြောင့် အသုံးများသော်လည်း <strong>Non-biodegradable</strong> (မြေဆီလွှာရှိ ဗက်တီးရီးယားများက ဖြိုခွဲဖျက်ဆီး၍ မရသောအရာ) ဖြစ်သောကြောင့် နှစ်ရာပေါင်းများစွာ မပျက်စီးဘဲ ပတ်ဝန်းကျင်ညစ်ညမ်းမှုကို ဖြစ်စေသည်။
+                        </p>
+                        <div class="grid md:grid-cols-3 gap-3 text-xs sm:text-sm">
+                            <div class="p-4 rounded-2xl bg-rose-50 border border-rose-200">
+                                <div class="font-bold text-rose-950">1. Air Pollution (လေထုညစ်ညမ်းမှု)</div>
+                                <p class="text-slate-700 mt-1">ပလတ်စတစ်များကို မီးရှို့ဖျက်ဆီး (incineration) သောအခါ အဆိပ်ဓာတ်ငွေ့များ ထွက်လာသည်။ ဥပမာ- <strong>PVC</strong> ကို မီးရှို့လျှင် တိုက်စားတတ်သော <strong>Hydrogen chloride (HCl)</strong> ဓာတ်ငွေ့ ထွက်ပေါ်သည်။</p>
+                            </div>
+                            <div class="p-4 rounded-2xl bg-sky-50 border border-sky-200">
+                                <div class="font-bold text-sky-950">2. Water Pollution (ရေထုညစ်ညမ်းမှု)</div>
+                                <p class="text-slate-700 mt-1">ပင်လယ်ထဲသို့ စွန့်ပစ်သော ပလတ်စတစ်အိတ်များကို ပင်လယ်လိပ်များက အစာဟု မှားယွင်းစားသုံးမိကာ အသက်ဆုံးရှုံးစေသည်။ မြစ်ချောင်းနှင့် ရေမြောင်းများ ပိတ်ဆို့ကာ ရေကြီးခြင်းနှင့် ရောဂါပိုးမွှား ပေါက်ဖွားခြင်းကို ဖြစ်စေသည်။</p>
+                            </div>
+                            <div class="p-4 rounded-2xl bg-amber-50 border border-amber-200">
+                                <div class="font-bold text-amber-950">3. Soil Pollution (မြေထုညစ်ညမ်းမှု)</div>
+                                <p class="text-slate-700 mt-1">ပလတ်စတစ် အမှိုက်များသည် မြေကြီးထဲတွင် ဆွေးမြေ့ပျက်စီးခြင်း မရှိဘဲ နှစ်ရာပေါင်းများစွာ တည်ရှိနေကာ မြေဆီလွှာကို ညစ်ညမ်းစေသည်။</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- (ii) Recycling plastics -->
+                    <div class="sub-section-card space-y-4 myanmar-text">
+                        <div class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-emerald-700 text-white">(ii) Recycling Plastics (ပလတ်စတစ်များ ပြန်လည်အသုံးချခြင်း — Page 150–151)</div>
+                        <p class="text-xs sm:text-sm text-slate-700">
+                            ပလတ်စတစ် အမှိုက်ပြဿနာကို ဖြေရှင်းရန် အလွယ်ကူဆုံးနည်းလမ်းမှာ <strong>Reuse (ပြန်လည်အသုံးပြုခြင်း)</strong> နှင့် <strong>Recycle (ပြန်လည်သန့်စင်ထုတ်လုပ်ခြင်း)</strong> တို့ ဖြစ်သည်။ Recycle လုပ်ရာတွင် ပလတ်စတစ် အမျိုးအစားအလိုက် ခွဲခြားနိုင်ရန် မြှားသုံးခုပတ်လည် အလယ်တွင် နံပါတ် ၁ မှ ၇ အထိ ပါဝင်သော <strong>Recycling symbols</strong> များကို ရိုက်နှိပ်ထားရသည်။ (အလယ်မှ နံပါတ် ငယ်လေလေ Recycle လုပ်ရန် ပိုမိုလွယ်ကူလေလေ ဖြစ်သည်)။
+                        </p>
+                        <div class="overflow-x-auto rounded-2xl border border-slate-200">
+                            <table class="w-full text-left border-collapse text-xs sm:text-sm">
+                                <thead>
+                                    <tr class="bg-slate-900 text-white">
+                                        <th class="p-2.5">Code</th>
+                                        <th class="p-2.5">Abbreviation</th>
+                                        <th class="p-2.5">Polymer Name</th>
+                                        <th class="p-2.5">Common Examples</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-slate-200 bg-white">
+                                    <tr><td class="p-2.5 font-bold">♻️ 1</td><td class="p-2.5 font-mono font-bold">PETE / PET</td><td class="p-2.5">Polyethylene terephthalate</td><td class="p-2.5">ရေသန့်ဘူး၊ အချိုရည်ဘူးခွံများ</td></tr>
+                                    <tr class="bg-slate-50"><td class="p-2.5 font-bold">♻️ 2</td><td class="p-2.5 font-mono font-bold">HDPE</td><td class="p-2.5">High-density polyethylene</td><td class="p-2.5">နို့ဘူး၊ ခေါင်းလျှော်ရည်ဘူးများ</td></tr>
+                                    <tr><td class="p-2.5 font-bold">♻️ 3</td><td class="p-2.5 font-mono font-bold">PVC / V</td><td class="p-2.5">Polyvinyl chloride</td><td class="p-2.5">ရေပိုက်များ၊ ဝါယာကြိုးအဖုံးများ</td></tr>
+                                    <tr class="bg-slate-50"><td class="p-2.5 font-bold">♻️ 4</td><td class="p-2.5 font-mono font-bold">LDPE</td><td class="p-2.5">Low-density polyethylene</td><td class="p-2.5">ကြွပ်ကြွပ်အိတ်၊ ပလတ်စတစ်ထုပ်ပိုးအိတ်များ</td></tr>
+                                    <tr><td class="p-2.5 font-bold">♻️ 5</td><td class="p-2.5 font-mono font-bold">PP</td><td class="p-2.5">Polypropylene</td><td class="p-2.5">အစားအစာထည့်ဘူးများ၊ ပုလင်းအဖုံးများ</td></tr>
+                                    <tr class="bg-slate-50"><td class="p-2.5 font-bold">♻️ 6</td><td class="p-2.5 font-mono font-bold">PS</td><td class="p-2.5">Polystyrene</td><td class="p-2.5">တစ်ခါသုံး ဖော့ဘူးခွက်များ</td></tr>
+                                    <tr><td class="p-2.5 font-bold">♻️ 7</td><td class="p-2.5 font-mono font-bold">OTHER</td><td class="p-2.5">Other plastics (Nylon, Polycarbonate, etc.)</td><td class="p-2.5">CD ချပ်များ၊ ကလေးနို့ဘူးများ</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                `
+            },
+
+            // ==========================================
+            // REVIEW QUESTIONS & EXERCISES
+            // ==========================================
+            'exercises': {
+                badge: 'Review Questions & Key Terms • Textbook Page 139, 144 & End of Chapter',
+                title: 'Chapter 8 Review Questions & Solutions (စာမျက်နှာ ၁၃၉၊ ၁၄၄ နှင့် လေ့ကျင့်ခန်းအဖြေများ)',
+                subtitle: 'Section 8.1 Review Questions (p. 139) နှင့် Section 8.2 Review Questions (p. 144) အပြည့်အစုံ',
+                html: `
+                    <!-- Section 8.1 Review Questions (Page 139) -->
+                    <div class="sub-section-card space-y-4 myanmar-text">
+                        <h3 class="text-lg font-bold text-slate-900">✍️ Section 8.1 Review Questions & Answers (Textbook Page 139)</h3>
+
+                        <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-1.5 text-xs sm:text-sm">
+                            <div class="font-bold text-slate-900">(1) Name the given compounds according to the IUPAC system:</div>
+                            <p class="text-slate-700 font-mono">
+                                • CH₃COCH₂CH₃ → <strong>2-butanone</strong> (or butan-2-one)<br>
+                                • (CH₃)₃CCH₂COOH → <strong>3,3-dimethylbutanoic acid</strong><br>
+                                • CH₃COOCH₃ → <strong>methyl ethanoate</strong><br>
+                                • CH₃CH₂CONH₂ → <strong>propanamide</strong>
+                            </p>
+                        </div>
+
+                        <div class="p-4 rounded-2xl bg-rose-50/70 border border-rose-200 space-y-1.5 text-xs sm:text-sm">
+                            <div class="font-bold text-rose-950">(2) Identify unknown substances Q, R, S and T in the following reactions:</div>
+                            <p class="text-slate-800">
+                                (a) <strong>Q</strong> + magnesium ──► magnesium methanoate + <strong>R</strong> (gas)<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;→ <strong>Q = methanoic acid (HCOOH)</strong>, <strong>R = hydrogen gas (H₂)</strong><br>
+                                (b) <strong>S</strong> + sodium hydroxide ──► sodium ethanoate + water<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;→ <strong>S = ethanoic acid (CH₃COOH)</strong><br>
+                                (c) ethanoic acid + <strong>T</strong> ⇌(H₂SO₄, Δ)⇌ methyl ethanoate + water<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;→ <strong>T = methanol (CH₃OH)</strong>
+                            </p>
+                        </div>
+
+                        <div class="p-4 rounded-2xl bg-emerald-50/70 border border-emerald-200 space-y-1.5 text-xs sm:text-sm">
+                            <div class="font-bold text-emerald-950">(3) Write the formulae of the reactants needed to prepare each of the following esters:</div>
+                            <p class="text-slate-800 font-mono">
+                                (a) CH₃COOCH₂CH₂CH₃ (smells like pears) → <strong>CH₃COOH (ethanoic acid)</strong> and <strong>CH₃CH₂CH₂OH (1-propanol)</strong><br>
+                                (b) CH₃COOCH₂CH₂CH₂CH₂CH₃ (smells like bananas) → <strong>CH₃COOH (ethanoic acid)</strong> and <strong>CH₃CH₂CH₂CH₂CH₂OH (1-pentanol)</strong>
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Section 8.2 Review Questions (Page 144) -->
+                    <div class="sub-section-card space-y-4 myanmar-text">
+                        <h3 class="text-lg font-bold text-slate-900">✍️ Section 8.2 Review Questions & Answers (Textbook Page 144)</h3>
+
+                        <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-1.5 text-xs sm:text-sm">
+                            <div class="font-bold text-slate-900">(1) Name one reagent that is used to distinguish propanal from propanone (acetone).</div>
+                            <p class="text-slate-800">
+                                <strong>Ans:</strong> <strong>Fehling's solution</strong> (Propanal gives a reddish-brown precipitate of Cu₂O when warmed with Fehling's solution, whereas propanone gives no precipitate).
+                            </p>
+                        </div>
+
+                        <div class="p-4 rounded-2xl bg-amber-50/70 border border-amber-200 space-y-1.5 text-xs sm:text-sm">
+                            <div class="font-bold text-amber-950">(2) Which is higher in energy of the following?</div>
+                            <p class="text-slate-800">
+                                (i) electromagnetic radiation with wavenumber 100 cm⁻¹ or with wavenumber 2000 cm⁻¹?<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;→ <strong>Wavenumber 2000 cm⁻¹</strong> (Energy is directly proportional to wavenumber, $E = hc\bar{\nu}$).<br>
+                                (ii) electromagnetic radiation with wavelength 950 nm or with wavelength 850 nm?<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;→ <strong>Wavelength 850 nm</strong> (Energy is inversely proportional to wavelength, $E = hc/\lambda$).
+                            </p>
+                        </div>
+
+                        <div class="p-4 rounded-2xl bg-indigo-50/70 border border-indigo-200 space-y-1.5 text-xs sm:text-sm">
+                            <div class="font-bold text-indigo-950">(3) The infrared spectrum was obtained from a compound and showed absorptions at 1700 cm⁻¹ and 1200 cm⁻¹. Which of the following compounds could account for this spectrum? (CH₃COOCH₃, CH₃COOH, CH₃CH₂OH)</div>
+                            <p class="text-slate-800">
+                                <strong>Ans:</strong> <strong>CH₃COOCH₃ (methyl ethanoate)</strong>. Because 1700 cm⁻¹ indicates a <strong>C=O</strong> group and 1200 cm⁻¹ indicates a <strong>C–O</strong> group, without any broad O–H absorption band (2500–3600 cm⁻¹) found in CH₃COOH or CH₃CH₂OH.
+                            </p>
+                        </div>
+                    </div>
+                `
+            }
+        };
+
+        // ==========================================
+        // 4. NAVIGATION & UI CONTROLLER
+        // ==========================================
+        const ORDERED_IDS = [
+            'intro',
+            '8_1_a', '8_1_b', '8_1_c', '8_1_d', '8_1_e', '8_1_f',
+            '8_2_a', '8_2_b',
+            '8_3_a', '8_3_b', '8_3_c', '8_3_d',
+            'exercises'
+        ];
+
+        function selectArticle(id) {
+            currentArticleId = id;
+            const article = ARTICLES[id];
+            if (!article) return;
+
+            clearActiveScenes();
+
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('bg-rose-50', 'text-rose-950', 'border-rose-200', 'shadow-xs');
+                btn.classList.add('text-slate-600', 'hover:bg-slate-50');
+                const badge = btn.querySelector('.nav-badge');
+                if (badge) {
+                    badge.classList.remove('bg-rose-600', 'text-white');
+                    badge.classList.add('bg-slate-100', 'text-slate-700');
+                }
+            });
+
+            const activeBtn = document.getElementById(`nav-${id}`);
+            if (activeBtn) {
+                activeBtn.classList.remove('text-slate-600', 'hover:bg-slate-50');
+                activeBtn.classList.add('bg-rose-50', 'text-rose-950', 'border-rose-200', 'shadow-xs');
+                const badge = activeBtn.querySelector('.nav-badge');
+                if (badge) {
+                    badge.classList.remove('bg-slate-100', 'text-slate-700');
+                    badge.classList.add('bg-rose-600', 'text-white');
+                }
+            }
+
+            const container = document.getElementById('content-container');
+            const idx = ORDERED_IDS.indexOf(id);
+            const prevId = idx > 0 ? ORDERED_IDS[idx - 1] : null;
+            const nextId = idx < ORDERED_IDS.length - 1 ? ORDERED_IDS[idx + 1] : null;
+
+            container.innerHTML = `
+                <div class="border-b border-slate-200 pb-5">
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-rose-100 text-rose-800 mb-2">
+                        ${article.badge}
+                    </span>
+                    <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">${article.title}</h1>
+                    <p class="mt-1 text-sm sm:text-base text-slate-600 font-medium">${article.subtitle}</p>
+                </div>
+
+                ${article.html}
+
+                <div class="pt-4 pb-8 flex items-center justify-between gap-4 border-t border-slate-200">
+                    ${prevId ? `
+                        <button onclick="selectArticle('${prevId}')" class="px-4 py-3 rounded-2xl bg-white border border-slate-200 hover:border-rose-300 hover:bg-rose-50 text-slate-700 text-xs sm:text-sm font-semibold transition flex items-center gap-2 shadow-xs">
+                            <span>←</span> ယခင်ခေါင်းစဉ် (${ARTICLES[prevId].title.split(' ')[0]})
+                        </button>
+                    ` : '<div></div>'}
+
+                    ${nextId ? `
+                        <button onclick="selectArticle('${nextId}')" class="px-5 py-3 rounded-2xl bg-rose-600 hover:bg-rose-700 text-white text-xs sm:text-sm font-semibold transition flex items-center gap-2 shadow-sm">
+                            နောက်ခေါင်းစဉ် (${ARTICLES[nextId].title.split(' ')[0]}) <span>→</span>
+                        </button>
+                    ` : `
+                        <button onclick="selectArticle('intro')" class="px-5 py-3 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs sm:text-sm font-semibold transition flex items-center gap-2 shadow-sm">
+                            Chapter Overview သို့ ပြန်သွားရန် <span>📖</span>
+                        </button>
+                    `}
+                </div>
+            `;
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            closeMobileSidebar();
+
+            if (typeof article.onMount === 'function') {
+                setTimeout(() => article.onMount(), 50);
+            }
+        }
+
+        const sidebar = document.getElementById('sidebar');
+        const backdrop = document.getElementById('sidebar-backdrop');
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const closeSidebarBtn = document.getElementById('close-sidebar-btn');
+
+        function openMobileSidebar() {
+            sidebar.classList.remove('-translate-x-full');
+            backdrop.classList.remove('hidden');
+        }
+        function closeMobileSidebar() {
+            sidebar.classList.add('-translate-x-full');
+            backdrop.classList.add('hidden');
+        }
+
+        mobileMenuBtn.addEventListener('click', openMobileSidebar);
+        closeSidebarBtn.addEventListener('click', closeMobileSidebar);
+        backdrop.addEventListener('click', closeMobileSidebar);
+
+        window.onload = function() {
+            selectArticle('intro');
+        };
+    </script>
+</body>
+</html>
